@@ -1,4 +1,5 @@
 <?php
+// app/Models/Opd.php
 
 namespace App\Models;
 
@@ -21,6 +22,12 @@ class Opd extends Model
         'ppid_phone',
         'vision_mission',
         'duties',
+        'vision',           // <-- TAMBAHKAN
+        'mission',          // <-- TAMBAHKAN
+        'about',            // <-- TAMBAHKAN
+        'google_maps_link', // <-- TAMBAHKAN
+        'functions',        // <-- TAMBAHKAN
+        'structure_image',  // <-- TAMBAHKAN
         'is_active',
     ];
 
@@ -37,6 +44,12 @@ class Opd extends Model
     public function documents()
     {
         return $this->hasMany(Document::class);
+    }
+    
+    // Tambahkan relasi
+    public function legalDocuments()
+    {
+        return $this->hasMany(LegalDocument::class);
     }
 
     public function getActiveDocumentsCount()
