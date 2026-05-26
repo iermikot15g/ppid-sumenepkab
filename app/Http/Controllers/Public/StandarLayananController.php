@@ -1,5 +1,4 @@
 <?php
-// app/Http/Controllers/Public/StandarLayananController.php
 
 namespace App\Http\Controllers\Public;
 
@@ -10,18 +9,7 @@ class StandarLayananController extends Controller
 {
     public function index()
     {
-        $sections = [
-            'maklumat' => StaticPage::where('page_key', 'standar_maklumat')->first(),
-            'prosedur' => StaticPage::where('page_key', 'standar_prosedur_permohonan')->first(),
-            'keberatan' => StaticPage::where('page_key', 'standar_prosedur_keberatan')->first(),
-            'sengketa' => StaticPage::where('page_key', 'standar_prosedur_sengketa')->first(),
-            'jalur-waktu' => StaticPage::where('page_key', 'standar_jalur_waktu')->first(),
-            'biaya' => StaticPage::where('page_key', 'standar_biaya')->first(),
-        ];
-        
-        $activeSlug = request()->slug ?? 'maklumat';
-        
-        return view('public.standar-layanan.index', compact('sections', 'activeSlug'));
+        return redirect()->route('standar-layanan.show', 'maklumat');
     }
 
     public function show($slug)

@@ -24,9 +24,19 @@ use Illuminate\Support\Facades\Route;
 
 // ========== PUBLIC ROUTES ==========
 Route::get('/', [HomeController::class, 'index'])->name('home');
+
+// ========== PROFIL PPID ==========
 Route::get('/profil', [ProfilController::class, 'index'])->name('profil');
+Route::get('/profil/{section}', [ProfilController::class, 'show'])->name('profil.show');
+
+// ========== STANDAR LAYANAN ==========
+Route::get('/standar-layanan', [StandarLayananController::class, 'index'])->name('standar-layanan.index');
 Route::get('/standar-layanan/{slug}', [StandarLayananController::class, 'show'])->name('standar-layanan.show');
+
+// ========== DAFTAR INFORMASI PUBLIK (DIP) ==========
 Route::get('/dip', [DipController::class, 'index'])->name('dip.index');
+Route::get('/dip/category/{slug}', [DipController::class, 'byCategory'])->name('dip.category');
+Route::get('/dip/preview/{document}', [DipController::class, 'preview'])->name('dip.preview');
 Route::get('/dip/download/{document}', [DipController::class, 'download'])
     ->middleware(['auth'])
     ->name('dip.download');
@@ -124,6 +134,20 @@ Route::prefix('dashboard')->middleware(['auth'])->group(function () {
             Route::post('/update-order', [HeroSlideController::class, 'updateOrder'])->name('utama.cms.hero.update-order');
         });
 
+        // CMS Profil PPID
+        Route::prefix('cms/profil')->group(function () {
+            Route::get('/', [CmsNewsController::class, 'profilIndex'])->name('utama.cms.profil.index');
+            Route::get('/{pageKey}/edit', [CmsNewsController::class, 'profilEdit'])->name('utama.cms.profil.edit');
+            Route::put('/{pageKey}', [CmsNewsController::class, 'profilUpdate'])->name('utama.cms.profil.update');
+        });
+
+        // ========== CMS STANDAR LAYANAN ==========
+        Route::prefix('cms/standar')->group(function () {
+            Route::get('/', [CmsNewsController::class, 'standarIndex'])->name('utama.cms.standar.index');
+            Route::get('/{pageKey}/edit', [CmsNewsController::class, 'standarEdit'])->name('utama.cms.standar.edit');
+            Route::put('/{pageKey}', [CmsNewsController::class, 'standarUpdate'])->name('utama.cms.standar.update');
+        });
+
         // Manajemen Dokumen Global
         Route::prefix('documents')->group(function () {
             Route::get('/', [DocumentManagementController::class, 'index'])->name('utama.documents.index');
@@ -181,6 +205,13 @@ Route::prefix('dashboard/admin')->middleware(['auth', 'role:super_admin'])->grou
     ]);
     
     Route::get('audit-logs', [AuditLogController::class, 'index'])->name('admin.audit-logs');
+
+    // Sub Kategori
+    Route::get('categories/{category}/subcategories', [CategoryController::class, 'subCategories'])->name('admin.categories.subcategories');
+    Route::post('categories/{category}/subcategories', [CategoryController::class, 'storeSubCategory'])->name('admin.categories.subcategories.store');
+    Route::get('subcategories/{subCategory}/edit', [CategoryController::class, 'editSubCategory'])->name('admin.subcategories.edit');
+    Route::put('subcategories/{subCategory}', [CategoryController::class, 'updateSubCategory'])->name('admin.subcategories.update');
+    Route::delete('subcategories/{subCategory}', [CategoryController::class, 'destroySubCategory'])->name('admin.subcategories.destroy');
 });
 
 // ========== TEMP TEST ROUTE (Hapus setelah production) ==========

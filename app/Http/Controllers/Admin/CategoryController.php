@@ -5,16 +5,19 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
-use App\Traits\LogsActivity;  // <-- TAMBAHKAN INI
+use App\Models\SubCategory;
+use App\Traits\LogsActivity;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class CategoryController extends Controller
 {
-    use LogsActivity;  // <-- TAMBAHKAN INI
+    use LogsActivity;
 
+    // ========== KATEGORI UTAMA ==========
     public function index()
     {
-        $categories = Category::orderBy('sort_order')->get();
+        $categories = Category::with('subCategories')->orderBy('sort_order')->get();
         return view('admin.categories.index', compact('categories'));
     }
 
@@ -31,9 +34,8 @@ class CategoryController extends Controller
             'sort_order' => 'nullable|integer',
         ]);
 
-        $category = Category::create($validated);  // <-- UBAH: simpan ke variabel
+        $category = Category::create($validated);
 
-        // <-- TAMBAHKAN LOG ACTIVITY
         $this->logActivity('create_category', 'Menambahkan kategori: ' . $category->name, $category);
 
         return redirect()->route('admin.categories.index')
@@ -55,7 +57,6 @@ class CategoryController extends Controller
 
         $category->update($validated);
 
-        // <-- TAMBAHKAN LOG ACTIVITY
         $this->logActivity('update_category', 'Memperbarui kategori: ' . $category->name, $category);
 
         return redirect()->route('admin.categories.index')
@@ -64,12 +65,71 @@ class CategoryController extends Controller
 
     public function destroy(Category $category)
     {
-        // <-- TAMBAHKAN LOG ACTIVITY (SEBELUM DELETE)
         $this->logActivity('delete_category', 'Menghapus kategori: ' . $category->name, $category);
-
         $category->delete();
-        
+
         return redirect()->route('admin.categories.index')
             ->with('success', 'Kategori berhasil dihapus.');
+    }
+
+    // ========== SUB KATEGORI ==========
+    public function subCategories(Category $category)
+    {
+        $subCategories = $category->subCategories()->orderBy('sort_order')->get();
+        return view('admin.categories.subcategories', compact('category', 'subCategories'));
+    }
+
+    public function storeSubCategory(Request $request, Category $category)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'slug' => 'required|string|max:255|unique:sub_categories',
+            'sort_order' => 'nullable|integer',
+        ]);
+
+        $validated['slug'] = Str::slug($validated['slug']);
+        
+        $subCategory = $category->subCategories()->create($validated);
+
+        $this->logActivity('create_sub_category', 'Menambahkan sub kategori: ' . $subCategory->name . ' untuk kategori ' . $category->name, $subCategory);
+
+        return redirect()->route('admin.categories.subcategories', $category)
+            ->with('success', 'Sub Kategori berhasil ditambahkan.');
+    }
+
+    public function editSubCategory(SubCategory $subCategory)
+    {
+        $category = $subCategory->category;
+        return view('admin.categories.edit-subcategory', compact('subCategory', 'category'));
+    }
+
+    public function updateSubCategory(Request $request, SubCategory $subCategory)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'slug' => 'required|string|max:255|unique:sub_categories,slug,' . $subCategory->id,
+            'sort_order' => 'nullable|integer',
+        ]);
+
+        $validated['slug'] = Str::slug($validated['slug']);
+        
+        $subCategory->update($validated);
+
+        $this->logActivity('update_sub_category', 'Memperbarui sub kategori: ' . $subCategory->name, $subCategory);
+
+        return redirect()->route('admin.categories.subcategories', $subCategory->category_id)
+            ->with('success', 'Sub Kategori berhasil diperbarui.');
+    }
+
+    public function destroySubCategory(SubCategory $subCategory)
+    {
+        $categoryId = $subCategory->category_id;
+        
+        $this->logActivity('delete_sub_category', 'Menghapus sub kategori: ' . $subCategory->name, $subCategory);
+        
+        $subCategory->delete();
+
+        return redirect()->route('admin.categories.subcategories', $categoryId)
+            ->with('success', 'Sub Kategori berhasil dihapus.');
     }
 }

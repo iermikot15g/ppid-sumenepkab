@@ -34,11 +34,11 @@
                         </svg>
                     </button>
                     <div x-show="open" @click.away="open = false" x-transition class="absolute left-0 mt-2 w-56 bg-white rounded-md shadow-lg py-1 z-10 border border-gray-200" style="display: none;">
-                        <a href="{{ route('profil', ['section' => 'visi-misi']) }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Visi Misi</a>
-                        <a href="{{ route('profil', ['section' => 'tentang-ppid']) }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Tentang PPID</a>
-                        <a href="{{ route('profil', ['section' => 'dasar-hukum']) }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Dasar Hukum</a>
-                        <a href="{{ route('profil', ['section' => 'tugas-fungsi']) }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Tugas dan Fungsi</a>
-                        <a href="{{ route('profil', ['section' => 'struktur']) }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Struktur Organisasi</a>
+                        <a href="{{ route('profil.show', 'tentang-ppid') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Tentang PPID</a>
+                        <a href="{{ route('profil.show', 'visi-misi') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Visi Misi</a>
+                        <a href="{{ route('profil.show', 'dasar-hukum') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Dasar Hukum</a>
+                        <a href="{{ route('profil.show', 'tugas-fungsi') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Tugas dan Fungsi</a>
+                        <a href="{{ route('profil.show', 'struktur') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Struktur Organisasi</a>
                     </div>
                 </div>
                 
@@ -52,9 +52,9 @@
                     </button>
                     <div x-show="open" @click.away="open = false" x-transition class="absolute left-0 mt-2 w-64 bg-white rounded-md shadow-lg py-1 z-10 border border-gray-200" style="display: none;">
                         <a href="{{ route('standar-layanan.show', 'maklumat') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Maklumat Pelayanan</a>
-                        <a href="{{ route('standar-layanan.show', 'prosedur') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Prosedur Layanan</a>
-                        <a href="{{ route('standar-layanan.show', 'keberatan') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Prosedur Keberatan</a>
-                        <a href="{{ route('standar-layanan.show', 'sengketa') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Prosedur Sengketa</a>
+                        <a href="{{ route('standar-layanan.show', 'prosedur') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Prosedur Permohonan Informasi</a>
+                        <a href="{{ route('standar-layanan.show', 'keberatan') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Prosedur Pengajuan Keberatan</a>
+                        <a href="{{ route('standar-layanan.show', 'sengketa') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Prosedur Sengketa Informasi</a>
                         <a href="{{ route('standar-layanan.show', 'jalur-waktu') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Jalur dan Waktu Layanan</a>
                         <a href="{{ route('standar-layanan.show', 'biaya') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Biaya Layanan</a>
                     </div>
@@ -121,11 +121,11 @@
                         </svg>
                     </button>
                     <div x-show="open" class="pl-4 space-y-1" style="display: none;">
-                        <a href="{{ route('profil', ['section' => 'visi-misi']) }}" class="block px-3 py-2 text-sm text-gray-600 hover:bg-gray-100 rounded-md">Visi Misi</a>
-                        <a href="{{ route('profil', ['section' => 'tentang-ppid']) }}" class="block px-3 py-2 text-sm text-gray-600 hover:bg-gray-100 rounded-md">Tentang PPID</a>
-                        <a href="{{ route('profil', ['section' => 'dasar-hukum']) }}" class="block px-3 py-2 text-sm text-gray-600 hover:bg-gray-100 rounded-md">Dasar Hukum</a>
-                        <a href="{{ route('profil', ['section' => 'tugas-fungsi']) }}" class="block px-3 py-2 text-sm text-gray-600 hover:bg-gray-100 rounded-md">Tugas dan Fungsi</a>
-                        <a href="{{ route('profil', ['section' => 'struktur']) }}" class="block px-3 py-2 text-sm text-gray-600 hover:bg-gray-100 rounded-md">Struktur Organisasi</a>
+                        <a href="{{ route('profil.show', 'tentang-ppid') }}" class="block px-3 py-2 text-sm text-gray-600 hover:bg-gray-100 rounded-md">Tentang PPID</a>
+                        <a href="{{ route('profil.show', 'visi-misi') }}" class="block px-3 py-2 text-sm text-gray-600 hover:bg-gray-100 rounded-md">Visi Misi</a>
+                        <a href="{{ route('profil.show', 'dasar-hukum') }}" class="block px-3 py-2 text-sm text-gray-600 hover:bg-gray-100 rounded-md">Dasar Hukum</a>
+                        <a href="{{ route('profil.show', 'tugas-fungsi') }}" class="block px-3 py-2 text-sm text-gray-600 hover:bg-gray-100 rounded-md">Tugas dan Fungsi</a>
+                        <a href="{{ route('profil.show', 'struktur') }}" class="block px-3 py-2 text-sm text-gray-600 hover:bg-gray-100 rounded-md">Struktur Organisasi</a>
                     </div>
                 </div>
                 
@@ -139,9 +139,9 @@
                     </button>
                     <div x-show="open" class="pl-4 space-y-1" style="display: none;">
                         <a href="{{ route('standar-layanan.show', 'maklumat') }}" class="block px-3 py-2 text-sm text-gray-600 hover:bg-gray-100 rounded-md">Maklumat Pelayanan</a>
-                        <a href="{{ route('standar-layanan.show', 'prosedur') }}" class="block px-3 py-2 text-sm text-gray-600 hover:bg-gray-100 rounded-md">Prosedur Layanan</a>
-                        <a href="{{ route('standar-layanan.show', 'keberatan') }}" class="block px-3 py-2 text-sm text-gray-600 hover:bg-gray-100 rounded-md">Prosedur Keberatan</a>
-                        <a href="{{ route('standar-layanan.show', 'sengketa') }}" class="block px-3 py-2 text-sm text-gray-600 hover:bg-gray-100 rounded-md">Prosedur Sengketa</a>
+                        <a href="{{ route('standar-layanan.show', 'prosedur') }}" class="block px-3 py-2 text-sm text-gray-600 hover:bg-gray-100 rounded-md">Prosedur Permohonan Informasi</a>
+                        <a href="{{ route('standar-layanan.show', 'keberatan') }}" class="block px-3 py-2 text-sm text-gray-600 hover:bg-gray-100 rounded-md">Prosedur Pengajuan Keberatan</a>
+                        <a href="{{ route('standar-layanan.show', 'sengketa') }}" class="block px-3 py-2 text-sm text-gray-600 hover:bg-gray-100 rounded-md">Prosedur Sengketa Informasi</a>
                         <a href="{{ route('standar-layanan.show', 'jalur-waktu') }}" class="block px-3 py-2 text-sm text-gray-600 hover:bg-gray-100 rounded-md">Jalur dan Waktu Layanan</a>
                         <a href="{{ route('standar-layanan.show', 'biaya') }}" class="block px-3 py-2 text-sm text-gray-600 hover:bg-gray-100 rounded-md">Biaya Layanan</a>
                     </div>

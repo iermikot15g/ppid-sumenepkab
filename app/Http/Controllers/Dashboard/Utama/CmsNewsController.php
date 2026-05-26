@@ -5,12 +5,14 @@ namespace App\Http\Controllers\Dashboard\Utama;
 
 use App\Http\Controllers\Controller;
 use App\Models\News;
+use App\Models\StaticPage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class CmsNewsController extends Controller
 {
+    // ========== CMS BERITA ==========
     public function index()
     {
         $news = News::where('type', 'news')
@@ -121,7 +123,7 @@ class CmsNewsController extends Controller
         return response()->json(['success' => true]);
     }
 
-    // Tambahkan method ini
+    // ========== CMS AGENDA ==========
     public function agendaIndex()
     {
         $agendas = News::where('type', 'agenda')
@@ -213,7 +215,7 @@ class CmsNewsController extends Controller
             ->with('success', 'Agenda berhasil dihapus.');
     }
 
-    // ========== GALERI FOTO ==========
+    // ========== CMS GALERI FOTO ==========
     public function galleryIndex()
     {
         $galleries = News::where('type', 'gallery')
@@ -226,8 +228,6 @@ class CmsNewsController extends Controller
     {
         return view('dashboard.utama.cms.gallery.create');
     }
-
-    // app/Http/Controllers/Dashboard/Utama/CmsNewsController.php
 
     public function galleryStore(Request $request)
     {
@@ -242,7 +242,7 @@ class CmsNewsController extends Controller
         $data = [
             'title' => $validated['title'],
             'slug' => Str::slug($validated['title']),
-            'content' => '',  // <-- TAMBAHKAN INI (default kosong)
+            'content' => '',
             'thumbnail' => $thumbnailPath,
             'type' => 'gallery',
             'is_published' => $request->boolean('is_published'),
@@ -279,7 +279,7 @@ class CmsNewsController extends Controller
         $data = [
             'title' => $validated['title'],
             'slug' => Str::slug($validated['title']),
-            'content' => '',  // <-- TAMBAHKAN INI
+            'content' => '',
             'is_published' => $request->boolean('is_published'),
             'published_at' => $request->boolean('is_published') && !$news->published_at ? now() : $news->published_at,
         ];
@@ -313,7 +313,7 @@ class CmsNewsController extends Controller
             ->with('success', 'Foto berhasil dihapus.');
     }
 
-    // ========== INFOGRAFIS ==========
+    // ========== CMS INFOGRAFIS ==========
     public function infographicIndex()
     {
         $infographics = News::where('type', 'infographic')
@@ -409,5 +409,89 @@ class CmsNewsController extends Controller
 
         return redirect()->route('utama.cms.infographic.index')
             ->with('success', 'Infografis berhasil dihapus.');
+    }
+
+    // ========== CMS PROFIL PPID ==========
+    public function profilIndex()
+    {
+        $pages = StaticPage::where('page_key', 'like', 'profil_%')->get();
+        return view('dashboard.utama.cms.profil.index', compact('pages'));
+    }
+
+    public function profilEdit($pageKey)
+    {
+        $page = StaticPage::where('page_key', $pageKey)->firstOrFail();
+        return view('dashboard.utama.cms.profil.edit', compact('page'));
+    }
+
+    public function profilUpdate(Request $request, $pageKey)
+    {
+        $page = StaticPage::where('page_key', $pageKey)->firstOrFail();
+        
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'content' => 'nullable|string',
+            'pdf_file' => 'nullable|file|mimes:pdf|max:5120',
+        ]);
+        
+        $data = [
+            'title' => $validated['title'],
+            'content' => $validated['content'],
+            'updated_by' => auth()->id(),
+        ];
+        
+        if ($request->hasFile('pdf_file')) {
+            if ($page->pdf_file_path) {
+                Storage::disk('public')->delete($page->pdf_file_path);
+            }
+            $data['pdf_file_path'] = $request->file('pdf_file')->store('profil', 'public');
+        }
+        
+        $page->update($data);
+        
+        return redirect()->route('utama.cms.profil.index')
+            ->with('success', 'Konten profil berhasil diperbarui.');
+    }
+
+    // ========== CMS STANDAR LAYANAN ==========
+    public function standarIndex()
+    {
+        $pages = StaticPage::where('page_key', 'like', 'standar_%')->get();
+        return view('dashboard.utama.cms.standar.index', compact('pages'));
+    }
+
+    public function standarEdit($pageKey)
+    {
+        $page = StaticPage::where('page_key', $pageKey)->firstOrFail();
+        return view('dashboard.utama.cms.standar.edit', compact('page'));
+    }
+
+    public function standarUpdate(Request $request, $pageKey)
+    {
+        $page = StaticPage::where('page_key', $pageKey)->firstOrFail();
+        
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'content' => 'nullable|string',
+            'pdf_file' => 'nullable|file|mimes:pdf|max:5120',
+        ]);
+        
+        $data = [
+            'title' => $validated['title'],
+            'content' => $validated['content'],
+            'updated_by' => auth()->id(),
+        ];
+        
+        if ($request->hasFile('pdf_file')) {
+            if ($page->pdf_file_path) {
+                Storage::disk('public')->delete($page->pdf_file_path);
+            }
+            $data['pdf_file_path'] = $request->file('pdf_file')->store('standar', 'public');
+        }
+        
+        $page->update($data);
+        
+        return redirect()->route('utama.cms.standar.index')
+            ->with('success', 'Konten standar layanan berhasil diperbarui.');
     }
 }
