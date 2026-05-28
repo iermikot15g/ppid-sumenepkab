@@ -14,7 +14,6 @@ class ProfilOpdController extends Controller
 {
     use LogsActivity;
 
-    // ========== CMS PROFIL OPD ==========
     public function index()
     {
         $opd = Auth::user()->opd;
@@ -23,7 +22,7 @@ class ProfilOpdController extends Controller
             abort(403, 'Anda tidak memiliki OPD yang terdaftar.');
         }
         
-        return view('dashboard.pembantu.profil-opd.index', compact('opd'));
+        return view('dashboard.pembantu.cms.profil.index', compact('opd'));
     }
 
     public function editAbout()
@@ -34,7 +33,7 @@ class ProfilOpdController extends Controller
             abort(403, 'Anda tidak memiliki OPD yang terdaftar.');
         }
         
-        return view('dashboard.pembantu.profil-opd.edit-about', compact('opd'));
+        return view('dashboard.pembantu.cms.profil.about', compact('opd'));
     }
 
     public function updateAbout(Request $request)
@@ -46,9 +45,9 @@ class ProfilOpdController extends Controller
         }
 
         $validated = $request->validate([
-            'about_content' => 'nullable|string',
             'vision' => 'nullable|string',
             'mission' => 'nullable|string',
+            'about_content' => 'nullable|string',
             'address' => 'nullable|string',
             'phone' => 'nullable|string|max:20',
             'email' => 'nullable|email|max:100',
@@ -67,7 +66,7 @@ class ProfilOpdController extends Controller
 
         $this->logActivity('update_opd_about', 'Memperbarui Tentang OPD: ' . $opd->name, $opd);
 
-        return redirect()->route('pembantu.profil-opd.index')
+        return redirect()->route('pembantu.cms.profil.about')
             ->with('success', 'Konten Tentang OPD berhasil diperbarui.');
     }
 
@@ -79,7 +78,7 @@ class ProfilOpdController extends Controller
             abort(403, 'Anda tidak memiliki OPD yang terdaftar.');
         }
         
-        return view('dashboard.pembantu.profil-opd.edit-duties', compact('opd'));
+        return view('dashboard.pembantu.cms.profil.duties', compact('opd'));
     }
 
     public function updateDuties(Request $request)
@@ -99,7 +98,7 @@ class ProfilOpdController extends Controller
 
         $this->logActivity('update_opd_duties', 'Memperbarui Tugas dan Fungsi OPD: ' . $opd->name, $opd);
 
-        return redirect()->route('pembantu.profil-opd.index')
+        return redirect()->route('pembantu.cms.profil.duties')
             ->with('success', 'Konten Tugas dan Fungsi berhasil diperbarui.');
     }
 
@@ -111,7 +110,7 @@ class ProfilOpdController extends Controller
             abort(403, 'Anda tidak memiliki OPD yang terdaftar.');
         }
         
-        return view('dashboard.pembantu.profil-opd.edit-structure', compact('opd'));
+        return view('dashboard.pembantu.cms.profil.structure', compact('opd'));
     }
 
     public function updateStructure(Request $request)
@@ -136,7 +135,7 @@ class ProfilOpdController extends Controller
 
         $this->logActivity('update_opd_structure', 'Memperbarui Struktur Organisasi OPD: ' . $opd->name, $opd);
 
-        return redirect()->route('pembantu.profil-opd.index')
+        return redirect()->route('pembantu.cms.profil.structure')
             ->with('success', 'Struktur Organisasi berhasil diperbarui.');
     }
 }

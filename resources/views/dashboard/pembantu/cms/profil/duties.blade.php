@@ -14,19 +14,17 @@
             @csrf
             @method('PUT')
 
-            <div class="space-y-6">
-                <!-- Tugas -->
+            <div class="space-y-4">
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Tugas</label>
-                    <textarea name="duties_content" rows="12" class="w-full border-gray-300 rounded-md shadow-sm font-mono text-sm" id="duties_content">{{ old('duties_content', $opd->duties_content) }}</textarea>
+                    <textarea name="duties_content" rows="10" class="w-full border-gray-300 rounded-md shadow-sm font-mono text-sm">{{ old('duties_content', $opd->duties_content) }}</textarea>
                     <p class="text-xs text-gray-500 mt-1">Mendukung HTML untuk formatting (gunakan &lt;ul&gt;, &lt;li&gt;, &lt;ol&gt;, &lt;p&gt;, dll)</p>
                 </div>
 
-                <!-- Fungsi -->
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Fungsi</label>
-                    <textarea name="functions_content" rows="12" class="w-full border-gray-300 rounded-md shadow-sm font-mono text-sm" id="functions_content">{{ old('functions_content', $opd->functions_content) }}</textarea>
-                    <p class="text-xs text-gray-500 mt-1">Mendukung HTML untuk formatting (gunakan &lt;ul&gt;, &lt;li&gt;, &lt;ol&gt;, &lt;p&gt;, dll)</p>
+                    <textarea name="functions_content" rows="10" class="w-full border-gray-300 rounded-md shadow-sm font-mono text-sm">{{ old('functions_content', $opd->functions_content) }}</textarea>
+                    <p class="text-xs text-gray-500 mt-1">Mendukung HTML untuk formatting</p>
                 </div>
             </div>
 
@@ -37,12 +35,4 @@
         </form>
     </div>
 </div>
-
-<script>
-    // Simple helper untuk memudahkan penulisan HTML
-    document.addEventListener('DOMContentLoaded', function() {
-        // Anda bisa menambahkan tombol bantuan HTML di sini jika diperlukan
-        console.log('Editor Tugas dan Fungsi siap digunakan');
-    });
-</script>
 @endsection

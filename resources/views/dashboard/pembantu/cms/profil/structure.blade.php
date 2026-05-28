@@ -20,7 +20,6 @@
                     @if($opd->structure_image)
                         <img src="{{ Storage::url($opd->structure_image) }}" alt="Struktur Organisasi" 
                              class="w-full max-w-md border rounded-lg shadow-sm mb-2" style="aspect-ratio: 4/3; object-fit: contain;">
-                        <p class="text-xs text-gray-500 mt-1">Rasio gambar: 4:3</p>
                     @else
                         <div class="bg-gray-100 rounded-lg p-8 text-center">
                             <svg class="w-16 h-16 mx-auto text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
