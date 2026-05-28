@@ -8,8 +8,7 @@ use App\Http\Controllers\Public\ProfilController;
 use App\Http\Controllers\Public\StandarLayananController;
 use App\Http\Controllers\Dashboard\Pembantu\DashboardController;
 use App\Http\Controllers\Dashboard\Pembantu\DocumentController;
-use App\Http\Controllers\Dashboard\Pembantu\ProfilOpdController;
-use App\Http\Controllers\Dashboard\Pembantu\LegalDocumentController;
+use App\Http\Controllers\Dashboard\Pembantu\CmsProfilOpdController;
 use App\Http\Controllers\Dashboard\Pembantu\AgendaController;
 use App\Http\Controllers\Dashboard\Pembantu\InfografisController;
 use App\Http\Controllers\Dashboard\Utama\MonitoringController;
@@ -74,24 +73,31 @@ Route::prefix('dashboard')->middleware(['auth'])->group(function () {
             Route::patch('/{document}/status', [DocumentController::class, 'updateStatus'])->name('documents.status');
         });
         
-        // ========== DASAR HUKUM (LEGAL DOCUMENTS) ==========
-        Route::resource('legal-documents', LegalDocumentController::class);
-        
         // ========== CMS PPID PEMBANTU ==========
         Route::prefix('cms')->group(function () {
             
-            // CMS Profil OPD
+            // ========== CMS PROFIL OPD ==========
             Route::prefix('profil')->group(function () {
-                Route::get('/', [ProfilOpdController::class, 'index'])->name('pembantu.cms.profil.index');
-                Route::get('/about', [ProfilOpdController::class, 'editAbout'])->name('pembantu.cms.profil.about');
-                Route::put('/about', [ProfilOpdController::class, 'updateAbout'])->name('pembantu.cms.profil.update-about');
-                Route::get('/duties', [ProfilOpdController::class, 'editDuties'])->name('pembantu.cms.profil.duties');
-                Route::put('/duties', [ProfilOpdController::class, 'updateDuties'])->name('pembantu.cms.profil.update-duties');
-                Route::get('/structure', [ProfilOpdController::class, 'editStructure'])->name('pembantu.cms.profil.structure');
-                Route::put('/structure', [ProfilOpdController::class, 'updateStructure'])->name('pembantu.cms.profil.update-structure');
+                Route::get('/', [CmsProfilOpdController::class, 'index'])->name('pembantu.cms.profil.index');
+                
+                // Tentang OPD
+                Route::get('/tentang', [CmsProfilOpdController::class, 'editTentang'])->name('pembantu.cms.profil.tentang');
+                Route::put('/tentang', [CmsProfilOpdController::class, 'updateTentang'])->name('pembantu.cms.profil.update-tentang');
+                
+                // Tugas dan Fungsi
+                Route::get('/tugas-fungsi', [CmsProfilOpdController::class, 'editTugasFungsi'])->name('pembantu.cms.profil.tugas-fungsi');
+                Route::put('/tugas-fungsi', [CmsProfilOpdController::class, 'updateTugasFungsi'])->name('pembantu.cms.profil.update-tugas-fungsi');
+                
+                // Struktur Organisasi
+                Route::get('/struktur', [CmsProfilOpdController::class, 'editStruktur'])->name('pembantu.cms.profil.struktur');
+                Route::put('/struktur', [CmsProfilOpdController::class, 'updateStruktur'])->name('pembantu.cms.profil.update-struktur');
+                
+                // Dasar Hukum
+                Route::get('/dasar-hukum', [CmsProfilOpdController::class, 'editDasarHukum'])->name('pembantu.cms.profil.dasar-hukum');
+                Route::put('/dasar-hukum', [CmsProfilOpdController::class, 'updateDasarHukum'])->name('pembantu.cms.profil.update-dasar-hukum');
             });
             
-            // CMS Agenda
+            // ========== CMS AGENDA ==========
             Route::prefix('agenda')->group(function () {
                 Route::get('/', [AgendaController::class, 'index'])->name('pembantu.cms.agenda.index');
                 Route::get('/create', [AgendaController::class, 'create'])->name('pembantu.cms.agenda.create');
@@ -102,7 +108,7 @@ Route::prefix('dashboard')->middleware(['auth'])->group(function () {
                 Route::patch('/{id}/toggle', [AgendaController::class, 'togglePublished'])->name('pembantu.cms.agenda.toggle');
             });
             
-            // CMS Infografis
+            // ========== CMS INFOGRAFIS ==========
             Route::prefix('infographic')->group(function () {
                 Route::get('/', [InfografisController::class, 'index'])->name('pembantu.cms.infographic.index');
                 Route::get('/create', [InfografisController::class, 'create'])->name('pembantu.cms.infographic.create');

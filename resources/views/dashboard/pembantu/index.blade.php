@@ -88,7 +88,7 @@
     </div>
 
     <!-- Stats Row 2 -->
-    <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
+    <div class="grid grid-cols-1 gap-5 sm:grid-cols-1">
         <div class="bg-white overflow-hidden shadow rounded-lg">
             <div class="p-5">
                 <div class="flex items-center">
@@ -101,24 +101,6 @@
                         <dl>
                             <dt class="text-sm font-medium text-gray-500 truncate">Total Unduhan</dt>
                             <dd class="text-2xl font-semibold text-blue-600">{{ number_format($totalDownloads) }}</dd>
-                        </dl>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="bg-white overflow-hidden shadow rounded-lg">
-            <div class="p-5">
-                <div class="flex items-center">
-                    <div class="flex-shrink-0">
-                        <svg class="h-6 w-6 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                        </svg>
-                    </div>
-                    <div class="ml-5 w-0 flex-1">
-                        <dl>
-                            <dt class="text-sm font-medium text-gray-500 truncate">Dokumen Hukum</dt>
-                            <dd class="text-2xl font-semibold text-purple-600">{{ number_format($totalLegalDocs) }}</dd>
                         </dl>
                     </div>
                 </div>

@@ -19,18 +19,17 @@ class Opd extends Model
         'social_media',
         'ppid_name',
         'ppid_phone',
-        'vision_mission',
-        'duties',
-        'vision',
-        'mission',
-        'about',
-        'about_content',      // <-- TAMBAHKAN
-        'duties_content',     // <-- TAMBAHKAN
-        'functions_content',  // <-- TAMBAHKAN
         'google_maps_link',
-        'functions',
-        'structure_image',
         'is_active',
+        
+        // CMS Profil OPD
+        'tentang_content',
+        'tusi_content',
+        'tusi_pdf',
+        'structure_content',
+        'structure_pdf',
+        'dasar_hukum_content',
+        'dasar_hukum_pdf',
     ];
 
     protected $casts = [
@@ -46,20 +45,5 @@ class Opd extends Model
     public function documents()
     {
         return $this->hasMany(Document::class);
-    }
-
-    public function legalDocuments()
-    {
-        return $this->hasMany(LegalDocument::class);
-    }
-
-    public function getActiveDocumentsCount()
-    {
-        return $this->documents()->where('status', 'published')->count();
-    }
-
-    public function getLastUpdateDate()
-    {
-        return $this->documents()->max('updated_at');
     }
 }

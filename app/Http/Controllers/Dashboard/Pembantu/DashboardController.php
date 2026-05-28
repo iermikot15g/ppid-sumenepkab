@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Dashboard\Pembantu;
 
 use App\Http\Controllers\Controller;
 use App\Models\Document;
-use App\Models\LegalDocument;
 use App\Traits\LogsActivity;
 use Illuminate\Support\Facades\Auth;
 
@@ -23,9 +22,6 @@ class DashboardController extends Controller
         $unpublishedDocuments = Document::where('opd_id', $opdId)->where('status', 'unpublished')->count();
         $archivedDocuments = Document::where('opd_id', $opdId)->where('status', 'archived')->count();
         $totalDownloads = Document::where('opd_id', $opdId)->sum('download_count');
-        
-        // Statistik dokumen hukum
-        $totalLegalDocs = LegalDocument::where('opd_id', $opdId)->count();
         
         // Dokumen terbaru
         $recentDocuments = Document::where('opd_id', $opdId)
@@ -51,7 +47,6 @@ class DashboardController extends Controller
             'unpublishedDocuments',
             'archivedDocuments',
             'totalDownloads',
-            'totalLegalDocs',
             'recentDocuments',
             'statsByCategory',
             'user'

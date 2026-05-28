@@ -14,7 +14,6 @@ class ProfilController extends Controller
 
     public function show($section)
     {
-        // Mapping section ke page_key
         $pageKey = match($section) {
             'tentang-ppid' => 'profil_tentang_ppid',
             'visi-misi' => 'profil_visi_misi',

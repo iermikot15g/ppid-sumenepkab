@@ -57,106 +57,89 @@
         </nav>
     </div>
 
-    <!-- Tab Content: Tentang OPD -->
+    <!-- Tab Content: Tentang OPD (menggunakan tentang_content) -->
     <div id="content-tentang" class="bg-white rounded-lg shadow-md p-6">
-        <div class="space-y-4">
-            @if($opd->vision || $opd->mission)
-                <div>
-                    <h3 class="text-lg font-semibold text-gray-900 mb-2">Visi dan Misi</h3>
-                    @if($opd->vision)
-                        <div class="mb-3">
-                            <h4 class="font-medium text-gray-700">Visi</h4>
-                            <p class="text-gray-600">{{ $opd->vision }}</p>
-                        </div>
-                    @endif
-                    @if($opd->mission)
-                        <div>
-                            <h4 class="font-medium text-gray-700">Misi</h4>
-                            <p class="text-gray-600 whitespace-pre-line">{{ $opd->mission }}</p>
-                        </div>
-                    @endif
-                </div>
-            @endif
-            
-            @if($opd->about_content)
-                <div>
-                    <h3 class="text-lg font-semibold text-gray-900 mb-2">Profil OPD</h3>
-                    <div class="text-gray-600">{!! nl2br(e($opd->about_content)) !!}</div>
-                </div>
-            @endif
-
-            @if($opd->google_maps_link)
-                <div>
-                    <h3 class="text-lg font-semibold text-gray-900 mb-2">Lokasi Kantor</h3>
-                    <div class="rounded-lg overflow-hidden">
-                        <iframe src="{{ $opd->google_maps_link }}" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
-                    </div>
-                </div>
-            @endif
-        </div>
-    </div>
-
-    <!-- Tab Content: Dasar Hukum -->
-    <div id="content-dasar-hukum" class="bg-white rounded-lg shadow-md p-6 hidden">
-        @php
-            $legalDocs = App\Models\LegalDocument::where('opd_id', $opd->id)->where('is_published', true)->latest()->get();
-        @endphp
-        
-        @if($legalDocs->count() > 0)
-            <div class="space-y-3">
-                @foreach($legalDocs as $doc)
-                    <div class="border-b border-gray-100 pb-3">
-                        <h4 class="font-medium text-gray-800">{{ $doc->title }}</h4>
-                        @if($doc->regulation_number)
-                            <p class="text-sm text-gray-500">Nomor: {{ $doc->regulation_number }}</p>
-                        @endif
-                        @if($doc->year)
-                            <p class="text-sm text-gray-500">Tahun: {{ $doc->year }}</p>
-                        @endif
-                        @if($doc->description)
-                            <p class="text-sm text-gray-600 mt-1">{{ $doc->description }}</p>
-                        @endif
-                        <a href="{{ Storage::url($doc->file_path) }}" target="_blank" class="inline-block mt-2 text-blue-600 text-sm hover:underline">
-                            Download PDF →
-                        </a>
-                    </div>
-                @endforeach
+        @if($opd->tentang_content)
+            <div class="prose max-w-none">
+                {!! $opd->tentang_content !!}
             </div>
         @else
-            <p class="text-gray-500 text-center py-8">Belum ada dokumen hukum.</p>
+            <p class="text-gray-500 text-center py-8">Konten sedang dalam pengisian oleh administrator.</p>
+        @endif
+        
+        @if($opd->google_maps_link)
+            <div class="mt-6">
+                <iframe src="{{ $opd->google_maps_link }}" width="100%" height="300" style="border:0;" allowfullscreen loading="lazy"></iframe>
+            </div>
         @endif
     </div>
 
-    <!-- Tab Content: Tugas dan Fungsi -->
-    <div id="content-tugas-fungsi" class="bg-white rounded-lg shadow-md p-6 hidden">
-        <div class="space-y-4">
-            @if($opd->duties_content)
-                <div>
-                    <h3 class="text-lg font-semibold text-gray-900 mb-2">Tugas</h3>
-                    <div class="text-gray-600">{!! nl2br(e($opd->duties_content)) !!}</div>
-                </div>
-            @endif
-            @if($opd->functions_content)
-                <div>
-                    <h3 class="text-lg font-semibold text-gray-900 mb-2">Fungsi</h3>
-                    <div class="text-gray-600">{!! nl2br(e($opd->functions_content)) !!}</div>
-                </div>
-            @endif
-            @if(!$opd->duties_content && !$opd->functions_content)
-                <p class="text-gray-500 text-center py-8">Konten sedang dalam pengisian oleh administrator.</p>
-            @endif
-        </div>
-    </div>
-
-    <!-- Tab Content: Struktur Organisasi -->
-    <div id="content-struktur" class="bg-white rounded-lg shadow-md p-6 hidden">
-        @if($opd->structure_image)
-            <div class="flex justify-center">
-                <img src="{{ Storage::url($opd->structure_image) }}" alt="Struktur Organisasi" 
-                     class="max-w-full rounded-lg shadow-sm">
+    <!-- Tab Content: Dasar Hukum (menggunakan dasar_hukum_content dan dasar_hukum_pdf) -->
+    <div id="content-dasar-hukum" class="bg-white rounded-lg shadow-md p-6 hidden">
+        @if($opd->dasar_hukum_content)
+            <div class="prose max-w-none">
+                {!! $opd->dasar_hukum_content !!}
             </div>
         @else
-            <p class="text-gray-500 text-center py-8">Struktur organisasi belum tersedia.</p>
+            <p class="text-gray-500 text-center py-8">Konten dasar hukum sedang dalam pengisian oleh administrator.</p>
+        @endif
+        
+        @if($opd->dasar_hukum_pdf)
+            <div class="mt-6">
+                <a href="{{ Storage::url($opd->dasar_hukum_pdf) }}" target="_blank" 
+                   class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3M3 17V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
+                    </svg>
+                    Download PDF
+                </a>
+            </div>
+        @endif
+    </div>
+
+    <!-- Tab Content: Tugas dan Fungsi (menggunakan tusi_content dan tusi_pdf) -->
+    <div id="content-tugas-fungsi" class="bg-white rounded-lg shadow-md p-6 hidden">
+        @if($opd->tusi_content)
+            <div class="prose max-w-none">
+                {!! $opd->tusi_content !!}
+            </div>
+        @else
+            <p class="text-gray-500 text-center py-8">Konten tugas dan fungsi sedang dalam pengisian oleh administrator.</p>
+        @endif
+        
+        @if($opd->tusi_pdf)
+            <div class="mt-6">
+                <a href="{{ Storage::url($opd->tusi_pdf) }}" target="_blank" 
+                   class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3M3 17V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
+                    </svg>
+                    Download PDF
+                </a>
+            </div>
+        @endif
+    </div>
+
+    <!-- Tab Content: Struktur Organisasi (menggunakan structure_content dan structure_pdf) -->
+    <div id="content-struktur" class="bg-white rounded-lg shadow-md p-6 hidden">
+        @if($opd->structure_content)
+            <div class="prose max-w-none">
+                {!! $opd->structure_content !!}
+            </div>
+        @else
+            <p class="text-gray-500 text-center py-8">Konten struktur organisasi sedang dalam pengisian oleh administrator.</p>
+        @endif
+        
+        @if($opd->structure_pdf)
+            <div class="mt-6">
+                <a href="{{ Storage::url($opd->structure_pdf) }}" target="_blank" 
+                   class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3M3 17V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
+                    </svg>
+                    Download PDF
+                </a>
+            </div>
         @endif
     </div>
 
@@ -217,8 +200,10 @@
         
         // Add active style to selected tab
         const activeTab = document.getElementById(`tab-${tab}`);
-        activeTab.classList.remove('border-transparent', 'text-gray-500');
-        activeTab.classList.add('border-blue-500', 'text-blue-600');
+        if (activeTab) {
+            activeTab.classList.remove('border-transparent', 'text-gray-500');
+            activeTab.classList.add('border-blue-500', 'text-blue-600');
+        }
     }
 </script>
 @endsection
