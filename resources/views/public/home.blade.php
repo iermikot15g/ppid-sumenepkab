@@ -3,14 +3,16 @@
 @section('title', 'PPID Kabupaten Sumenep')
 
 @section('content')
-<!-- Hero Slider Section - Ukuran Gambar 965x410px -->
+<!-- Hero Slider Section -->
 @php
     use App\Models\HeroSlide;
     $heroSlides = HeroSlide::active()->get();
 @endphp
 
+<!-- Hero Slider Section - NATIVE CSS & JS (sama seperti sebelumnya) -->
 @if($heroSlides->count() > 0)
 <style>
+    /* CSS Hero Slider (sama seperti sebelumnya) */
     .hero-slider-container {
         position: relative;
         width: 100%;
@@ -19,8 +21,17 @@
     .hero-slides-wrapper {
         position: relative;
         width: 100%;
-        aspect-ratio: 965 / 410;
-        background-color: #1a3a5c;
+        height: 400px;
+    }
+    @media (min-width: 768px) {
+        .hero-slides-wrapper {
+            height: 500px;
+        }
+    }
+    @media (min-width: 1024px) {
+        .hero-slides-wrapper {
+            height: 600px;
+        }
     }
     .hero-slide-item {
         position: absolute;
@@ -39,12 +50,11 @@
         width: 100%;
         height: 100%;
         object-fit: cover;
-        object-position: center center;
     }
     .hero-overlay {
         position: absolute;
         inset: 0;
-        background: linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.6));
+        background: rgba(0, 0, 0, 0.4);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -56,42 +66,27 @@
         max-width: 56rem;
     }
     .hero-title {
-        font-size: 1.25rem;
+        font-size: 1.5rem;
         font-weight: bold;
         margin-bottom: 0.5rem;
         text-shadow: 0 2px 4px rgba(0,0,0,0.5);
     }
-    @media (min-width: 640px) {
-        .hero-title {
-            font-size: 1.5rem;
-        }
-    }
     @media (min-width: 768px) {
-        .hero-title {
-            font-size: 2rem;
-        }
-    }
-    @media (min-width: 1024px) {
         .hero-title {
             font-size: 2.5rem;
         }
     }
+    @media (min-width: 1024px) {
+        .hero-title {
+            font-size: 3rem;
+        }
+    }
     .hero-subtitle {
-        font-size: 0.75rem;
+        font-size: 0.875rem;
         margin-bottom: 1rem;
         text-shadow: 0 1px 2px rgba(0,0,0,0.5);
     }
-    @media (min-width: 640px) {
-        .hero-subtitle {
-            font-size: 0.875rem;
-        }
-    }
     @media (min-width: 768px) {
-        .hero-subtitle {
-            font-size: 1rem;
-        }
-    }
-    @media (min-width: 1024px) {
         .hero-subtitle {
             font-size: 1.125rem;
         }
@@ -104,23 +99,11 @@
         color: white;
         border: none;
         cursor: pointer;
-        padding: 8px 12px;
-        font-size: 16px;
+        padding: 10px 15px;
+        font-size: 20px;
         border-radius: 50%;
         z-index: 10;
         transition: background 0.3s;
-    }
-    @media (min-width: 768px) {
-        .hero-nav-btn {
-            padding: 10px 15px;
-            font-size: 18px;
-        }
-    }
-    @media (min-width: 1024px) {
-        .hero-nav-btn {
-            padding: 12px 18px;
-            font-size: 20px;
-        }
     }
     .hero-nav-btn:hover {
         background: rgba(0, 0, 0, 0.8);
@@ -133,61 +116,27 @@
     }
     .hero-dots {
         position: absolute;
-        bottom: 12px;
+        bottom: 20px;
         left: 0;
         right: 0;
         display: flex;
         justify-content: center;
-        gap: 6px;
+        gap: 8px;
         z-index: 10;
     }
-    @media (min-width: 768px) {
-        .hero-dots {
-            bottom: 15px;
-            gap: 8px;
-        }
-    }
-    @media (min-width: 1024px) {
-        .hero-dots {
-            bottom: 20px;
-        }
-    }
     .hero-dot {
-        width: 8px;
-        height: 8px;
+        width: 10px;
+        height: 10px;
         background: rgba(255, 255, 255, 0.5);
         border-radius: 50%;
         border: none;
         cursor: pointer;
         transition: all 0.3s;
     }
-    @media (min-width: 768px) {
-        .hero-dot {
-            width: 10px;
-            height: 10px;
-        }
-    }
     .hero-dot.active {
         background: white;
-        width: 20px;
+        width: 24px;
         border-radius: 5px;
-    }
-    @media (min-width: 768px) {
-        .hero-dot.active {
-            width: 24px;
-        }
-    }
-    
-    /* Infografis Rasio 9:16 */
-    .infographic-item {
-        aspect-ratio: 9 / 16;
-        overflow: hidden;
-    }
-    .infographic-item img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        object-position: center center;
     }
 </style>
 
@@ -330,7 +279,7 @@
     </div>
 </div>
 
-<!-- Infografis Section (Rasio 9:16) -->
+<!-- ========== INFOGRAFIS SECTION ========== -->
 <div class="container mx-auto px-4 py-8">
     <div class="flex justify-between items-center mb-6">
         <h2 class="text-2xl font-bold text-gray-800">Infografis</h2>
@@ -338,22 +287,33 @@
     </div>
     
     @php
-        $infographics = App\Models\News::where('type', 'infographic')->where('is_published', true)->latest('published_at')->take(4)->get();
+        $infographics = App\Models\News::where('type', 'infographic')
+            ->where('is_published', true)
+            ->latest('published_at')
+            ->take(4)
+            ->get();
     @endphp
     
     @if($infographics->count() > 0)
     <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
         @foreach($infographics as $infographic)
-        <a href="{{ route('dip.index', ['search' => $infographic->title]) }}" class="infographic-item bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition">
-            @if($infographic->thumbnail && Storage::disk('public')->exists($infographic->thumbnail))
-                <img src="{{ asset('storage/' . $infographic->thumbnail) }}" alt="{{ $infographic->title }}" class="w-full h-full object-cover">
-            @else
-                <div class="w-full h-full bg-gray-200 flex items-center justify-center">
-                    <svg class="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                    </svg>
-                </div>
-            @endif
+        <a href="{{ route('dip.index', ['search' => $infographic->title]) }}" 
+           class="block bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition group">
+            <div class="aspect-w-9 aspect-h-16">
+                @if($infographic->thumbnail && Storage::disk('public')->exists($infographic->thumbnail))
+                    <img src="{{ asset('storage/' . $infographic->thumbnail) }}" alt="{{ $infographic->title }}" 
+                         class="w-full h-64 object-cover group-hover:scale-105 transition duration-300">
+                @else
+                    <div class="w-full h-64 bg-gray-200 flex items-center justify-center">
+                        <svg class="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                    </div>
+                @endif
+            </div>
+            <div class="p-3 bg-white">
+                <h3 class="font-semibold text-gray-800 text-sm line-clamp-2">{{ $infographic->title }}</h3>
+            </div>
         </a>
         @endforeach
     </div>
@@ -364,7 +324,7 @@
     @endif
 </div>
 
-<!-- Berita Terbaru Section -->
+<!-- ========== BERITA TERBARU SECTION ========== -->
 <div class="container mx-auto px-4 py-8">
     <div class="flex justify-between items-center mb-6">
         <h2 class="text-2xl font-bold text-gray-800">Berita Terbaru</h2>
@@ -372,7 +332,11 @@
     </div>
     
     @php
-        $latestNews = App\Models\News::where('type', 'news')->where('is_published', true)->latest('published_at')->take(3)->get();
+        $latestNews = App\Models\News::where('type', 'news')
+            ->where('is_published', true)
+            ->latest('published_at')
+            ->take(3)
+            ->get();
     @endphp
     
     @if($latestNews->count() > 0)
@@ -403,7 +367,7 @@
     @endif
 </div>
 
-<!-- Galeri Foto Section -->
+<!-- ========== GALERI FOTO SECTION ========== -->
 <div class="container mx-auto px-4 py-8 bg-gray-50 rounded-lg my-4">
     <div class="flex justify-between items-center mb-6">
         <h2 class="text-2xl font-bold text-gray-800">Galeri Foto</h2>
@@ -411,7 +375,11 @@
     </div>
     
     @php
-        $galleries = App\Models\News::where('type', 'gallery')->where('is_published', true)->latest('published_at')->take(6)->get();
+        $galleries = App\Models\News::where('type', 'gallery')
+            ->where('is_published', true)
+            ->latest('published_at')
+            ->take(6)
+            ->get();
     @endphp
     
     @if($galleries->count() > 0)
@@ -446,7 +414,7 @@
     </div>
 </div>
 
-<!-- Agenda Section -->
+<!-- ========== AGENDA KEGIATAN SECTION ========== -->
 <div class="container mx-auto px-4 py-8">
     <div class="flex justify-between items-center mb-6">
         <h2 class="text-2xl font-bold text-gray-800">Agenda Kegiatan</h2>
@@ -454,7 +422,12 @@
     </div>
     
     @php
-        $agendas = App\Models\News::where('type', 'agenda')->where('is_published', true)->where('event_date', '>=', now())->orderBy('event_date')->take(5)->get();
+        $agendas = App\Models\News::where('type', 'agenda')
+            ->where('is_published', true)
+            ->where('event_date', '>=', now())
+            ->orderBy('event_date')
+            ->take(5)
+            ->get();
     @endphp
     
     @if($agendas->count() > 0)

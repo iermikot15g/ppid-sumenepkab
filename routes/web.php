@@ -10,6 +10,8 @@ use App\Http\Controllers\Dashboard\Pembantu\DashboardController;
 use App\Http\Controllers\Dashboard\Pembantu\DocumentController;
 use App\Http\Controllers\Dashboard\Pembantu\ProfilOpdController;
 use App\Http\Controllers\Dashboard\Pembantu\LegalDocumentController;
+use App\Http\Controllers\Dashboard\Pembantu\AgendaController;
+use App\Http\Controllers\Dashboard\Pembantu\InfografisController;
 use App\Http\Controllers\Dashboard\Utama\MonitoringController;
 use App\Http\Controllers\Dashboard\Utama\CmsNewsController;
 use App\Http\Controllers\Dashboard\Utama\HeroSlideController;
@@ -58,23 +60,59 @@ Route::prefix('dashboard')->middleware(['auth'])->group(function () {
     
     // ========== DASHBOARD PPID PEMBANTU ==========
     Route::prefix('pembantu')->middleware(['role:ppid_pembantu'])->group(function () {
+        // Dashboard
         Route::get('/', [DashboardController::class, 'index'])->name('dashboard.pembantu');
         
-        // Route Dokumen DIP
-        Route::get('/documents', [DocumentController::class, 'index'])->name('documents.index');
-        Route::get('/documents/create', [DocumentController::class, 'create'])->name('documents.create');
-        Route::post('/documents', [DocumentController::class, 'store'])->name('documents.store');
-        Route::get('/documents/{document}/edit', [DocumentController::class, 'edit'])->name('documents.edit');
-        Route::put('/documents/{document}', [DocumentController::class, 'update'])->name('documents.update');
-        Route::delete('/documents/{document}', [DocumentController::class, 'destroy'])->name('documents.destroy');
-        Route::patch('/documents/{document}/status', [DocumentController::class, 'updateStatus'])->name('documents.status');
+        // ========== DOKUMEN DIP ==========
+        Route::prefix('documents')->group(function () {
+            Route::get('/', [DocumentController::class, 'index'])->name('documents.index');
+            Route::get('/create', [DocumentController::class, 'create'])->name('documents.create');
+            Route::post('/', [DocumentController::class, 'store'])->name('documents.store');
+            Route::get('/{document}/edit', [DocumentController::class, 'edit'])->name('documents.edit');
+            Route::put('/{document}', [DocumentController::class, 'update'])->name('documents.update');
+            Route::delete('/{document}', [DocumentController::class, 'destroy'])->name('documents.destroy');
+            Route::patch('/{document}/status', [DocumentController::class, 'updateStatus'])->name('documents.status');
+        });
         
-        // Route Profil OPD
-        Route::get('profil-opd/edit', [ProfilOpdController::class, 'edit'])->name('pembantu.profil-opd.edit');
-        Route::put('profil-opd', [ProfilOpdController::class, 'update'])->name('pembantu.profil-opd.update');
-        
-        // Route Dasar Hukum (Legal Documents)
+        // ========== DASAR HUKUM (LEGAL DOCUMENTS) ==========
         Route::resource('legal-documents', LegalDocumentController::class);
+        
+        // ========== CMS PPID PEMBANTU ==========
+        Route::prefix('cms')->group(function () {
+            
+            // CMS Profil OPD
+            Route::prefix('profil')->group(function () {
+                Route::get('/', [ProfilOpdController::class, 'index'])->name('pembantu.cms.profil.index');
+                Route::get('/about', [ProfilOpdController::class, 'editAbout'])->name('pembantu.cms.profil.about');
+                Route::put('/about', [ProfilOpdController::class, 'updateAbout'])->name('pembantu.cms.profil.update-about');
+                Route::get('/duties', [ProfilOpdController::class, 'editDuties'])->name('pembantu.cms.profil.duties');
+                Route::put('/duties', [ProfilOpdController::class, 'updateDuties'])->name('pembantu.cms.profil.update-duties');
+                Route::get('/structure', [ProfilOpdController::class, 'editStructure'])->name('pembantu.cms.profil.structure');
+                Route::put('/structure', [ProfilOpdController::class, 'updateStructure'])->name('pembantu.cms.profil.update-structure');
+            });
+            
+            // CMS Agenda
+            Route::prefix('agenda')->group(function () {
+                Route::get('/', [AgendaController::class, 'index'])->name('pembantu.cms.agenda.index');
+                Route::get('/create', [AgendaController::class, 'create'])->name('pembantu.cms.agenda.create');
+                Route::post('/', [AgendaController::class, 'store'])->name('pembantu.cms.agenda.store');
+                Route::get('/{id}/edit', [AgendaController::class, 'edit'])->name('pembantu.cms.agenda.edit');
+                Route::put('/{id}', [AgendaController::class, 'update'])->name('pembantu.cms.agenda.update');
+                Route::delete('/{id}', [AgendaController::class, 'destroy'])->name('pembantu.cms.agenda.destroy');
+                Route::patch('/{id}/toggle', [AgendaController::class, 'togglePublished'])->name('pembantu.cms.agenda.toggle');
+            });
+            
+            // CMS Infografis
+            Route::prefix('infographic')->group(function () {
+                Route::get('/', [InfografisController::class, 'index'])->name('pembantu.cms.infographic.index');
+                Route::get('/create', [InfografisController::class, 'create'])->name('pembantu.cms.infographic.create');
+                Route::post('/', [InfografisController::class, 'store'])->name('pembantu.cms.infographic.store');
+                Route::get('/{id}/edit', [InfografisController::class, 'edit'])->name('pembantu.cms.infographic.edit');
+                Route::put('/{id}', [InfografisController::class, 'update'])->name('pembantu.cms.infographic.update');
+                Route::delete('/{id}', [InfografisController::class, 'destroy'])->name('pembantu.cms.infographic.destroy');
+                Route::patch('/{id}/toggle', [InfografisController::class, 'togglePublished'])->name('pembantu.cms.infographic.toggle');
+            });
+        });
     });
     
     // ========== DASHBOARD PPID UTAMA ==========
@@ -141,7 +179,7 @@ Route::prefix('dashboard')->middleware(['auth'])->group(function () {
             Route::put('/{pageKey}', [CmsNewsController::class, 'profilUpdate'])->name('utama.cms.profil.update');
         });
 
-        // ========== CMS STANDAR LAYANAN ==========
+        // CMS Standar Layanan
         Route::prefix('cms/standar')->group(function () {
             Route::get('/', [CmsNewsController::class, 'standarIndex'])->name('utama.cms.standar.index');
             Route::get('/{pageKey}/edit', [CmsNewsController::class, 'standarEdit'])->name('utama.cms.standar.edit');

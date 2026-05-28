@@ -7,10 +7,10 @@
     <div class="bg-white rounded-lg shadow p-6">
         <div class="flex items-center justify-between mb-6">
             <h1 class="text-2xl font-bold text-gray-800">Edit Tentang OPD</h1>
-            <a href="{{ route('pembantu.profil-opd.index') }}" class="text-gray-600 hover:text-gray-800">← Kembali</a>
+            <a href="{{ route('pembantu.cms.profil.index') }}" class="text-gray-600 hover:text-gray-800">← Kembali ke CMS Profil OPD</a>
         </div>
 
-        <form method="POST" action="{{ route('pembantu.profil-opd.update-about') }}" enctype="multipart/form-data">
+        <form method="POST" action="{{ route('pembantu.cms.profil.update-about') }}" enctype="multipart/form-data">
             @csrf
             @method('PUT')
 
@@ -38,32 +38,35 @@
                 <!-- Visi -->
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Visi</label>
-                    <textarea name="vision" rows="3" class="w-full border-gray-300 rounded-md shadow-sm font-mono text-sm">{{ old('vision', $opd->vision) }}</textarea>
+                    <textarea name="vision" rows="5" class="w-full border-gray-300 rounded-md shadow-sm font-mono text-sm">{{ old('vision', $opd->vision) }}</textarea>
+                    <p class="text-xs text-gray-500 mt-1">Mendukung HTML untuk formatting</p>
                 </div>
 
                 <!-- Misi -->
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Misi</label>
-                    <textarea name="mission" rows="5" class="w-full border-gray-300 rounded-md shadow-sm font-mono text-sm">{{ old('mission', $opd->mission) }}</textarea>
+                    <textarea name="mission" rows="8" class="w-full border-gray-300 rounded-md shadow-sm font-mono text-sm">{{ old('mission', $opd->mission) }}</textarea>
+                    <p class="text-xs text-gray-500 mt-1">Mendukung HTML untuk formatting</p>
                 </div>
 
-                <!-- Profil Singkat -->
+                <!-- Profil Singkat OPD -->
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Profil Singkat OPD</label>
-                    <textarea name="about_content" rows="5" class="w-full border-gray-300 rounded-md shadow-sm font-mono text-sm">{{ old('about_content', $opd->about_content) }}</textarea>
+                    <textarea name="about_content" rows="10" class="w-full border-gray-300 rounded-md shadow-sm font-mono text-sm" id="about_content">{{ old('about_content', $opd->about_content) }}</textarea>
+                    <p class="text-xs text-gray-500 mt-1">Mendukung HTML untuk formatting (gunakan &lt;ul&gt;, &lt;li&gt;, &lt;p&gt;, dll)</p>
                 </div>
 
-                <!-- Alamat -->
+                <!-- Alamat Kantor -->
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Alamat Kantor</label>
-                    <textarea name="address" rows="2" class="w-full border-gray-300 rounded-md shadow-sm">{{ old('address', $opd->address) }}</textarea>
+                    <textarea name="address" rows="3" class="w-full border-gray-300 rounded-md shadow-sm">{{ old('address', $opd->address) }}</textarea>
                 </div>
 
-                <!-- Google Maps -->
+                <!-- Google Maps Link -->
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Google Maps Link</label>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Google Maps Link (Embed)</label>
                     <input type="text" name="google_maps_link" class="w-full border-gray-300 rounded-md shadow-sm" value="{{ old('google_maps_link', $opd->google_maps_link) }}">
-                    <p class="text-xs text-gray-500 mt-1">Masukkan link embed Google Maps</p>
+                    <p class="text-xs text-gray-500 mt-1">Masukkan link embed Google Maps (iframe src)</p>
                 </div>
 
                 <!-- Kontak -->
@@ -80,7 +83,7 @@
             </div>
 
             <div class="mt-6 flex justify-end space-x-3">
-                <a href="{{ route('pembantu.profil-opd.index') }}" class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50">Batal</a>
+                <a href="{{ route('pembantu.cms.profil.index') }}" class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50">Batal</a>
                 <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">Simpan Perubahan</button>
             </div>
         </form>

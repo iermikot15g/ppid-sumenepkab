@@ -7,7 +7,7 @@
     <div class="bg-white rounded-lg shadow p-6">
         <div class="flex items-center justify-between mb-6">
             <h1 class="text-2xl font-bold text-gray-800">Edit Tentang OPD</h1>
-            <a href="{{ route('pembantu.profil-opd.index') }}" class="text-gray-600 hover:text-gray-800">← Kembali</a>
+            <a href="{{ route('pembantu.profil-opd.index') }}" class="text-gray-600 hover:text-gray-800">← Kembali ke CMS Profil OPD</a>
         </div>
 
         <form method="POST" action="{{ route('pembantu.profil-opd.update-about') }}" enctype="multipart/form-data">
@@ -39,18 +39,21 @@
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Visi</label>
                     <textarea name="vision" rows="3" class="w-full border-gray-300 rounded-md shadow-sm font-mono text-sm">{{ old('vision', $opd->vision) }}</textarea>
+                    <p class="text-xs text-gray-500 mt-1">Mendukung HTML untuk formatting</p>
                 </div>
 
                 <!-- Misi -->
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Misi</label>
                     <textarea name="mission" rows="5" class="w-full border-gray-300 rounded-md shadow-sm font-mono text-sm">{{ old('mission', $opd->mission) }}</textarea>
+                    <p class="text-xs text-gray-500 mt-1">Mendukung HTML untuk formatting</p>
                 </div>
 
                 <!-- Profil Singkat -->
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Profil Singkat OPD</label>
-                    <textarea name="about_content" rows="5" class="w-full border-gray-300 rounded-md shadow-sm font-mono text-sm">{{ old('about_content', $opd->about_content) }}</textarea>
+                    <textarea name="about_content" rows="8" class="w-full border-gray-300 rounded-md shadow-sm font-mono text-sm">{{ old('about_content', $opd->about_content) }}</textarea>
+                    <p class="text-xs text-gray-500 mt-1">Mendukung HTML untuk formatting (gunakan &lt;ul&gt;, &lt;li&gt;, &lt;p&gt;, dll)</p>
                 </div>
 
                 <!-- Alamat -->
@@ -61,9 +64,9 @@
 
                 <!-- Google Maps -->
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Google Maps Link</label>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Google Maps Link (Embed)</label>
                     <input type="text" name="google_maps_link" class="w-full border-gray-300 rounded-md shadow-sm" value="{{ old('google_maps_link', $opd->google_maps_link) }}">
-                    <p class="text-xs text-gray-500 mt-1">Masukkan link embed Google Maps</p>
+                    <p class="text-xs text-gray-500 mt-1">Masukkan link embed Google Maps (iframe src)</p>
                 </div>
 
                 <!-- Kontak -->
