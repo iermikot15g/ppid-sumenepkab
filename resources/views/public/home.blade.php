@@ -3,34 +3,33 @@
 @section('title', 'PPID Kabupaten Sumenep')
 
 @section('content')
-<!-- Hero Slider Section -->
+<!-- ============================================================ -->
+<!-- HERO SLIDER SECTION                                          -->
+<!-- Rasio gambar: 1920:815 atau 384:163                          -->
+<!-- ============================================================ -->
 @php
     use App\Models\HeroSlide;
     $heroSlides = HeroSlide::active()->get();
 @endphp
 
-<!-- Hero Slider Section - NATIVE CSS & JS (sama seperti sebelumnya) -->
 @if($heroSlides->count() > 0)
 <style>
-    /* CSS Hero Slider (sama seperti sebelumnya) */
+    /* ========== HERO SLIDER STYLES ========== */
     .hero-slider-container {
         position: relative;
         width: 100%;
         overflow: hidden;
     }
+    /* Rasio 1920:815 = 2.355 : 1 */
     .hero-slides-wrapper {
         position: relative;
         width: 100%;
-        height: 400px;
+        aspect-ratio: 1920 / 815;
+        background-color: #1a3a5c;
     }
-    @media (min-width: 768px) {
+    @media (max-width: 768px) {
         .hero-slides-wrapper {
-            height: 500px;
-        }
-    }
-    @media (min-width: 1024px) {
-        .hero-slides-wrapper {
-            height: 600px;
+            aspect-ratio: 384 / 163;
         }
     }
     .hero-slide-item {
@@ -50,47 +49,9 @@
         width: 100%;
         height: 100%;
         object-fit: cover;
+        object-position: center center;
     }
-    .hero-overlay {
-        position: absolute;
-        inset: 0;
-        background: rgba(0, 0, 0, 0.4);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-        color: white;
-        padding: 0 1rem;
-    }
-    .hero-content {
-        max-width: 56rem;
-    }
-    .hero-title {
-        font-size: 1.5rem;
-        font-weight: bold;
-        margin-bottom: 0.5rem;
-        text-shadow: 0 2px 4px rgba(0,0,0,0.5);
-    }
-    @media (min-width: 768px) {
-        .hero-title {
-            font-size: 2.5rem;
-        }
-    }
-    @media (min-width: 1024px) {
-        .hero-title {
-            font-size: 3rem;
-        }
-    }
-    .hero-subtitle {
-        font-size: 0.875rem;
-        margin-bottom: 1rem;
-        text-shadow: 0 1px 2px rgba(0,0,0,0.5);
-    }
-    @media (min-width: 768px) {
-        .hero-subtitle {
-            font-size: 1.125rem;
-        }
-    }
+    /* Navigasi Tombol */
     .hero-nav-btn {
         position: absolute;
         top: 50%;
@@ -99,21 +60,28 @@
         color: white;
         border: none;
         cursor: pointer;
-        padding: 10px 15px;
-        font-size: 20px;
+        padding: 12px 16px;
+        font-size: 18px;
         border-radius: 50%;
         z-index: 10;
         transition: background 0.3s;
+    }
+    @media (min-width: 768px) {
+        .hero-nav-btn {
+            padding: 14px 20px;
+            font-size: 20px;
+        }
     }
     .hero-nav-btn:hover {
         background: rgba(0, 0, 0, 0.8);
     }
     .hero-prev {
-        left: 10px;
+        left: 15px;
     }
     .hero-next {
-        right: 10px;
+        right: 15px;
     }
+    /* Dots Navigasi */
     .hero-dots {
         position: absolute;
         bottom: 20px;
@@ -121,7 +89,7 @@
         right: 0;
         display: flex;
         justify-content: center;
-        gap: 8px;
+        gap: 10px;
         z-index: 10;
     }
     .hero-dot {
@@ -144,17 +112,7 @@
     <div class="hero-slides-wrapper">
         @foreach($heroSlides as $index => $slide)
         <div class="hero-slide-item {{ $index === 0 ? 'active' : '' }}" data-index="{{ $index }}">
-            <img src="{{ asset('storage/' . $slide->image_path) }}" alt="{{ $slide->title ?? 'Slide' }}">
-            <div class="hero-overlay">
-                <div class="hero-content">
-                    @if($slide->title)
-                        <h2 class="hero-title">{{ $slide->title }}</h2>
-                    @endif
-                    @if($slide->subtitle)
-                        <p class="hero-subtitle">{{ $slide->subtitle }}</p>
-                    @endif
-                </div>
-            </div>
+            <img src="{{ asset('storage/' . $slide->image_path) }}" alt="{{ $slide->title ?? 'Slide ' . ($index + 1) }}">
         </div>
         @endforeach
     </div>
@@ -172,6 +130,7 @@
 </div>
 
 <script>
+    // ========== HERO SLIDER SCRIPT ==========
     (function() {
         let currentIndex = 0;
         const totalSlides = {{ $heroSlides->count() }};
@@ -233,7 +192,9 @@
 </div>
 @endif
 
-<!-- Quick Access Section -->
+<!-- ============================================================ -->
+<!-- QUICK ACCESS SECTION - Ikon akses cepat ke fitur utama      -->
+<!-- ============================================================ -->
 <div class="container mx-auto px-4 py-12">
     <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto">
         <a href="{{ route('dip.index') }}" class="bg-white shadow-md rounded-lg p-4 text-center hover:shadow-lg transition">
@@ -263,7 +224,9 @@
     </div>
 </div>
 
-<!-- Welcome Section -->
+<!-- ============================================================ -->
+<!-- WELCOME SECTION - Sambutan dan informasi portal             -->
+<!-- ============================================================ -->
 <div class="container mx-auto px-4 py-8">
     <div class="bg-blue-50 rounded-lg p-8 max-w-4xl mx-auto text-center">
         <h2 class="text-2xl font-bold text-blue-800 mb-3">Selamat Datang di Portal PPID Kabupaten Sumenep</h2>
@@ -279,11 +242,14 @@
     </div>
 </div>
 
-<!-- ========== INFOGRAFIS SECTION ========== -->
+<!-- ============================================================ -->
+<!-- INFOGRAFIS SECTION - Grid 4 kolom                           -->
+<!-- Preview menggunakan modal gambar                             -->
+<!-- ============================================================ -->
 <div class="container mx-auto px-4 py-8">
     <div class="flex justify-between items-center mb-6">
         <h2 class="text-2xl font-bold text-gray-800">Infografis</h2>
-        <a href="{{ route('dip.index', ['category' => 'infographic']) }}" class="text-blue-600 hover:underline">Lihat Semua →</a>
+        <a href="{{ route('infografis.index') }}" class="text-blue-600 hover:underline">Lihat Semua →</a>
     </div>
     
     @php
@@ -297,24 +263,22 @@
     @if($infographics->count() > 0)
     <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
         @foreach($infographics as $infographic)
-        <a href="{{ route('dip.index', ['search' => $infographic->title]) }}" 
-           class="block bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition group">
-            <div class="aspect-w-9 aspect-h-16">
-                @if($infographic->thumbnail && Storage::disk('public')->exists($infographic->thumbnail))
-                    <img src="{{ asset('storage/' . $infographic->thumbnail) }}" alt="{{ $infographic->title }}" 
-                         class="w-full h-64 object-cover group-hover:scale-105 transition duration-300">
-                @else
-                    <div class="w-full h-64 bg-gray-200 flex items-center justify-center">
-                        <svg class="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                        </svg>
-                    </div>
-                @endif
-            </div>
+        <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition group cursor-pointer" 
+             onclick="openInfografisModal('{{ asset('storage/' . $infographic->thumbnail) }}', '{{ addslashes($infographic->title) }}')">
+            @if($infographic->thumbnail && Storage::disk('public')->exists($infographic->thumbnail))
+                <img src="{{ asset('storage/' . $infographic->thumbnail) }}" alt="{{ $infographic->title }}" 
+                     class="w-full h-64 object-cover group-hover:scale-105 transition duration-300">
+            @else
+                <div class="w-full h-64 bg-gray-200 flex items-center justify-center">
+                    <svg class="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                </div>
+            @endif
             <div class="p-3 bg-white">
                 <h3 class="font-semibold text-gray-800 text-sm line-clamp-2">{{ $infographic->title }}</h3>
             </div>
-        </a>
+        </div>
         @endforeach
     </div>
     @else
@@ -324,54 +288,28 @@
     @endif
 </div>
 
-<!-- ========== BERITA TERBARU SECTION ========== -->
-<div class="container mx-auto px-4 py-8">
-    <div class="flex justify-between items-center mb-6">
-        <h2 class="text-2xl font-bold text-gray-800">Berita Terbaru</h2>
-        <a href="{{ route('dip.index', ['category' => 'news']) }}" class="text-blue-600 hover:underline">Lihat Semua →</a>
+<!-- ============================================================ -->
+<!-- INFOGRAFIS MODAL - Preview gambar (ukuran menyesuaikan)      -->
+<!-- ============================================================ -->
+<div id="infografisModal" class="fixed inset-0 z-50 hidden bg-black bg-opacity-90 items-center justify-center p-4" onclick="closeInfografisModal()">
+    <div class="relative max-w-full max-h-full" onclick="event.stopPropagation()">
+        <button onclick="closeInfografisModal()" class="absolute -top-12 right-0 text-white hover:text-gray-300 text-3xl z-10">&times;</button>
+        <div class="flex items-center justify-center">
+            <img id="infografisModalImage" src="" alt="" 
+                 class="max-w-[90vw] max-h-[90vh] w-auto h-auto object-contain rounded-lg shadow-2xl">
+        </div>
+        <p id="infografisModalCaption" class="text-center text-white mt-4 text-sm"></p>
     </div>
-    
-    @php
-        $latestNews = App\Models\News::where('type', 'news')
-            ->where('is_published', true)
-            ->latest('published_at')
-            ->take(3)
-            ->get();
-    @endphp
-    
-    @if($latestNews->count() > 0)
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        @foreach($latestNews as $news)
-        <a href="{{ route('dip.index', ['search' => $news->title]) }}" class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition">
-            @if($news->thumbnail && Storage::disk('public')->exists($news->thumbnail))
-                <img src="{{ asset('storage/' . $news->thumbnail) }}" alt="{{ $news->title }}" class="w-full h-48 object-cover">
-            @else
-                <div class="w-full h-48 bg-gray-200 flex items-center justify-center">
-                    <svg class="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9.5a2.5 2.5 0 00-2.5-2.5H15" />
-                    </svg>
-                </div>
-            @endif
-            <div class="p-4">
-                <h3 class="font-semibold text-gray-800 mb-2 line-clamp-2">{{ $news->title }}</h3>
-                <p class="text-sm text-gray-500 mb-2">{{ $news->published_at ? $news->published_at->format('d F Y') : '-' }}</p>
-                <p class="text-gray-600 text-sm line-clamp-3">{{ Str::limit(strip_tags($news->content), 100) }}</p>
-            </div>
-        </a>
-        @endforeach
-    </div>
-    @else
-    <div class="bg-gray-50 rounded-lg p-8 text-center">
-        <p class="text-gray-500">Belum ada berita terbaru.</p>
-    </div>
-    @endif
 </div>
 
-<!-- ========== GALERI FOTO SECTION ========== -->
+<!-- ============================================================ -->
+<!-- GALERI FOTO SECTION - Grid 6 kolom                           -->
+<!-- Klik "Lihat Semua" -> menuju ke halaman khusus galeri        -->
+<!-- ============================================================ -->
 <div class="container mx-auto px-4 py-8 bg-gray-50 rounded-lg my-4">
     <div class="flex justify-between items-center mb-6">
         <h2 class="text-2xl font-bold text-gray-800">Galeri Foto</h2>
-        <a href="{{ route('dip.index', ['category' => 'gallery']) }}" class="text-blue-600 hover:underline">Lihat Semua →</a>
+        <a href="{{ route('galeri.index') }}" class="text-blue-600 hover:underline">Lihat Semua →</a>
     </div>
     
     @php
@@ -385,7 +323,8 @@
     @if($galleries->count() > 0)
     <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
         @foreach($galleries as $gallery)
-        <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition cursor-pointer" onclick="openGalleryModal('{{ asset('storage/' . $gallery->thumbnail) }}', '{{ addslashes($gallery->title) }}')">
+        <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition cursor-pointer" 
+             onclick="openGaleriModal('{{ asset('storage/' . $gallery->thumbnail) }}', '{{ addslashes($gallery->title) }}')">
             @if($gallery->thumbnail && Storage::disk('public')->exists($gallery->thumbnail))
                 <img src="{{ asset('storage/' . $gallery->thumbnail) }}" alt="{{ $gallery->title }}" class="w-full h-32 object-cover">
             @else
@@ -405,90 +344,170 @@
     @endif
 </div>
 
-<!-- Gallery Modal -->
-<div id="galleryModal" class="fixed inset-0 z-50 hidden bg-black bg-opacity-90 items-center justify-center" onclick="closeGalleryModal()">
-    <div class="relative max-w-4xl w-full mx-4" onclick="event.stopPropagation()">
-        <button onclick="closeGalleryModal()" class="absolute -top-10 right-0 text-white hover:text-gray-300 text-2xl">&times;</button>
-        <img id="modalImage" src="" alt="" class="w-full rounded-lg shadow-2xl">
-        <p id="modalCaption" class="text-center text-white mt-4"></p>
+<!-- ============================================================ -->
+<!-- GALERI MODAL - Preview gambar (ukuran menyesuaikan)          -->
+<!-- ============================================================ -->
+<div id="galeriModal" class="fixed inset-0 z-50 hidden bg-black bg-opacity-90 items-center justify-center p-4" onclick="closeGaleriModal()">
+    <div class="relative max-w-full max-h-full" onclick="event.stopPropagation()">
+        <button onclick="closeGaleriModal()" class="absolute -top-12 right-0 text-white hover:text-gray-300 text-3xl z-10">&times;</button>
+        <div class="flex items-center justify-center">
+            <img id="galeriModalImage" src="" alt="" 
+                 class="max-w-[90vw] max-h-[90vh] w-auto h-auto object-contain rounded-lg shadow-2xl">
+        </div>
+        <p id="galeriModalCaption" class="text-center text-white mt-4 text-sm"></p>
     </div>
 </div>
 
-<!-- ========== AGENDA KEGIATAN SECTION ========== -->
+<!-- ============================================================ -->
+<!-- AGENDA KEGIATAN SECTION - Grid 4 kolom x 3 baris            -->
+<!-- Urutan: agenda terbaru (tanggal terdekat) di paling atas     -->
+<!-- Klik "Lihat Semua" -> menuju ke halaman khusus agenda        -->
+<!-- ============================================================ -->
 <div class="container mx-auto px-4 py-8">
     <div class="flex justify-between items-center mb-6">
         <h2 class="text-2xl font-bold text-gray-800">Agenda Kegiatan</h2>
-        <a href="{{ route('dip.index', ['category' => 'agenda']) }}" class="text-blue-600 hover:underline">Lihat Semua →</a>
+        <a href="{{ route('agenda.index') }}" class="text-blue-600 hover:underline">Lihat Semua →</a>
     </div>
     
     @php
+        // Ambil 12 agenda terbaru (4 kolom x 3 baris = 12 item)
+        // Urutan: event_date ASC (yang paling dekat tampil pertama)
         $agendas = App\Models\News::where('type', 'agenda')
             ->where('is_published', true)
-            ->where('event_date', '>=', now())
-            ->orderBy('event_date')
-            ->take(5)
+            ->where('event_date', '>=', now()) // Hanya agenda yang belum lewat
+            ->orderBy('event_date', 'asc')     // Urutan dari yang paling dekat
+            ->take(12)
             ->get();
     @endphp
     
     @if($agendas->count() > 0)
-    <div class="space-y-3">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         @foreach($agendas as $agenda)
-        <a href="{{ route('dip.index', ['search' => $agenda->title]) }}" class="block bg-white rounded-lg p-4 shadow-sm hover:shadow-md transition border-l-4 border-blue-500">
-            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
-                <div class="flex-1">
-                    <h3 class="font-semibold text-gray-800">{{ $agenda->title }}</h3>
-                    <div class="flex flex-wrap gap-3 text-sm text-gray-500 mt-1">
-                        <span class="flex items-center gap-1">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                            </svg>
-                            {{ \Carbon\Carbon::parse($agenda->event_date)->format('d F Y') }}
-                        </span>
-                        @if($agenda->location)
-                        <span class="flex items-center gap-1">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                            </svg>
-                            {{ $agenda->location }}
-                        </span>
+        <a href="{{ route('agenda.index') }}?search={{ urlencode($agenda->title) }}" 
+           class="block bg-white rounded-lg shadow-md hover:shadow-lg transition border-l-4 border-blue-500 overflow-hidden group">
+            <div class="p-4">
+                <!-- Tanggal - Format dengan hari, tanggal, bulan, tahun -->
+                <div class="flex items-center text-blue-600 mb-2">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                    <span class="text-sm font-medium">{{ \Carbon\Carbon::parse($agenda->event_date)->translatedFormat('l, d F Y') }}</span>
+                </div>
+                
+                <!-- Judul -->
+                <h3 class="font-semibold text-gray-800 mb-2 line-clamp-2 group-hover:text-blue-600 transition">
+                    {{ $agenda->title }}
+                </h3>
+                
+                <!-- Lokasi -->
+                @if($agenda->location)
+                <div class="flex items-center text-gray-500 text-sm mt-2">
+                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                    <span class="text-xs line-clamp-1">{{ $agenda->location }}</span>
+                </div>
+                @endif
+                
+                <!-- Sisa hari (countdown) -->
+                @php
+                    $daysLeft = now()->diffInDays(\Carbon\Carbon::parse($agenda->event_date), false);
+                @endphp
+                <div class="mt-3">
+                    <span class="inline-block px-2 py-1 text-xs rounded-full bg-green-100 text-green-600">
+                        @if($daysLeft == 0)
+                            Hari Ini
+                        @elseif($daysLeft == 1)
+                            Besok
+                        @else
+                            {{ $daysLeft }} hari lagi
                         @endif
-                    </div>
+                    </span>
                 </div>
             </div>
         </a>
         @endforeach
     </div>
+    
+    <!-- Jika agenda kurang dari 12, tampilkan pesan info -->
+    @if($agendas->count() < 12)
+    <div class="mt-4 text-center text-gray-500 text-sm">
+        Menampilkan {{ $agendas->count() }} agenda terdekat
+    </div>
+    @endif
+    
     @else
     <div class="bg-gray-50 rounded-lg p-8 text-center">
-        <p class="text-gray-500">Belum ada agenda kegiatan terdekat.</p>
+        <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+        </svg>
+        <p class="mt-2 text-gray-500">Belum ada agenda kegiatan terdekat.</p>
     </div>
     @endif
 </div>
 
+<!-- ============================================================ -->
+<!-- SCRIPTS - Modal preview untuk infografis dan galeri          -->
+<!-- ============================================================ -->
 <script>
-    function openGalleryModal(imageUrl, title) {
-        const modal = document.getElementById('galleryModal');
-        const modalImage = document.getElementById('modalImage');
-        const modalCaption = document.getElementById('modalCaption');
+    // ================================================================
+    // INFOGRAFIS MODAL
+    // ================================================================
+    function openInfografisModal(imageUrl, title) {
+        const modal = document.getElementById('infografisModal');
+        const modalImage = document.getElementById('infografisModalImage');
+        const modalCaption = document.getElementById('infografisModalCaption');
         
-        modalImage.src = imageUrl;
-        modalCaption.textContent = title;
-        modal.classList.remove('hidden');
-        modal.classList.add('flex');
-        document.body.style.overflow = 'hidden';
+        if (modal && modalImage && modalCaption) {
+            modalImage.src = imageUrl;
+            modalCaption.textContent = title;
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            document.body.style.overflow = 'hidden';
+        }
     }
 
-    function closeGalleryModal() {
-        const modal = document.getElementById('galleryModal');
-        modal.classList.add('hidden');
-        modal.classList.remove('flex');
-        document.body.style.overflow = 'auto';
+    function closeInfografisModal() {
+        const modal = document.getElementById('infografisModal');
+        if (modal) {
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+            document.body.style.overflow = 'auto';
+        }
+    }
+    
+    // ================================================================
+    // GALERI MODAL
+    // ================================================================
+    function openGaleriModal(imageUrl, title) {
+        const modal = document.getElementById('galeriModal');
+        const modalImage = document.getElementById('galeriModalImage');
+        const modalCaption = document.getElementById('galeriModalCaption');
+        
+        if (modal && modalImage && modalCaption) {
+            modalImage.src = imageUrl;
+            modalCaption.textContent = title;
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            document.body.style.overflow = 'hidden';
+        }
     }
 
+    function closeGaleriModal() {
+        const modal = document.getElementById('galeriModal');
+        if (modal) {
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+            document.body.style.overflow = 'auto';
+        }
+    }
+
+    // Tutup semua modal dengan tombol Escape
     document.addEventListener('keydown', function(event) {
         if (event.key === 'Escape') {
-            closeGalleryModal();
+            closeInfografisModal();
+            closeGaleriModal();
         }
     });
 </script>

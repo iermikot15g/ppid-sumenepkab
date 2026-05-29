@@ -71,10 +71,10 @@
                     <div x-show="open" @click.away="open = false" x-transition class="absolute left-0 mt-2 w-64 bg-white rounded-md shadow-lg py-1 z-10 border border-gray-200" style="display: none;">
                         <a href="{{ route('dip.index', ['category' => 'all']) }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Semua Informasi</a>
                         <hr class="my-1">
-                        <a href="{{ route('dip.index', ['category' => 'berkala']) }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Informasi Berkala</a>
-                        <a href="{{ route('dip.index', ['category' => 'serta-merta']) }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Informasi Serta-Merta</a>
-                        <a href="{{ route('dip.index', ['category' => 'setiap-saat']) }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Informasi Setiap Saat</a>
-                        <a href="{{ route('dip.index', ['category' => 'dikecualikan']) }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Informasi Dikecualikan</a>
+                        <a href="{{ route('dip.index', ['category' => 'informasi-berkala']) }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Informasi Berkala</a>
+                        <a href="{{ route('dip.index', ['category' => 'informasi-serta-merta']) }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Informasi Serta-Merta</a>
+                        <a href="{{ route('dip.index', ['category' => 'informasi-setiap-saat']) }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Informasi Setiap Saat</a>
+                        <a href="{{ route('dip.index', ['category' => 'informasi-dikecualikan']) }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Informasi Dikecualikan</a>
                     </div>
                 </div>
                 
@@ -158,10 +158,10 @@
                     <div x-show="open" class="pl-4 space-y-1" style="display: none;">
                         <a href="{{ route('dip.index', ['category' => 'all']) }}" class="block px-3 py-2 text-sm text-gray-600 hover:bg-gray-100 rounded-md">Semua Informasi</a>
                         <hr class="my-1">
-                        <a href="{{ route('dip.index', ['category' => 'berkala']) }}" class="block px-3 py-2 text-sm text-gray-600 hover:bg-gray-100 rounded-md">Informasi Berkala</a>
-                        <a href="{{ route('dip.index', ['category' => 'serta-merta']) }}" class="block px-3 py-2 text-sm text-gray-600 hover:bg-gray-100 rounded-md">Informasi Serta-Merta</a>
-                        <a href="{{ route('dip.index', ['category' => 'setiap-saat']) }}" class="block px-3 py-2 text-sm text-gray-600 hover:bg-gray-100 rounded-md">Informasi Setiap Saat</a>
-                        <a href="{{ route('dip.index', ['category' => 'dikecualikan']) }}" class="block px-3 py-2 text-sm text-gray-600 hover:bg-gray-100 rounded-md">Informasi Dikecualikan</a>
+                        <a href="{{ route('dip.index', ['category' => 'informasi-berkala']) }}" class="block px-3 py-2 text-sm text-gray-600 hover:bg-gray-100 rounded-md">Informasi Berkala</a>
+                        <a href="{{ route('dip.index', ['category' => 'informasi-serta-merta']) }}" class="block px-3 py-2 text-sm text-gray-600 hover:bg-gray-100 rounded-md">Informasi Serta-Merta</a>
+                        <a href="{{ route('dip.index', ['category' => 'informasi-setiap-saat']) }}" class="block px-3 py-2 text-sm text-gray-600 hover:bg-gray-100 rounded-md">Informasi Setiap Saat</a>
+                        <a href="{{ route('dip.index', ['category' => 'informasi-dikecualikan']) }}" class="block px-3 py-2 text-sm text-gray-600 hover:bg-gray-100 rounded-md">Informasi Dikecualikan</a>
                     </div>
                 </div>
                 
