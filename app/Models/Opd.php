@@ -16,7 +16,7 @@ class Opd extends Model
         'address',
         'phone',
         'email',
-        'social_media',
+        'social_media',     // <-- TAMBAHKAN
         'ppid_name',
         'ppid_phone',
         'google_maps_link',
@@ -33,7 +33,7 @@ class Opd extends Model
     ];
 
     protected $casts = [
-        'social_media' => 'array',
+        'social_media' => 'array',  // <-- TAMBAHKAN
         'is_active' => 'boolean',
     ];
 
@@ -45,5 +45,13 @@ class Opd extends Model
     public function documents()
     {
         return $this->hasMany(Document::class);
+    }
+
+    /**
+     * Get social media links as array
+     */
+    public function getSocialMediaLinks()
+    {
+        return $this->social_media ?? [];
     }
 }

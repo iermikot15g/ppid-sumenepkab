@@ -41,6 +41,15 @@
             <h3 class="font-semibold text-gray-800">Dasar Hukum</h3>
             <p class="text-xs text-gray-500 mt-1">Konten HTML + PDF</p>
         </a>
+
+        <!-- Media Sosial -->
+        <a href="{{ route('pembantu.cms.profil.media-sosial') }}" 
+        class="block bg-white rounded-lg shadow hover:shadow-md transition p-6 text-center">
+            <div class="text-4xl mb-3">🌐</div>
+            <h3 class="font-semibold text-gray-800">Media Sosial</h3>
+            <p class="text-xs text-gray-500 mt-1">Facebook, Instagram, Twitter, YouTube, TikTok, WhatsApp</p>
+        </a>
+
     </div>
 
     <div class="bg-blue-50 rounded-lg p-4 mt-6">

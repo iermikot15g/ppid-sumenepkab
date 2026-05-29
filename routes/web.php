@@ -55,7 +55,6 @@ Route::get('/dip/download/{document}', [DipController::class, 'download'])
 // INFOGRAFIS - Halaman khusus menampilkan semua infografis yang dipublish
 // ============================================================================
 Route::get('/infografis', [PublicInfografisController::class, 'index'])->name('infografis.index');
-// Route::get('/infografis/preview/{id}', [PublicInfografisController::class, 'preview'])->name('infografis.preview');
 
 // ============================================================================
 // GALERI FOTO - Halaman khusus menampilkan semua galeri foto yang dipublish
@@ -116,7 +115,7 @@ Route::prefix('dashboard')->middleware(['auth'])->group(function () {
         Route::prefix('cms')->group(function () {
             
             // ================================================================
-            // CMS PROFIL OPD - Kelola profil OPD (Tentang, Tugas Fungsi, Struktur, Dasar Hukum)
+            // CMS PROFIL OPD - Kelola profil OPD (Tentang, Tugas Fungsi, Struktur, Dasar Hukum, Media Sosial)
             // ================================================================
             Route::prefix('profil')->group(function () {
                 Route::get('/', [CmsProfilOpdController::class, 'index'])->name('pembantu.cms.profil.index');
@@ -136,6 +135,12 @@ Route::prefix('dashboard')->middleware(['auth'])->group(function () {
                 // Dasar Hukum
                 Route::get('/dasar-hukum', [CmsProfilOpdController::class, 'editDasarHukum'])->name('pembantu.cms.profil.dasar-hukum');
                 Route::put('/dasar-hukum', [CmsProfilOpdController::class, 'updateDasarHukum'])->name('pembantu.cms.profil.update-dasar-hukum');
+                
+                // ================================================================
+                // MEDIA SOSIAL - Kelola link media sosial OPD
+                // ================================================================
+                Route::get('/media-sosial', [CmsProfilOpdController::class, 'editMediaSosial'])->name('pembantu.cms.profil.media-sosial');
+                Route::put('/media-sosial', [CmsProfilOpdController::class, 'updateMediaSosial'])->name('pembantu.cms.profil.update-media-sosial');
             });
             
             // ================================================================

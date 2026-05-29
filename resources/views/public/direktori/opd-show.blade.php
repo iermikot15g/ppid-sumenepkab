@@ -13,6 +13,7 @@
     <!-- Header OPD -->
     <div class="bg-white rounded-lg shadow-md p-6 mb-6">
         <div class="flex flex-col md:flex-row gap-4">
+            <!-- Logo -->
             <div>
                 @if($opd->logo)
                     <img src="{{ Storage::url($opd->logo) }}" alt="{{ $opd->name }}" class="w-24 h-24 object-cover rounded-lg">
@@ -24,14 +25,88 @@
                     </div>
                 @endif
             </div>
+            
+            <!-- Informasi OPD -->
             <div class="flex-1">
                 <h1 class="text-2xl font-bold text-gray-900">{{ $opd->name }}</h1>
                 <p class="text-gray-500">{{ $opd->short_name ?? '' }}</p>
+                
+                <!-- Kontak -->
                 <div class="mt-2 text-sm text-gray-600">
-                    <p><span class="font-medium">Telepon:</span> {{ $opd->phone ?? '-' }}</p>
-                    <p><span class="font-medium">Email:</span> {{ $opd->email ?? '-' }}</p>
-                    <p><span class="font-medium">Alamat:</span> {{ $opd->address ?? '-' }}</p>
+                    @if($opd->phone)
+                    <p><span class="font-medium">📞 Telepon:</span> {{ $opd->phone }}</p>
+                    @endif
+                    @if($opd->email)
+                    <p><span class="font-medium">✉️ Email:</span> {{ $opd->email }}</p>
+                    @endif
+                    @if($opd->address)
+                    <p><span class="font-medium">📍 Alamat:</span> {{ $opd->address }}</p>
+                    @endif
                 </div>
+                
+                <!-- ========== MEDIA SOSIAL (IKON DI BAWAH HEADER) ========== -->
+                @php
+                    $socialMedia = $opd->getSocialMediaLinks();
+                @endphp
+                
+                @if(!empty($socialMedia))
+                <div class="mt-4 flex flex-wrap gap-3">
+                    @if(isset($socialMedia['facebook']) && !empty($socialMedia['facebook']))
+                    <a href="{{ $socialMedia['facebook'] }}" target="_blank" rel="noopener noreferrer" 
+                    class="text-gray-600 hover:text-blue-700 transition" title="Facebook">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"/>
+                        </svg>
+                    </a>
+                    @endif
+                    
+                    @if(isset($socialMedia['instagram']) && !empty($socialMedia['instagram']))
+                    <a href="{{ $socialMedia['instagram'] }}" target="_blank" rel="noopener noreferrer" 
+                    class="text-gray-600 hover:text-pink-600 transition" title="Instagram">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.272 2.695.072 7.053.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8z"/>
+                        </svg>
+                    </a>
+                    @endif
+                    
+                    @if(isset($socialMedia['twitter']) && !empty($socialMedia['twitter']))
+                    <a href="{{ $socialMedia['twitter'] }}" target="_blank" rel="noopener noreferrer" 
+                    class="text-gray-600 hover:text-blue-400 transition" title="Twitter / X">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                        </svg>
+                    </a>
+                    @endif
+                    
+                    @if(isset($socialMedia['youtube']) && !empty($socialMedia['youtube']))
+                    <a href="{{ $socialMedia['youtube'] }}" target="_blank" rel="noopener noreferrer" 
+                    class="text-gray-600 hover:text-red-600 transition" title="YouTube">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.376.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.376-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                        </svg>
+                    </a>
+                    @endif
+                    
+                    @if(isset($socialMedia['tiktok']) && !empty($socialMedia['tiktok']))
+                    <a href="{{ $socialMedia['tiktok'] }}" target="_blank" rel="noopener noreferrer" 
+                    class="text-gray-600 hover:text-black transition" title="TikTok">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/>
+                        </svg>
+                    </a>
+                    @endif
+                    
+                    @if(isset($socialMedia['whatsapp']) && !empty($socialMedia['whatsapp']))
+                    <a href="{{ $socialMedia['whatsapp'] }}" target="_blank" rel="noopener noreferrer" 
+                    class="text-gray-600 hover:text-green-600 transition" title="WhatsApp">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-5.46-4.45-9.91-9.91-9.91zm0 15.67c-1.44 0-2.84-.38-4.06-1.09l-.29-.17-3.12.82.84-3.04-.19-.3c-.77-1.22-1.17-2.63-1.17-4.06 0-4.27 3.48-7.76 7.76-7.76 4.27 0 7.76 3.48 7.76 7.76.01 4.28-3.47 7.76-7.75 7.76z"/>
+                            <path d="M17.03 14.5c-.14-.23-.52-.37-1.09-.65-.57-.28-3.37-1.67-3.89-1.86-.52-.19-.9-.28-1.28.28-.38.56-1.47 1.83-1.8 2.21-.33.38-.66.43-1.23.14-.57-.28-2.41-1.33-2.95-1.86-.54-.53-.54-1.23-.12-1.92.42-.69 1.62-1.91 1.62-1.91s.57-.95.33-1.52c-.24-.56-1.33-3.18-1.82-4.26-.48-1.08-.96-.87-1.32-.87-.28 0-.86-.05-1.32-.05-.46 0-1.17.18-1.78.88-.61.7-2.33 2.28-2.33 5.56 0 3.28 2.39 6.46 2.72 6.91.33.45 4.7 7.18 11.38 5.46 1.15-.3 2.06-1.07 2.73-2.07.67-1 .86-1.94.61-2.69-.24-.75-1.04-1.2-1.19-1.33z"/>
+                        </svg>
+                    </a>
+                    @endif
+                </div>
+                @endif
             </div>
         </div>
     </div>

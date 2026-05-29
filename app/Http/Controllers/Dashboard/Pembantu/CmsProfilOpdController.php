@@ -28,6 +28,41 @@ class CmsProfilOpdController extends Controller
         return view('dashboard.pembantu.cms.profil.index', compact('opd'));
     }
 
+    // ========== MEDIA SOSIAL ==========
+    public function editMediaSosial()
+    {
+        $opd = $this->getOpd();
+        $socialMedia = $opd->getSocialMediaLinks();
+        
+        return view('dashboard.pembantu.cms.profil.media-sosial', compact('opd', 'socialMedia'));
+    }
+
+    public function updateMediaSosial(Request $request)
+    {
+        $opd = $this->getOpd();
+
+        $validated = $request->validate([
+            'facebook' => 'nullable|url|max:255',
+            'instagram' => 'nullable|url|max:255',
+            'twitter' => 'nullable|url|max:255',
+            'youtube' => 'nullable|url|max:255',
+            'tiktok' => 'nullable|url|max:255',
+            'whatsapp' => 'nullable|url|max:255',
+        ]);
+
+        // Filter hanya yang terisi
+        $socialMedia = array_filter($validated, function($value) {
+            return !empty($value);
+        });
+
+        $opd->update([
+            'social_media' => $socialMedia
+        ]);
+
+        return redirect()->route('pembantu.cms.profil.media-sosial')
+            ->with('success', 'Media sosial berhasil diperbarui.');
+    }
+
     // ========== TENTANG OPD ==========
     public function editTentang()
     {
