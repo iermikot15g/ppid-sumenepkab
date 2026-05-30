@@ -85,6 +85,16 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // ============================================================================
+// PROFILE ROUTES - Untuk semua user yang login
+// ============================================================================
+Route::middleware(['auth'])->group(function () {
+    Route::get('/profile', [App\Http\Controllers\ProfileController::class, 'index'])->name('profile.index');
+    Route::put('/profile', [App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
+    Route::get('/profile/password', [App\Http\Controllers\ProfileController::class, 'passwordForm'])->name('profile.password');
+    Route::put('/profile/password', [App\Http\Controllers\ProfileController::class, 'updatePassword'])->name('profile.password.update');
+});
+
+// ============================================================================
 // DASHBOARD ROUTES - Semua route yang memerlukan autentikasi
 // ============================================================================
 Route::prefix('dashboard')->middleware(['auth'])->group(function () {
