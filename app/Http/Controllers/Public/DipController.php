@@ -1,11 +1,9 @@
 <?php
-// app/Http/Controllers/Public/DipController.php
 
 namespace App\Http\Controllers\Public;
 
 use App\Http\Controllers\Controller;
 use App\Models\Document;
-use App\Models\Category;
 use App\Models\Opd;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -15,27 +13,22 @@ class DipController extends Controller
     public function index(Request $request)
     {
         $query = Document::with(['opd', 'category'])
-            ->where('status', 'published')
-            ->where('classification', 'open');
+            ->where('status', 'published');
 
-        // Filter by category
         if ($request->category && $request->category !== 'all') {
             $query->whereHas('category', function($q) use ($request) {
                 $q->where('slug', $request->category);
             });
         }
 
-        // Filter by OPD
         if ($request->opd) {
             $query->where('opd_id', $request->opd);
         }
 
-        // Filter by year
         if ($request->year) {
             $query->where('year', $request->year);
         }
 
-        // Search
         if ($request->search) {
             $query->where(function($q) use ($request) {
                 $q->where('title', 'like', '%' . $request->search . '%')
@@ -45,42 +38,61 @@ class DipController extends Controller
         }
 
         $documents = $query->latest('published_at')->paginate(12);
-        $categories = Category::all();
         $opds = Opd::where('is_active', true)->orderBy('name')->get();
         $years = range(date('Y'), 2000);
+        $categories = \App\Models\Category::all();
 
-        return view('public.dip.index', compact('documents', 'categories', 'opds', 'years'));
+        return view('public.dip.index', compact('documents', 'opds', 'years', 'categories'));
     }
 
-    public function byCategory($slug, Request $request)
-    {
-        $category = Category::where('slug', $slug)->firstOrFail();
-        $request->merge(['category' => $slug]);
-        return $this->index($request);
-    }
-
-    public function search(Request $request)
-    {
-        return $this->index($request);
-    }
-
+    /**
+     * Preview dokumen menggunakan Google Docs Viewer
+     * - Membatasi kemampuan download
+     * - Hanya untuk user yang login
+     */
     public function preview(Document $document)
     {
+        // Cek apakah dokumen bisa diakses publik
         if ($document->status !== 'published') {
-            abort(404);
+            return response()->json(['error' => 'Dokumen tidak tersedia'], 404);
         }
+
+        // Jika tidak login, kembalikan pesan yang meminta login
+        if (!auth()->check()) {
+            return response()->json([
+                'error' => 'login_required',
+                'message' => 'Silakan login terlebih dahulu untuk melihat preview dokumen',
+                'login_url' => route('login')
+            ], 401);
+        }
+
+        // ========== MENGGUNAKAN GOOGLE DOCS VIEWER ==========
+        // Google Docs Viewer tidak menyediakan tombol download bawaan
+        // Hanya bisa view, print, dan zoom
+        $fileUrl = asset('storage/' . $document->file_path);
+        $viewerUrl = 'https://docs.google.com/viewer?embedded=true&url=' . urlencode($fileUrl);
+        
+        // Untuk file gambar (JPG, PNG) tidak bisa menggunakan Google Docs Viewer
+        // Maka tetap gunakan direct URL
+        $isImage = in_array($document->file_mime, ['image/jpeg', 'image/jpg', 'image/png']);
         
         return response()->json([
             'title' => $document->title,
             'description' => $document->description,
-            'file_url' => Storage::url($document->file_path),
+            'file_url' => $isImage ? $fileUrl : $viewerUrl,
             'file_type' => $document->file_mime,
+            'is_image' => $isImage,
+            'is_pdf' => $document->file_mime === 'application/pdf',
             'opd' => $document->opd->name,
             'year' => $document->year,
             'category' => $document->category->name ?? '-',
+            'viewer_notice' => 'Menggunakan Google Docs Viewer - Tidak dapat mengunduh langsung dari viewer',
         ]);
     }
 
+    /**
+     * Download dokumen - Wajib login (sudah ada middleware auth di route)
+     */
     public function download(Document $document)
     {
         if ($document->status !== 'published' || $document->classification !== 'open') {
@@ -90,5 +102,11 @@ class DipController extends Controller
         $document->increment('download_count');
 
         return Storage::disk('public')->download($document->file_path, $document->title . '.pdf');
+    }
+
+    public function byCategory($slug, Request $request)
+    {
+        $request->merge(['category' => $slug]);
+        return $this->index($request);
     }
 }
