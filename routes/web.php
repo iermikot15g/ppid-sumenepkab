@@ -12,6 +12,7 @@ use App\Http\Controllers\Dashboard\Pembantu\DocumentController;
 use App\Http\Controllers\Dashboard\Pembantu\CmsProfilOpdController;
 use App\Http\Controllers\Dashboard\Pembantu\AgendaController;
 use App\Http\Controllers\Dashboard\Pembantu\InfografisController;
+use App\Http\Controllers\Dashboard\Pembantu\OpdServiceController;
 use App\Http\Controllers\Dashboard\Utama\MonitoringController;
 use App\Http\Controllers\Dashboard\Utama\CmsNewsController;
 use App\Http\Controllers\Dashboard\Utama\HeroSlideController;
@@ -167,6 +168,19 @@ Route::prefix('dashboard')->middleware(['auth'])->group(function () {
                 Route::put('/{id}', [InfografisController::class, 'update'])->name('pembantu.cms.infographic.update');
                 Route::delete('/{id}', [InfografisController::class, 'destroy'])->name('pembantu.cms.infographic.destroy');
                 Route::patch('/{id}/toggle', [InfografisController::class, 'togglePublished'])->name('pembantu.cms.infographic.toggle');
+            });
+
+            // ================================================================
+            // LAYANAN PUBLIK OPD - Kelola website layanan publik OPD
+            // ================================================================
+            Route::prefix('services')->group(function () {
+                Route::get('/', [OpdServiceController::class, 'index'])->name('pembantu.cms.services.index');
+                Route::get('/create', [OpdServiceController::class, 'create'])->name('pembantu.cms.services.create');
+                Route::post('/', [OpdServiceController::class, 'store'])->name('pembantu.cms.services.store');
+                Route::get('/{service}/edit', [OpdServiceController::class, 'edit'])->name('pembantu.cms.services.edit');
+                Route::put('/{service}', [OpdServiceController::class, 'update'])->name('pembantu.cms.services.update');
+                Route::delete('/{service}', [OpdServiceController::class, 'destroy'])->name('pembantu.cms.services.destroy');
+                Route::patch('/{service}/toggle', [OpdServiceController::class, 'toggleActive'])->name('pembantu.cms.services.toggle');
             });
         });
     });

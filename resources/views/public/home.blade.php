@@ -3,6 +3,23 @@
 @section('title', 'PPID Kabupaten Sumenep')
 
 @section('content')
+<style>
+    /* ========== UTILITY CLASSES ========== */
+    .line-clamp-2 {
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+    
+    .line-clamp-3 {
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+</style>
+
 <!-- ============================================================ -->
 <!-- HERO SLIDER SECTION                                          -->
 <!-- Rasio gambar: 1920:815 atau 384:163                          -->
@@ -193,7 +210,7 @@
 @endif
 
 <!-- ============================================================ -->
-<!-- QUICK ACCESS SECTION - Ikon akses cepat ke fitur utama      -->
+<!-- QUICK ACCESS SECTION - Baris 1: Ikon Default                -->
 <!-- ============================================================ -->
 <div class="container mx-auto px-4 py-12">
     <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto">
@@ -223,6 +240,51 @@
         </a>
     </div>
 </div>
+
+<!-- ============================================================ -->
+<!-- QUICK ACCESS SECTION - Baris 2: Layanan Publik OPD          -->
+<!-- ============================================================ -->
+@php
+    use App\Models\OpdService;
+    $publicServices = OpdService::where('is_active', true)
+        ->orderBy('sort_order')
+        ->take(8)
+        ->get();
+@endphp
+
+@if($publicServices->count() > 0)
+<div class="container mx-auto px-4 pb-12">
+    <div class="text-center mb-6">
+        <h2 class="text-xl font-semibold text-gray-800">Layanan Publik</h2>
+        <p class="text-sm text-gray-500">Akses cepat ke berbagai layanan publik</p>
+    </div>
+    <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-3">
+        @foreach($publicServices as $service)
+        <a href="{{ $service->url }}" target="_blank" rel="noopener noreferrer" 
+           class="bg-white shadow-md rounded-lg p-3 text-center hover:shadow-lg transition group"
+           title="{{ $service->description }}">
+            <!-- Logo / Icon -->
+            <div class="flex justify-center mb-2">
+                @if($service->icon)
+                    <img src="{{ Storage::url($service->icon) }}" alt="{{ $service->name }}" class="w-10 h-10 object-contain">
+                @else
+                    @php
+                        $domain = parse_url($service->url, PHP_URL_HOST) ?: str_replace(['http://', 'https://'], '', $service->url);
+                        $domain = explode('/', $domain)[0];
+                    @endphp
+                    <img src="https://www.google.com/s2/favicons?domain={{ urlencode($domain) }}&sz=64" 
+                         alt="{{ $service->name }}" 
+                         class="w-10 h-10"
+                         onerror="this.src='https://placehold.co/64x64/1F4E79/white?text={{ substr($service->name, 0, 2) }}'">
+                @endif
+            </div>
+            <!-- Nama Layanan -->
+            <span class="text-xs font-medium text-gray-700 group-hover:text-blue-600 line-clamp-2">{{ $service->name }}</span>
+        </a>
+        @endforeach
+    </div>
+</div>
+@endif
 
 <!-- ============================================================ -->
 <!-- WELCOME SECTION - Sambutan dan informasi portal             -->

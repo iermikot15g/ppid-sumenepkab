@@ -54,4 +54,14 @@ class Opd extends Model
     {
         return $this->social_media ?? [];
     }
+
+    public function services()
+    {
+        return $this->hasMany(OpdService::class)->orderBy('sort_order');
+    }
+
+    public function getActiveServices()
+    {
+        return $this->services()->where('is_active', true)->orderBy('sort_order')->get();
+    }
 }
