@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\Scopes\PimpinanScope; // Tambahkan ini
 
 class Document extends Model
 {
@@ -39,6 +40,18 @@ class Document extends Model
         'download_count' => 'integer',
     ];
 
+    /**
+     * Boot method untuk mendaftarkan global scope
+     */
+    protected static function booted()
+    {
+        // Hanya aktifkan scope jika tidak dalam konteks console/command
+        if (!app()->runningInConsole()) {
+            static::addGlobalScope(new PimpinanScope);
+        }
+    }
+
+    // ... relasi-relasi yang sudah ada tetap sama ...
     public function opd()
     {
         return $this->belongsTo(Opd::class);

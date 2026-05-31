@@ -14,6 +14,7 @@
                 $user = auth()->user();
             @endphp
             
+            <!-- ========== MENU PPID PEMBANTU ========== -->
             @if($user->hasRole('ppid_pembantu'))
                 <!-- Dashboard -->
                 <a href="{{ url('/dashboard/pembantu') }}" class="sidebar-link {{ request()->is('dashboard/pembantu') ? 'active' : '' }}">
@@ -39,6 +40,7 @@
                     CMS Profil OPD
                 </a>
 
+                <!-- Layanan Publik -->
                 <a href="{{ route('pembantu.cms.services.index') }}" class="sidebar-link {{ request()->routeIs('pembantu.cms.services.*') ? 'active' : '' }}">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.66 0 3-4 3-9s-1.34-9-3-9m0 18c-1.66 0-3-4-3-9s1.34-9 3-9" />
@@ -63,8 +65,9 @@
                 </a>
             @endif
             
-            @if($user->hasRole(['super_admin', 'ppid_utama', 'pimpinan']))
-                <!-- Menu untuk PPID Utama -->
+            <!-- ========== MENU PPID UTAMA & SUPER ADMIN ========== -->
+            @if($user->hasRole(['super_admin', 'ppid_utama']))
+                <!-- Dashboard Monitoring -->
                 <a href="{{ url('/dashboard/utama') }}" class="sidebar-link {{ request()->is('dashboard/utama') ? 'active' : '' }}">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
@@ -132,6 +135,7 @@
                     Profil PPID (CMS)
                 </a>
                 
+                <!-- CMS Standar Layanan -->
                 <a href="{{ route('utama.cms.standar.index') }}" class="sidebar-link {{ request()->routeIs('utama.cms.standar.*') ? 'active' : '' }}">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
@@ -139,6 +143,39 @@
                     Standar Layanan (CMS)
                 </a>
 
+            @endif
+
+            <!-- ========== MENU PIMPINAN OPD (READ-ONLY) ========== -->
+            @if($user->hasRole('pimpinan'))
+                <div class="pt-4 mt-4 border-t border-gray-200">
+                    <p class="px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Dashboard Pimpinan OPD</p>
+                </div>
+
+                <!-- Dashboard Monitoring -->
+                <a href="{{ route('pimpinan.dashboard') }}" class="sidebar-link {{ request()->routeIs('pimpinan.dashboard') ? 'active' : '' }}">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                    </svg>
+                    Dashboard Monitoring
+                </a>
+
+                <!-- Manajemen Dokumen (Read-Only) -->
+                <a href="{{ route('pimpinan.documents.index') }}" class="sidebar-link {{ request()->routeIs('pimpinan.documents.*') ? 'active' : '' }}">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                    </svg>
+                    Manajemen Dokumen
+                    <span class="ml-auto text-xs text-gray-400 bg-gray-100 px-1 rounded">Read-only</span>
+                </a>
+
+                <!-- Laporan Statistik (Read-Only) -->
+                <a href="{{ route('pimpinan.laporan.index') }}" class="sidebar-link {{ request()->routeIs('pimpinan.laporan.*') ? 'active' : '' }}">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                    </svg>
+                    Laporan Statistik
+                    <span class="ml-auto text-xs text-gray-400 bg-gray-100 px-1 rounded">Read-only</span>
+                </a>
             @endif
 
             <!-- ========== MENU ADMIN (HANYA UNTUK SUPER ADMIN) ========== -->

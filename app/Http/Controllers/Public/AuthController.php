@@ -39,24 +39,25 @@ class AuthController extends Controller
                 ])->onlyInput('email');
             }
 
-            // Redirect based on role
-            if ($user->hasRole('super_admin')) {
+            // ========== REDIRECT BERDASARKAN ROLE ==========
+            
+            // Super Admin & PPID Utama -> Dashboard Utama
+            if ($user->hasRole('super_admin') || $user->hasRole('ppid_utama')) {
                 return redirect()->intended('/dashboard/utama');
             }
             
-            if ($user->hasRole('ppid_utama')) {
-                return redirect()->intended('/dashboard/utama');
-            }
-            
+            // PPID Pembantu -> Dashboard Pembantu
             if ($user->hasRole('ppid_pembantu')) {
                 return redirect()->intended('/dashboard/pembantu');
             }
             
+            // PIMPINAN OPD (READ-ONLY) -> Dashboard Pimpinan
+            // PERUBAHAN: sebelumnya ke /dashboard/utama, sekarang ke /dashboard/pimpinan
             if ($user->hasRole('pimpinan')) {
-                return redirect()->intended('/dashboard/utama');
+                return redirect()->intended('/dashboard/pimpinan');
             }
 
-            // Default untuk masyarakat
+            // Default untuk masyarakat dan role lainnya
             return redirect()->intended('/');
         }
 

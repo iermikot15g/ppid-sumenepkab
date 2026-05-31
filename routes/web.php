@@ -18,6 +18,9 @@ use App\Http\Controllers\Dashboard\Utama\CmsNewsController;
 use App\Http\Controllers\Dashboard\Utama\HeroSlideController;
 use App\Http\Controllers\Dashboard\Utama\LaporanController;
 use App\Http\Controllers\Dashboard\Utama\DocumentManagementController;
+use App\Http\Controllers\Dashboard\Pimpinan\PimpinanDashboardController;
+use App\Http\Controllers\Dashboard\Pimpinan\PimpinanDocumentController;
+use App\Http\Controllers\Dashboard\Pimpinan\PimpinanLaporanController;
 use App\Http\Controllers\Admin\OpdController;
 use App\Http\Controllers\Admin\VillageController;
 use App\Http\Controllers\Admin\CategoryController;
@@ -196,9 +199,10 @@ Route::prefix('dashboard')->middleware(['auth'])->group(function () {
     });
     
     // ========================================================================
-    // DASHBOARD PPID UTAMA - Untuk PPID Utama, Super Admin, Pimpinan
+    // DASHBOARD PPID UTAMA & SUPER ADMIN - Untuk PPID Utama dan Super Admin
+    // Catatan: Pimpinan TIDAK termasuk di sini, mereka punya group sendiri
     // ========================================================================
-    Route::prefix('utama')->middleware(['role:super_admin|ppid_utama|pimpinan'])->group(function () {
+    Route::prefix('utama')->middleware(['role:super_admin|ppid_utama'])->group(function () {
         
         // Dashboard monitoring
         Route::get('/', [MonitoringController::class, 'index'])->name('dashboard.utama');
@@ -288,6 +292,48 @@ Route::prefix('dashboard')->middleware(['auth'])->group(function () {
         Route::prefix('laporan')->group(function () {
             Route::get('/', [LaporanController::class, 'index'])->name('utama.laporan.index');
             Route::post('/generate', [LaporanController::class, 'generate'])->name('utama.laporan.generate');
+        });
+    });
+
+    // ========================================================================
+    // DASHBOARD PIMPINAN OPD (READ-ONLY) - Untuk Kepala OPD
+    // ========================================================================
+    Route::prefix('pimpinan')->middleware(['role:pimpinan'])->group(function () {
+        
+        // ====================================================================
+        // DASHBOARD MONITORING - Menampilkan statistik OPD yang dipimpin
+        // ====================================================================
+        Route::get('/', [PimpinanDashboardController::class, 'index'])->name('pimpinan.dashboard');
+        
+        // ====================================================================
+        // MANAJEMEN DOKUMEN (READ-ONLY) - Lihat dokumen milik OPD sendiri
+        // ====================================================================
+        Route::prefix('documents')->group(function () {
+            // Daftar dokumen (dengan filter dan pencarian)
+            Route::get('/', [PimpinanDocumentController::class, 'index'])->name('pimpinan.documents.index');
+            
+            // Detail dokumen (tampilan read-only, tanpa form edit)
+            Route::get('/{document}', [PimpinanDocumentController::class, 'show'])->name('pimpinan.documents.show');
+            
+            // Preview PDF (membuka file PDF di browser)
+            Route::get('/{document}/preview', [PimpinanDocumentController::class, 'preview'])->name('pimpinan.documents.preview');
+        });
+        
+        // ====================================================================
+        // LAPORAN STATISTIK (READ-ONLY) - Generate laporan untuk OPD sendiri
+        // ====================================================================
+        Route::prefix('laporan')->group(function () {
+            // Halaman form filter laporan
+            Route::get('/', [PimpinanLaporanController::class, 'index'])->name('pimpinan.laporan.index');
+            
+            // Generate laporan berdasarkan filter
+            Route::post('/generate', [PimpinanLaporanController::class, 'generate'])->name('pimpinan.laporan.generate');
+            
+            // Export laporan ke PDF
+            Route::get('/export-pdf', [PimpinanLaporanController::class, 'exportPdf'])->name('pimpinan.laporan.export-pdf');
+            
+            // Export laporan ke Excel
+            Route::get('/export-excel', [PimpinanLaporanController::class, 'exportExcel'])->name('pimpinan.laporan.export-excel');
         });
     });
 });
