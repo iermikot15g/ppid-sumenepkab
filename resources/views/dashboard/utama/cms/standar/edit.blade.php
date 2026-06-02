@@ -31,7 +31,7 @@
                 @if($page->pdf_file_path)
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">File PDF Saat Ini</label>
-                    <a href="{{ Storage::url($page->pdf_file_path) }}" target="_blank" class="text-blue-600 hover:underline">
+                    <a href="{{ Storage::url($page->pdf_file_path) }}" target="_blank" class="text-maroon-600 hover:underline">
                         {{ basename($page->pdf_file_path) }}
                     </a>
                 </div>
@@ -46,7 +46,7 @@
 
             <div class="mt-6 flex justify-end space-x-3">
                 <a href="{{ route('utama.cms.standar.index') }}" class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50">Batal</a>
-                <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">Simpan Perubahan</button>
+                <button type="submit" class="px-4 py-2 bg-maroon-600 text-white rounded-md hover:bg-maroon-700">Simpan Perubahan</button>
             </div>
         </form>
     </div>

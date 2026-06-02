@@ -40,7 +40,7 @@
                         {{ $item->is_published ? 'Published' : 'Draft' }}
                     </span>
                     <div>
-                        <a href="{{ route('utama.cms.gallery.edit', $item) }}" class="text-blue-600 hover:text-blue-900 mr-2">Edit</a>
+                        <a href="{{ route('utama.cms.gallery.edit', $item) }}" class="text-maroon-600 hover:text-blue-900 mr-2">Edit</a>
                         <button onclick="deleteGallery({{ $item->id }})" class="text-red-600 hover:text-red-900">Hapus</button>
                     </div>
                 </div>

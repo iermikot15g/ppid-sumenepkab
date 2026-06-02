@@ -37,7 +37,7 @@
 
             <div class="mt-6 flex justify-end space-x-3">
                 <a href="{{ route('pembantu.cms.infographic.index') }}" class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50">Batal</a>
-                <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">Simpan</button>
+                <button type="submit" class="px-4 py-2 bg-maroon-600 text-white rounded-md hover:bg-maroon-700">Simpan</button>
             </div>
         </form>
     </div>

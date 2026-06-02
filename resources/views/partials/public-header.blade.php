@@ -3,7 +3,7 @@
         <div class="flex justify-between items-center h-16 lg:h-20">
             <!-- Logo -->
             <a href="{{ route('home') }}" class="flex items-center space-x-3">
-                <div class="h-10 w-10 bg-blue-700 rounded-lg flex items-center justify-center">
+                <div class="h-10 w-10 bg-maroon-700 rounded-lg flex items-center justify-center">
                     <span class="text-white text-xs font-bold">PPID</span>
                 </div>
                 <div class="hidden sm:block">
@@ -23,11 +23,11 @@
             
             <!-- Desktop Navigation -->
             <div class="hidden lg:flex lg:items-center lg:space-x-8">
-                <a href="{{ route('home') }}" class="text-gray-700 hover:text-blue-600 {{ request()->routeIs('home') ? 'text-blue-600 font-semibold' : '' }}">Beranda</a>
+                <a href="{{ route('home') }}" class="text-gray-700 hover:text-maroon-600 {{ request()->routeIs('home') ? 'text-maroon-600 font-semibold' : '' }}">Beranda</a>
                 
                 <!-- Profil Dropdown -->
                 <div x-data="{ open: false }" class="relative">
-                    <button @click="open = !open" class="flex items-center text-gray-700 hover:text-blue-600 focus:outline-none">
+                    <button @click="open = !open" class="flex items-center text-gray-700 hover:text-maroon-600 focus:outline-none">
                         Profil
                         <svg class="ml-1 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
@@ -44,7 +44,7 @@
                 
                 <!-- Standar Layanan Dropdown -->
                 <div x-data="{ open: false }" class="relative">
-                    <button @click="open = !open" class="flex items-center text-gray-700 hover:text-blue-600 focus:outline-none">
+                    <button @click="open = !open" class="flex items-center text-gray-700 hover:text-maroon-600 focus:outline-none">
                         Standar Layanan
                         <svg class="ml-1 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
@@ -62,7 +62,7 @@
                 
                 <!-- DIP Dropdown -->
                 <div x-data="{ open: false }" class="relative">
-                    <button @click="open = !open" class="flex items-center text-gray-700 hover:text-blue-600 focus:outline-none">
+                    <button @click="open = !open" class="flex items-center text-gray-700 hover:text-maroon-600 focus:outline-none">
                         Daftar Informasi Publik
                         <svg class="ml-1 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
@@ -78,15 +78,15 @@
                     </div>
                 </div>
                 
-                <a href="{{ route('direktori.opd') }}" class="text-gray-700 hover:text-blue-600 {{ request()->routeIs('direktori.opd*') ? 'text-blue-600 font-semibold' : '' }}">PPID Pembantu</a>
-                <a href="{{ route('direktori.desa') }}" class="text-gray-700 hover:text-blue-600 {{ request()->routeIs('direktori.desa*') ? 'text-blue-600 font-semibold' : '' }}">PPID Desa</a>
+                <a href="{{ route('direktori.opd') }}" class="text-gray-700 hover:text-maroon-600 {{ request()->routeIs('direktori.opd*') ? 'text-maroon-600 font-semibold' : '' }}">PPID Pembantu</a>
+                <a href="{{ route('direktori.desa') }}" class="text-gray-700 hover:text-maroon-600 {{ request()->routeIs('direktori.desa*') ? 'text-maroon-600 font-semibold' : '' }}">PPID Desa</a>
             </div>
             
             <!-- Auth Buttons -->
             <div class="hidden lg:flex items-center space-x-4">
                 @auth
                     @if(auth()->user()->hasRole(['super_admin', 'ppid_utama', 'ppid_pembantu', 'pimpinan']))
-                        <a href="{{ auth()->user()->hasRole('ppid_pembantu') ? '/dashboard/pembantu' : '/dashboard/utama' }}" class="px-4 py-2 text-sm font-medium text-blue-600 border border-blue-600 rounded-md hover:bg-blue-50">
+                        <a href="{{ auth()->user()->hasRole('ppid_pembantu') ? '/dashboard/pembantu' : '/dashboard/utama' }}" class="px-4 py-2 text-sm font-medium text-maroon-600 border border-blue-600 rounded-md hover:bg-maroon-50">
                             Dashboard
                         </a>
                     @endif
@@ -97,10 +97,10 @@
                         </button>
                     </form>
                 @else
-                    <a href="{{ route('login') }}" class="px-4 py-2 text-sm font-medium text-blue-600 border border-blue-600 rounded-md hover:bg-blue-50">
+                    <a href="{{ route('login') }}" class="px-4 py-2 text-sm font-medium text-maroon-600 border border-blue-600 rounded-md hover:bg-maroon-50">
                         Login
                     </a>
-                    <a href="{{ route('register') }}" class="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700">
+                    <a href="{{ route('register') }}" class="px-4 py-2 text-sm font-medium text-white bg-maroon-600 rounded-md hover:bg-maroon-700">
                         Daftar
                     </a>
                 @endauth
@@ -172,15 +172,15 @@
                 
                 @auth
                     @if(auth()->user()->hasRole(['super_admin', 'ppid_utama', 'ppid_pembantu', 'pimpinan']))
-                        <a href="{{ auth()->user()->hasRole('ppid_pembantu') ? '/dashboard/pembantu' : '/dashboard/utama' }}" class="block px-3 py-2 text-base text-blue-600 hover:bg-gray-100 rounded-md">Dashboard</a>
+                        <a href="{{ auth()->user()->hasRole('ppid_pembantu') ? '/dashboard/pembantu' : '/dashboard/utama' }}" class="block px-3 py-2 text-base text-maroon-600 hover:bg-gray-100 rounded-md">Dashboard</a>
                     @endif
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
                         <button type="submit" class="block w-full text-left px-3 py-2 text-base text-red-600 hover:bg-gray-100 rounded-md">Logout</button>
                     </form>
                 @else
-                    <a href="{{ route('login') }}" class="block px-3 py-2 text-base text-blue-600 hover:bg-gray-100 rounded-md">Login</a>
-                    <a href="{{ route('register') }}" class="block px-3 py-2 text-base text-white bg-blue-600 rounded-md text-center">Daftar</a>
+                    <a href="{{ route('login') }}" class="block px-3 py-2 text-base text-maroon-600 hover:bg-gray-100 rounded-md">Login</a>
+                    <a href="{{ route('register') }}" class="block px-3 py-2 text-base text-white bg-maroon-600 rounded-md text-center">Daftar</a>
                 @endauth
             </div>
         </div>

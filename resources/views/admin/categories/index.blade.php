@@ -33,12 +33,12 @@
                         <td class="px-6 py-4 text-sm text-gray-500">{{ $category->slug }}</td>
                         <td class="px-6 py-4 text-sm text-gray-500">{{ $category->sort_order }}</td>
                         <td class="px-6 py-4 text-sm">
-                            <a href="{{ route('admin.categories.subcategories', $category) }}" class="text-blue-600 hover:text-blue-900">
+                            <a href="{{ route('admin.categories.subcategories', $category) }}" class="text-maroon-600 hover:text-blue-900">
                                 Kelola ({{ $category->subCategories->count() }})
                             </a>
                         </td>
                         <td class="px-6 py-4 text-right text-sm">
-                            <a href="{{ route('admin.categories.edit', $category) }}" class="text-blue-600 hover:text-blue-900 mr-3">Edit</a>
+                            <a href="{{ route('admin.categories.edit', $category) }}" class="text-maroon-600 hover:text-blue-900 mr-3">Edit</a>
                             <button onclick="deleteCategory({{ $category->id }})" class="text-red-600 hover:text-red-900">Hapus</button>
                         </td>
                     </tr>

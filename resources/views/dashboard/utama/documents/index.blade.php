@@ -41,7 +41,7 @@
                     <option value="archived" {{ request('status') == 'archived' ? 'selected' : '' }}>Archived</option>
                 </select>
             </div>
-            <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">Filter</button>
+            <button type="submit" class="px-4 py-2 bg-maroon-600 text-white rounded-md hover:bg-maroon-700">Filter</button>
             <a href="{{ route('utama.documents.index') }}" class="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600">Reset</a>
         </form>
     </div>
@@ -89,7 +89,7 @@
                                     {{ $doc->status === 'unpublished' ? 'disabled' : '' }}>
                                 Force Unpublish
                             </button>
-                            <a href="{{ route('utama.documents.edit', $doc) }}" class="text-blue-600 hover:text-blue-900 mr-3">Edit</a>
+                            <a href="{{ route('utama.documents.edit', $doc) }}" class="text-maroon-600 hover:text-blue-900 mr-3">Edit</a>
                             <button onclick="deleteDocument({{ $doc->id }})" class="text-red-600 hover:text-red-900">Hapus</button>
                         </td>
                     </tr>

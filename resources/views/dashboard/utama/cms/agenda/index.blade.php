@@ -46,7 +46,7 @@
                             </span>
                         </td>
                         <td class="px-6 py-4 text-right text-sm">
-                            <a href="{{ route('utama.cms.agenda.edit', $item) }}" class="text-blue-600 hover:text-blue-900 mr-3">Edit</a>
+                            <a href="{{ route('utama.cms.agenda.edit', $item) }}" class="text-maroon-600 hover:text-blue-900 mr-3">Edit</a>
                             <button onclick="deleteAgenda({{ $item->id }})" class="text-red-600 hover:text-red-900">Hapus</button>
                         </td>
                     </tr>

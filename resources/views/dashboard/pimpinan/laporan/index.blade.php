@@ -26,16 +26,16 @@
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Periode Mulai</label>
                     <input type="date" name="period_start" value="{{ old('period_start') }}" 
-                           class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                           class="w-full rounded-md border-gray-300 shadow-sm focus:border-maroon-500 focus:ring-maroon-500">
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Periode Selesai</label>
                     <input type="date" name="period_end" value="{{ old('period_end') }}" 
-                           class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                           class="w-full rounded-md border-gray-300 shadow-sm focus:border-maroon-500 focus:ring-maroon-500">
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Tahun Dokumen</label>
-                    <select name="year" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                    <select name="year" class="w-full rounded-md border-gray-300 shadow-sm focus:border-maroon-500 focus:ring-maroon-500">
                         <option value="">Semua Tahun</option>
                         @foreach($years as $year)
                         <option value="{{ $year }}">{{ $year }}</option>
@@ -44,7 +44,7 @@
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Kategori Utama</label>
-                    <select name="category_id" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                    <select name="category_id" class="w-full rounded-md border-gray-300 shadow-sm focus:border-maroon-500 focus:ring-maroon-500">
                         <option value="">Semua Kategori</option>
                         @foreach($categories as $category)
                         <option value="{{ $category->id }}">{{ $category->name }}</option>
@@ -53,7 +53,7 @@
                 </div>
             </div>
             <div class="mt-6 flex justify-end">
-                <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
+                <button type="submit" class="px-4 py-2 bg-maroon-600 text-white rounded-md hover:bg-maroon-700">
                     Generate Laporan
                 </button>
             </div>

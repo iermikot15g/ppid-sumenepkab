@@ -9,7 +9,7 @@
             <h1 class="text-2xl font-semibold text-gray-900">Infografis</h1>
             <p class="mt-1 text-sm text-gray-600">Kelola infografis OPD Anda</p>
         </div>
-        <a href="{{ route('pembantu.cms.infographic.create') }}" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
+        <a href="{{ route('pembantu.cms.infographic.create') }}" class="px-4 py-2 bg-maroon-600 text-white rounded-md hover:bg-maroon-700">
             + Tambah Infografis
         </a>
     </div>
@@ -44,7 +44,7 @@
                 <h3 class="font-semibold text-gray-800 line-clamp-2">{{ $item->title }}</h3>
                 <p class="text-xs text-gray-500 mt-1">{{ $item->created_at->format('d/m/Y H:i') }}</p>
                 <div class="flex justify-end items-center mt-3 pt-3 border-t border-gray-100">
-                    <a href="{{ route('pembantu.cms.infographic.edit', $item->id) }}" class="text-blue-600 hover:text-blue-800 text-sm mr-3">Edit</a>
+                    <a href="{{ route('pembantu.cms.infographic.edit', $item->id) }}" class="text-maroon-600 hover:text-maroon-800 text-sm mr-3">Edit</a>
                     <button onclick="deleteInfografis({{ $item->id }})" class="text-red-600 hover:text-red-800 text-sm">Hapus</button>
                 </div>
             </div>

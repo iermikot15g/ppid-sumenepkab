@@ -29,7 +29,7 @@
             <div class="w-32">
                 <input type="number" name="sort_order" class="w-full border-gray-300 rounded-md shadow-sm" placeholder="Urutan" value="0">
             </div>
-            <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">Tambah</button>
+            <button type="submit" class="px-4 py-2 bg-maroon-600 text-white rounded-md hover:bg-maroon-700">Tambah</button>
         </form>
     </div>
 
@@ -52,7 +52,7 @@
                         <td class="px-6 py-4 text-sm text-gray-500">{{ $sub->slug }}</td>
                         <td class="px-6 py-4 text-sm text-gray-500">{{ $sub->sort_order }}</td>
                         <td class="px-6 py-4 text-right text-sm">
-                            <a href="{{ route('admin.subcategories.edit', $sub) }}" class="text-blue-600 hover:text-blue-900 mr-3">Edit</a>
+                            <a href="{{ route('admin.subcategories.edit', $sub) }}" class="text-maroon-600 hover:text-blue-900 mr-3">Edit</a>
                             <button onclick="deleteSubCategory({{ $sub->id }})" class="text-red-600 hover:text-red-900">Hapus</button>
                         </td>
                     </tr>

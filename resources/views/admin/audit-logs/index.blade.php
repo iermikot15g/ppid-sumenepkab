@@ -34,7 +34,7 @@
                         <td class="px-6 py-4">
                             <span class="px-2 py-1 text-xs rounded-full 
                                 {{ str_contains($log->action, 'create') ? 'bg-green-100 text-green-800' : 
-                                   (str_contains($log->action, 'delete') ? 'bg-red-100 text-red-800' : 'bg-blue-100 text-blue-800') }}">
+                                   (str_contains($log->action, 'delete') ? 'bg-red-100 text-red-800' : 'bg-maroon-100 text-maroon-800') }}">
                                 {{ $log->action }}
                             </span>
                         </td>

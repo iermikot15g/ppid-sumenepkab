@@ -6,7 +6,7 @@
 <div class="container mx-auto px-4 py-8">
     <!-- Breadcrumb -->
     <div class="text-sm text-gray-500 mb-4">
-        <a href="{{ route('direktori.opd') }}" class="hover:text-blue-600">PPID Pembantu</a> / 
+        <a href="{{ route('direktori.opd') }}" class="hover:text-maroon-600">PPID Pembantu</a> / 
         <span class="text-gray-700">{{ $opd->name }}</span>
     </div>
 
@@ -18,8 +18,8 @@
                 @if($opd->logo)
                     <img src="{{ Storage::url($opd->logo) }}" alt="{{ $opd->name }}" class="w-24 h-24 object-cover rounded-lg">
                 @else
-                    <div class="w-24 h-24 bg-blue-100 rounded-lg flex items-center justify-center">
-                        <svg class="w-12 h-12 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="w-24 h-24 bg-maroon-100 rounded-lg flex items-center justify-center">
+                        <svg class="w-12 h-12 text-maroon-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                         </svg>
                     </div>
@@ -53,7 +53,7 @@
                 <div class="mt-4 flex flex-wrap gap-3">
                     @if(isset($socialMedia['facebook']) && !empty($socialMedia['facebook']))
                     <a href="{{ $socialMedia['facebook'] }}" target="_blank" rel="noopener noreferrer" 
-                    class="text-gray-600 hover:text-blue-700 transition" title="Facebook">
+                    class="text-gray-600 hover:text-maroon-700 transition" title="Facebook">
                         <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
                             <path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"/>
                         </svg>
@@ -114,7 +114,7 @@
     <!-- Tabs Navigation -->
     <div class="border-b border-gray-200 mb-6 overflow-x-auto">
         <nav class="flex space-x-4">
-            <button onclick="showTab('tentang')" id="tab-tentang" class="py-2 px-3 border-b-2 border-blue-500 text-blue-600 whitespace-nowrap">
+            <button onclick="showTab('tentang')" id="tab-tentang" class="py-2 px-3 border-b-2 border-maroon-500 text-maroon-600 whitespace-nowrap">
                 Tentang OPD
             </button>
             <button onclick="showTab('dasar-hukum')" id="tab-dasar-hukum" class="py-2 px-3 border-b-2 border-transparent text-gray-500 hover:text-gray-700 whitespace-nowrap">
@@ -162,7 +162,7 @@
         @if($opd->dasar_hukum_pdf)
             <div class="mt-6">
                 <a href="{{ Storage::url($opd->dasar_hukum_pdf) }}" target="_blank" 
-                   class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                   class="inline-flex items-center px-4 py-2 bg-maroon-600 text-white rounded-lg hover:bg-maroon-700">
                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3M3 17V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
                     </svg>
@@ -185,7 +185,7 @@
         @if($opd->tusi_pdf)
             <div class="mt-6">
                 <a href="{{ Storage::url($opd->tusi_pdf) }}" target="_blank" 
-                   class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                   class="inline-flex items-center px-4 py-2 bg-maroon-600 text-white rounded-lg hover:bg-maroon-700">
                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3M3 17V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
                     </svg>
@@ -208,7 +208,7 @@
         @if($opd->structure_pdf)
             <div class="mt-6">
                 <a href="{{ Storage::url($opd->structure_pdf) }}" target="_blank" 
-                   class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                   class="inline-flex items-center px-4 py-2 bg-maroon-600 text-white rounded-lg hover:bg-maroon-700">
                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3M3 17V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
                     </svg>
@@ -235,7 +235,7 @@
                         <p class="text-sm text-gray-500">{{ $doc->year }} • {{ $doc->category->name ?? '-' }}</p>
                         <p class="text-sm text-gray-600 mt-1">{{ Str::limit($doc->description, 150) }}</p>
                         <div class="mt-2">
-                            <a href="{{ route('dip.download', $doc) }}" class="text-blue-600 text-sm hover:underline">
+                            <a href="{{ route('dip.download', $doc) }}" class="text-maroon-600 text-sm hover:underline">
                                 Download →
                             </a>
                         </div>
@@ -265,7 +265,7 @@
         tabs.forEach(t => {
             const tabEl = document.getElementById(`tab-${t}`);
             if (tabEl) {
-                tabEl.classList.remove('border-blue-500', 'text-blue-600');
+                tabEl.classList.remove('border-maroon-500', 'text-maroon-600');
                 tabEl.classList.add('border-transparent', 'text-gray-500');
             }
         });
@@ -277,7 +277,7 @@
         const activeTab = document.getElementById(`tab-${tab}`);
         if (activeTab) {
             activeTab.classList.remove('border-transparent', 'text-gray-500');
-            activeTab.classList.add('border-blue-500', 'text-blue-600');
+            activeTab.classList.add('border-maroon-500', 'text-maroon-600');
         }
     }
 </script>

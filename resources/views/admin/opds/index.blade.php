@@ -56,7 +56,7 @@
                             </span>
                         </td>
                         <td class="px-6 py-4 text-right text-sm">
-                            <a href="{{ route('admin.opds.edit', $opd) }}" class="text-blue-600 hover:text-blue-900 mr-3">Edit</a>
+                            <a href="{{ route('admin.opds.edit', $opd) }}" class="text-maroon-600 hover:text-blue-900 mr-3">Edit</a>
                             <button type="button" 
                                     onclick="deleteOpd({{ $opd->id }})" 
                                     class="text-red-600 hover:text-red-900">

@@ -23,14 +23,14 @@
 
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Nama Sub Kategori <span class="text-red-500">*</span></label>
-                    <input type="text" name="name" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500" 
+                    <input type="text" name="name" class="w-full border-gray-300 rounded-md shadow-sm focus:border-maroon-500 focus:ring-maroon-500" 
                            value="{{ old('name', $subCategory->name) }}" required>
                     @error('name') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                 </div>
 
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Slug</label>
-                    <input type="text" name="slug" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500" 
+                    <input type="text" name="slug" class="w-full border-gray-300 rounded-md shadow-sm focus:border-maroon-500 focus:ring-maroon-500" 
                            value="{{ old('slug', $subCategory->slug) }}" required>
                     <p class="text-xs text-gray-500 mt-1">Contoh: profil-badan-publik</p>
                     @error('slug') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
@@ -38,7 +38,7 @@
 
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Urutan</label>
-                    <input type="number" name="sort_order" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500" 
+                    <input type="number" name="sort_order" class="w-full border-gray-300 rounded-md shadow-sm focus:border-maroon-500 focus:ring-maroon-500" 
                            value="{{ old('sort_order', $subCategory->sort_order) }}">
                     <p class="text-xs text-gray-500 mt-1">Semakin kecil angka, semakin atas posisinya</p>
                     @error('sort_order') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
@@ -47,7 +47,7 @@
 
             <div class="mt-6 flex justify-end space-x-3">
                 <a href="{{ route('admin.categories.subcategories', $category) }}" class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50">Batal</a>
-                <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">Simpan Perubahan</button>
+                <button type="submit" class="px-4 py-2 bg-maroon-600 text-white rounded-md hover:bg-maroon-700">Simpan Perubahan</button>
             </div>
         </form>
     </div>

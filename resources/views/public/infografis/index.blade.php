@@ -16,7 +16,7 @@
     <!-- BREADCRUMB NAVIGASI                                          -->
     <!-- ============================================================ -->
     <div class="text-sm text-gray-500 mb-4">
-        <a href="{{ route('home') }}" class="hover:text-blue-600">Beranda</a> / 
+        <a href="{{ route('home') }}" class="hover:text-maroon-600">Beranda</a> / 
         <span class="text-gray-700">Infografis</span>
     </div>
 

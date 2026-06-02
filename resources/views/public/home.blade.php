@@ -215,25 +215,25 @@
 <div class="container mx-auto px-4 py-12">
     <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto">
         <a href="{{ route('dip.index') }}" class="bg-white shadow-md rounded-lg p-4 text-center hover:shadow-lg transition">
-            <svg class="w-8 h-8 text-blue-600 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg class="w-8 h-8 text-maroon-600 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
             </svg>
             <span class="text-sm font-medium">Daftar Informasi Publik</span>
         </a>
         <a href="{{ route('direktori.opd') }}" class="bg-white shadow-md rounded-lg p-4 text-center hover:shadow-lg transition">
-            <svg class="w-8 h-8 text-blue-600 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg class="w-8 h-8 text-maroon-600 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
             </svg>
             <span class="text-sm font-medium">PPID Pembantu</span>
         </a>
         <a href="#kontak" class="bg-white shadow-md rounded-lg p-4 text-center hover:shadow-lg transition" onclick="document.getElementById('footer')?.scrollIntoView({behavior: 'smooth'})">
-            <svg class="w-8 h-8 text-blue-600 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg class="w-8 h-8 text-maroon-600 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
             </svg>
             <span class="text-sm font-medium">Hubungi Kami</span>
         </a>
         <a href="{{ route('login') }}" class="bg-white shadow-md rounded-lg p-4 text-center hover:shadow-lg transition">
-            <svg class="w-8 h-8 text-blue-600 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg class="w-8 h-8 text-maroon-600 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
             </svg>
             <span class="text-sm font-medium">Login / Daftar</span>
@@ -279,7 +279,7 @@
                 @endif
             </div>
             <!-- Nama Layanan -->
-            <span class="text-xs font-medium text-gray-700 group-hover:text-blue-600 line-clamp-2">{{ $service->name }}</span>
+            <span class="text-xs font-medium text-gray-700 group-hover:text-maroon-600 line-clamp-2">{{ $service->name }}</span>
         </a>
         @endforeach
     </div>
@@ -290,16 +290,16 @@
 <!-- WELCOME SECTION - Sambutan dan informasi portal             -->
 <!-- ============================================================ -->
 <div class="container mx-auto px-4 py-8">
-    <div class="bg-blue-50 rounded-lg p-8 max-w-4xl mx-auto text-center">
-        <h2 class="text-2xl font-bold text-blue-800 mb-3">Selamat Datang di Portal PPID Kabupaten Sumenep</h2>
+    <div class="bg-maroon-50 rounded-lg p-8 max-w-4xl mx-auto text-center">
+        <h2 class="text-2xl font-bold text-maroon-800 mb-3">Selamat Datang di Portal PPID Kabupaten Sumenep</h2>
         <p class="text-gray-700 mb-4">
             Pejabat Pengelola Informasi dan Dokumentasi (PPID) Kabupaten Sumenep berkomitmen 
             memberikan layanan informasi publik yang transparan, cepat, dan mudah diakses sesuai 
             dengan Undang-Undang Nomor 14 Tahun 2008 tentang Keterbukaan Informasi Publik.
         </p>
         <div class="flex flex-wrap justify-center gap-3 mt-6">
-            <a href="{{ route('dip.index') }}" class="inline-block px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">Lihat Daftar Informasi Publik</a>
-            <a href="{{ route('login') }}" class="px-6 py-2 bg-white text-blue-600 border border-blue-600 rounded-lg hover:bg-blue-50 transition">Login ke Dashboard</a>
+            <a href="{{ route('dip.index') }}" class="inline-block px-6 py-2 bg-maroon-600 text-white rounded-lg hover:bg-maroon-700 transition">Lihat Daftar Informasi Publik</a>
+            <a href="{{ route('login') }}" class="px-6 py-2 bg-white text-maroon-600 border border-blue-600 rounded-lg hover:bg-maroon-50 transition">Login ke Dashboard</a>
         </div>
     </div>
 </div>
@@ -311,7 +311,7 @@
 <div class="container mx-auto px-4 py-8">
     <div class="flex justify-between items-center mb-6">
         <h2 class="text-2xl font-bold text-gray-800">Infografis</h2>
-        <a href="{{ route('infografis.index') }}" class="text-blue-600 hover:underline">Lihat Semua →</a>
+        <a href="{{ route('infografis.index') }}" class="text-maroon-600 hover:underline">Lihat Semua →</a>
     </div>
     
     @php
@@ -371,7 +371,7 @@
 <div class="container mx-auto px-4 py-8 bg-gray-50 rounded-lg my-4">
     <div class="flex justify-between items-center mb-6">
         <h2 class="text-2xl font-bold text-gray-800">Galeri Foto</h2>
-        <a href="{{ route('galeri.index') }}" class="text-blue-600 hover:underline">Lihat Semua →</a>
+        <a href="{{ route('galeri.index') }}" class="text-maroon-600 hover:underline">Lihat Semua →</a>
     </div>
     
     @php
@@ -428,7 +428,7 @@
 <div class="container mx-auto px-4 py-8">
     <div class="flex justify-between items-center mb-6">
         <h2 class="text-2xl font-bold text-gray-800">Agenda Kegiatan</h2>
-        <a href="{{ route('agenda.index') }}" class="text-blue-600 hover:underline">Lihat Semua →</a>
+        <a href="{{ route('agenda.index') }}" class="text-maroon-600 hover:underline">Lihat Semua →</a>
     </div>
     
     @php
@@ -446,10 +446,10 @@
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         @foreach($agendas as $agenda)
         <a href="{{ route('agenda.index') }}?search={{ urlencode($agenda->title) }}" 
-           class="block bg-white rounded-lg shadow-md hover:shadow-lg transition border-l-4 border-blue-500 overflow-hidden group">
+           class="block bg-white rounded-lg shadow-md hover:shadow-lg transition border-l-4 border-maroon-500 overflow-hidden group">
             <div class="p-4">
                 <!-- Tanggal - Format dengan hari, tanggal, bulan, tahun -->
-                <div class="flex items-center text-blue-600 mb-2">
+                <div class="flex items-center text-maroon-600 mb-2">
                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                     </svg>
@@ -457,7 +457,7 @@
                 </div>
                 
                 <!-- Judul -->
-                <h3 class="font-semibold text-gray-800 mb-2 line-clamp-2 group-hover:text-blue-600 transition">
+                <h3 class="font-semibold text-gray-800 mb-2 line-clamp-2 group-hover:text-maroon-600 transition">
                     {{ $agenda->title }}
                 </h3>
                 

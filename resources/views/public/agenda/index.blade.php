@@ -16,7 +16,7 @@
     <!-- BREADCRUMB NAVIGASI                                          -->
     <!-- ============================================================ -->
     <div class="text-sm text-gray-500 mb-4">
-        <a href="{{ route('home') }}" class="hover:text-blue-600">Beranda</a> / 
+        <a href="{{ route('home') }}" class="hover:text-maroon-600">Beranda</a> / 
         <span class="text-gray-700">Agenda Kegiatan</span>
     </div>
 
@@ -25,15 +25,15 @@
     <!-- ============================================================ -->
     <div class="flex flex-wrap gap-2 mb-6">
         <a href="{{ route('agenda.index') }}" 
-           class="px-4 py-2 text-sm rounded-full {{ !isset($activeFilter) || $activeFilter == 'all' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300' }}">
+           class="px-4 py-2 text-sm rounded-full {{ !isset($activeFilter) || $activeFilter == 'all' ? 'bg-maroon-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300' }}">
             Semua Agenda
         </a>
         <a href="{{ route('agenda.filter', ['status' => 'upcoming']) }}" 
-           class="px-4 py-2 text-sm rounded-full {{ isset($activeFilter) && $activeFilter == 'upcoming' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300' }}">
+           class="px-4 py-2 text-sm rounded-full {{ isset($activeFilter) && $activeFilter == 'upcoming' ? 'bg-maroon-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300' }}">
             Akan Datang
         </a>
         <a href="{{ route('agenda.filter', ['status' => 'expired']) }}" 
-           class="px-4 py-2 text-sm rounded-full {{ isset($activeFilter) && $activeFilter == 'expired' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300' }}">
+           class="px-4 py-2 text-sm rounded-full {{ isset($activeFilter) && $activeFilter == 'expired' ? 'bg-maroon-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300' }}">
             Telah Lewat
         </a>
     </div>
@@ -48,10 +48,10 @@
             $isExpired = \Carbon\Carbon::parse($agenda->event_date)->isPast();
         @endphp
         <a href="{{ route('dip.index', ['search' => $agenda->title]) }}" 
-           class="block bg-white rounded-lg shadow-md hover:shadow-lg transition border-l-4 {{ $isExpired ? 'border-gray-300' : 'border-blue-500' }} overflow-hidden group">
+           class="block bg-white rounded-lg shadow-md hover:shadow-lg transition border-l-4 {{ $isExpired ? 'border-gray-300' : 'border-maroon-500' }} overflow-hidden group">
             <div class="p-4">
                 <!-- Tanggal -->
-                <div class="flex items-center {{ $isExpired ? 'text-gray-400' : 'text-blue-600' }} mb-2">
+                <div class="flex items-center {{ $isExpired ? 'text-gray-400' : 'text-maroon-600' }} mb-2">
                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                     </svg>
@@ -59,7 +59,7 @@
                 </div>
                 
                 <!-- Judul -->
-                <h3 class="font-semibold text-gray-800 mb-2 line-clamp-2 group-hover:text-blue-600 transition">
+                <h3 class="font-semibold text-gray-800 mb-2 line-clamp-2 group-hover:text-maroon-600 transition">
                     {{ $agenda->title }}
                 </h3>
                 

@@ -21,8 +21,8 @@
             @method('PUT')
 
             <div class="space-y-4">
-                <div class="bg-blue-50 p-4 rounded-lg mb-4">
-                    <p class="text-sm text-blue-700">
+                <div class="bg-maroon-50 p-4 rounded-lg mb-4">
+                    <p class="text-sm text-maroon-700">
                         <svg class="inline w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
@@ -33,7 +33,7 @@
                 <!-- Facebook -->
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">
-                        <span class="text-blue-700">📘 Facebook</span>
+                        <span class="text-maroon-700">📘 Facebook</span>
                     </label>
                     <input type="url" name="facebook" class="w-full border-gray-300 rounded-md shadow-sm" 
                            value="{{ old('facebook', $socialMedia['facebook'] ?? '') }}" 
@@ -94,7 +94,7 @@
 
             <div class="mt-6 flex justify-end space-x-3">
                 <a href="{{ route('pembantu.cms.profil.index') }}" class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50">Batal</a>
-                <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">Simpan Perubahan</button>
+                <button type="submit" class="px-4 py-2 bg-maroon-600 text-white rounded-md hover:bg-maroon-700">Simpan Perubahan</button>
             </div>
         </form>
     </div>

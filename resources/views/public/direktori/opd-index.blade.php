@@ -15,8 +15,8 @@
             <div class="flex gap-2">
                 <input type="text" name="search" placeholder="Cari OPD..." 
                        value="{{ request('search') }}"
-                       class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
-                <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                       class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-maroon-500 focus:border-maroon-500">
+                <button type="submit" class="px-4 py-2 bg-maroon-600 text-white rounded-lg hover:bg-maroon-700">
                     Cari
                 </button>
             </div>
@@ -32,8 +32,8 @@
                     @if($opd->logo)
                         <img src="{{ Storage::url($opd->logo) }}" alt="{{ $opd->name }}" class="w-12 h-12 object-cover rounded-lg">
                     @else
-                        <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                            <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div class="w-12 h-12 bg-maroon-100 rounded-lg flex items-center justify-center">
+                            <svg class="w-6 h-6 text-maroon-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
                             </svg>
                         </div>

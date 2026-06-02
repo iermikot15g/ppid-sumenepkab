@@ -24,11 +24,11 @@
                 <label class="block text-sm font-medium text-gray-700 mb-1">Cari</label>
                 <input type="text" name="search" value="{{ request('search') }}" 
                        placeholder="Judul atau deskripsi..."
-                       class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                       class="w-full rounded-md border-gray-300 shadow-sm focus:border-maroon-500 focus:ring-maroon-500">
             </div>
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1">Status</label>
-                <select name="status" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                <select name="status" class="w-full rounded-md border-gray-300 shadow-sm focus:border-maroon-500 focus:ring-maroon-500">
                     <option value="">Semua</option>
                     <option value="published" {{ request('status') == 'published' ? 'selected' : '' }}>Published</option>
                     <option value="unpublished" {{ request('status') == 'unpublished' ? 'selected' : '' }}>Unpublished</option>
@@ -37,7 +37,7 @@
             </div>
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1">Klasifikasi</label>
-                <select name="classification" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                <select name="classification" class="w-full rounded-md border-gray-300 shadow-sm focus:border-maroon-500 focus:ring-maroon-500">
                     <option value="">Semua</option>
                     <option value="open" {{ request('classification') == 'open' ? 'selected' : '' }}>Terbuka</option>
                     <option value="excluded" {{ request('classification') == 'excluded' ? 'selected' : '' }}>Dikecualikan</option>
@@ -45,7 +45,7 @@
             </div>
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1">Kategori</label>
-                <select name="category_id" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                <select name="category_id" class="w-full rounded-md border-gray-300 shadow-sm focus:border-maroon-500 focus:ring-maroon-500">
                     <option value="">Semua</option>
                     @foreach($categories as $category)
                     <option value="{{ $category->id }}" {{ request('category_id') == $category->id ? 'selected' : '' }}>
@@ -56,7 +56,7 @@
             </div>
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1">Tahun</label>
-                <select name="year" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                <select name="year" class="w-full rounded-md border-gray-300 shadow-sm focus:border-maroon-500 focus:ring-maroon-500">
                     <option value="">Semua</option>
                     @foreach($years as $year)
                     <option value="{{ $year }}" {{ request('year') == $year ? 'selected' : '' }}>{{ $year }}</option>
@@ -64,7 +64,7 @@
                 </select>
             </div>
             <div class="md:col-span-5 flex justify-end space-x-2">
-                <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
+                <button type="submit" class="px-4 py-2 bg-maroon-600 text-white rounded-md hover:bg-maroon-700">
                     Filter
                 </button>
                 <a href="{{ route('pimpinan.documents.index') }}" class="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600">
@@ -107,7 +107,7 @@
                             @endif
                         </td>
                         <td class="px-6 py-4">
-                            <span class="px-2 py-1 text-xs rounded-full {{ $document->classification === 'open' ? 'bg-blue-100 text-blue-800' : 'bg-purple-100 text-purple-800' }}">
+                            <span class="px-2 py-1 text-xs rounded-full {{ $document->classification === 'open' ? 'bg-maroon-100 text-maroon-800' : 'bg-purple-100 text-purple-800' }}">
                                 {{ $document->classification === 'open' ? 'Terbuka' : 'Dikecualikan' }}
                             </span>
                         </td>
@@ -115,7 +115,7 @@
                         <td class="px-6 py-4 text-sm text-gray-500">{{ number_format($document->download_count) }}</td>
                         <td class="px-6 py-4 text-sm">
                             <div class="flex space-x-2">
-                                <a href="{{ route('pimpinan.documents.show', $document) }}" class="text-blue-600 hover:text-blue-900">
+                                <a href="{{ route('pimpinan.documents.show', $document) }}" class="text-maroon-600 hover:text-blue-900">
                                     Detail
                                 </a>
                             </div>

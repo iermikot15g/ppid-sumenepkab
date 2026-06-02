@@ -52,7 +52,7 @@
             </div>
 
             <div class="mt-6 flex justify-end">
-                <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
+                <button type="submit" class="px-4 py-2 bg-maroon-600 text-white rounded-md hover:bg-maroon-700">
                     Simpan Perubahan
                 </button>
             </div>

@@ -9,7 +9,7 @@
             <h1 class="text-2xl font-semibold text-gray-900">Dokumen DIP</h1>
             <p class="mt-1 text-sm text-gray-600">Kelola dokumen informasi publik OPD Anda</p>
         </div>
-        <a href="{{ url('/dashboard/pembantu/documents/create') }}" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
+        <a href="{{ url('/dashboard/pembantu/documents/create') }}" class="px-4 py-2 bg-maroon-600 text-white rounded-md hover:bg-maroon-700">
             + Upload Dokumen Baru
         </a>
     </div>
@@ -57,7 +57,7 @@
                         </td>
                         <td class="px-6 py-4 text-sm text-gray-500">{{ $doc->created_at->format('d/m/Y') }}</td>
                         <td class="px-6 py-4 text-right text-sm">
-                            <a href="{{ url('/dashboard/pembantu/documents/' . $doc->id . '/edit') }}" class="text-blue-600 hover:text-blue-900 mr-3">Edit</a>
+                            <a href="{{ url('/dashboard/pembantu/documents/' . $doc->id . '/edit') }}" class="text-maroon-600 hover:text-blue-900 mr-3">Edit</a>
                             <button onclick="deleteDocument({{ $doc->id }})" class="text-red-600 hover:text-red-900">Hapus</button>
                         </td>
                     </tr>

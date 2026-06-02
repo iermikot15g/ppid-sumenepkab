@@ -100,7 +100,7 @@
                     <div class="ml-5 w-0 flex-1">
                         <dl>
                             <dt class="text-sm font-medium text-gray-500 truncate">Total Unduhan</dt>
-                            <dd class="text-2xl font-semibold text-blue-600">{{ number_format($totalDownloads) }}</dd>
+                            <dd class="text-2xl font-semibold text-maroon-600">{{ number_format($totalDownloads) }}</dd>
                         </dl>
                     </div>
                 </div>
@@ -122,7 +122,7 @@
                         <span>{{ $stat->total }} dokumen</span>
                     </div>
                     <div class="w-full bg-gray-200 rounded-full h-2">
-                        <div class="bg-blue-600 h-2 rounded-full" style="width: {{ $totalDocuments > 0 ? ($stat->total / $totalDocuments * 100) : 0 }}%"></div>
+                        <div class="bg-maroon-600 h-2 rounded-full" style="width: {{ $totalDocuments > 0 ? ($stat->total / $totalDocuments * 100) : 0 }}%"></div>
                     </div>
                 </div>
                 @endforeach

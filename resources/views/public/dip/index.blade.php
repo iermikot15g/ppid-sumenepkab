@@ -17,12 +17,12 @@
             <div class="flex-1">
                 <input type="text" name="search" placeholder="Cari judul atau deskripsi..." 
                        value="{{ request('search') }}"
-                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-maroon-500 focus:border-maroon-500">
             </div>
             
             <!-- Filter OPD -->
             <div class="w-full md:w-64">
-                <select name="opd" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                <select name="opd" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-maroon-500 focus:border-maroon-500">
                     <option value="">Semua OPD</option>
                     @foreach($opds as $opd)
                         <option value="{{ $opd->id }}" {{ request('opd') == $opd->id ? 'selected' : '' }}>
@@ -34,7 +34,7 @@
             
             <!-- Filter Tahun -->
             <div class="w-full md:w-32">
-                <select name="year" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                <select name="year" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-maroon-500 focus:border-maroon-500">
                     <option value="">Semua Tahun</option>
                     @foreach($years as $year)
                         <option value="{{ $year }}" {{ request('year') == $year ? 'selected' : '' }}>{{ $year }}</option>
@@ -43,7 +43,7 @@
             </div>
             
             <!-- Submit Button -->
-            <button type="submit" class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
+            <button type="submit" class="px-6 py-2 bg-maroon-600 text-white rounded-lg hover:bg-maroon-700 transition">
                 Cari
             </button>
             
@@ -60,12 +60,12 @@
     <div class="border-b border-gray-200 mb-6 overflow-x-auto">
         <nav class="flex space-x-4">
             <a href="{{ route('dip.index', array_merge(request()->except('category'), ['category' => 'all'])) }}" 
-               class="py-2 px-3 border-b-2 whitespace-nowrap {{ (request('category', 'all') == 'all') ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700' }}">
+               class="py-2 px-3 border-b-2 whitespace-nowrap {{ (request('category', 'all') == 'all') ? 'border-maroon-500 text-maroon-600' : 'border-transparent text-gray-500 hover:text-gray-700' }}">
                 Semua
             </a>
             @foreach($categories as $category)
             <a href="{{ route('dip.index', array_merge(request()->except('category'), ['category' => $category->slug])) }}" 
-               class="py-2 px-3 border-b-2 whitespace-nowrap {{ (request('category') == $category->slug) ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700' }}">
+               class="py-2 px-3 border-b-2 whitespace-nowrap {{ (request('category') == $category->slug) ? 'border-maroon-500 text-maroon-600' : 'border-transparent text-gray-500 hover:text-gray-700' }}">
                 {{ $category->name }}
             </a>
             @endforeach
@@ -105,7 +105,7 @@
                     <div class="flex gap-2">
                         <!-- Preview Button -->
                         <button onclick="previewDocument({{ $document->id }})" 
-                                class="text-blue-600 hover:text-blue-800 text-sm font-medium">
+                                class="text-maroon-600 hover:text-maroon-800 text-sm font-medium">
                             Preview
                         </button>
                         
@@ -199,7 +199,7 @@
                             <h3 class="mt-4 text-lg font-semibold text-gray-900">Login Diperlukan</h3>
                             <p class="mt-2 text-gray-600">${data.message || 'Silakan login terlebih dahulu untuk melihat preview dokumen.'}</p>
                             <div class="mt-6 flex justify-center gap-3">
-                                <a href="${data.login_url}" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">Login</a>
+                                <a href="${data.login_url}" class="px-4 py-2 bg-maroon-600 text-white rounded-lg hover:bg-maroon-700">Login</a>
                                 <a href="/register" class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50">Daftar</a>
                             </div>
                         </div>
@@ -235,7 +235,7 @@
                             <h3 class="mt-4 text-lg font-semibold text-gray-900">Login Diperlukan</h3>
                             <p class="mt-2 text-gray-600">${error.message}</p>
                             <div class="mt-6 flex justify-center gap-3">
-                                <a href="${error.login_url}" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">Login</a>
+                                <a href="${error.login_url}" class="px-4 py-2 bg-maroon-600 text-white rounded-lg hover:bg-maroon-700">Login</a>
                                 <a href="/register" class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50">Daftar</a>
                             </div>
                         </div>

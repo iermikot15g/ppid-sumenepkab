@@ -39,7 +39,7 @@
                         </td>
                         <td class="px-6 py-4 text-sm">
                             @foreach($user->roles as $role)
-                                <span class="px-2 py-1 text-xs rounded-full bg-blue-100 text-blue-800">
+                                <span class="px-2 py-1 text-xs rounded-full bg-maroon-100 text-maroon-800">
                                     {{ $role->name }}
                                 </span>
                             @endforeach
@@ -53,7 +53,7 @@
                             </span>
                         </td>
                         <td class="px-6 py-4 text-right text-sm">
-                            <a href="{{ route('admin.users.edit', $user) }}" class="text-blue-600 hover:text-blue-900 mr-3">Edit</a>
+                            <a href="{{ route('admin.users.edit', $user) }}" class="text-maroon-600 hover:text-blue-900 mr-3">Edit</a>
                             @if(!$user->hasRole('super_admin'))
                             <button type="button" 
                                     onclick="deleteUser({{ $user->id }})" 

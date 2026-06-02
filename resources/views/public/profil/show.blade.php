@@ -6,8 +6,8 @@
 <div class="container mx-auto px-4 py-8">
     <!-- Breadcrumb -->
     <div class="text-sm text-gray-500 mb-4">
-        <a href="{{ route('home') }}" class="hover:text-blue-600">Beranda</a> / 
-        <a href="{{ route('profil') }}" class="hover:text-blue-600">Profil</a> / 
+        <a href="{{ route('home') }}" class="hover:text-maroon-600">Beranda</a> / 
+        <a href="{{ route('profil') }}" class="hover:text-maroon-600">Profil</a> / 
         <span class="text-gray-700">{{ ucfirst(str_replace('-', ' ', $section)) }}</span>
     </div>
 
@@ -23,23 +23,23 @@
     <div class="border-b border-gray-200 mb-6 overflow-x-auto">
         <nav class="flex space-x-4">
             <a href="{{ route('profil.show', 'tentang-ppid') }}" 
-               class="py-2 px-3 border-b-2 whitespace-nowrap {{ $section == 'tentang-ppid' ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700' }}">
+               class="py-2 px-3 border-b-2 whitespace-nowrap {{ $section == 'tentang-ppid' ? 'border-maroon-500 text-maroon-600' : 'border-transparent text-gray-500 hover:text-gray-700' }}">
                 Tentang PPID
             </a>
             <a href="{{ route('profil.show', 'visi-misi') }}" 
-               class="py-2 px-3 border-b-2 whitespace-nowrap {{ $section == 'visi-misi' ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700' }}">
+               class="py-2 px-3 border-b-2 whitespace-nowrap {{ $section == 'visi-misi' ? 'border-maroon-500 text-maroon-600' : 'border-transparent text-gray-500 hover:text-gray-700' }}">
                 Visi Misi
             </a>
             <a href="{{ route('profil.show', 'dasar-hukum') }}" 
-               class="py-2 px-3 border-b-2 whitespace-nowrap {{ $section == 'dasar-hukum' ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700' }}">
+               class="py-2 px-3 border-b-2 whitespace-nowrap {{ $section == 'dasar-hukum' ? 'border-maroon-500 text-maroon-600' : 'border-transparent text-gray-500 hover:text-gray-700' }}">
                 Dasar Hukum
             </a>
             <a href="{{ route('profil.show', 'tugas-fungsi') }}" 
-               class="py-2 px-3 border-b-2 whitespace-nowrap {{ $section == 'tugas-fungsi' ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700' }}">
+               class="py-2 px-3 border-b-2 whitespace-nowrap {{ $section == 'tugas-fungsi' ? 'border-maroon-500 text-maroon-600' : 'border-transparent text-gray-500 hover:text-gray-700' }}">
                 Tugas dan Fungsi
             </a>
             <a href="{{ route('profil.show', 'struktur') }}" 
-               class="py-2 px-3 border-b-2 whitespace-nowrap {{ $section == 'struktur' ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700' }}">
+               class="py-2 px-3 border-b-2 whitespace-nowrap {{ $section == 'struktur' ? 'border-maroon-500 text-maroon-600' : 'border-transparent text-gray-500 hover:text-gray-700' }}">
                 Struktur Organisasi
             </a>
         </nav>
@@ -54,7 +54,7 @@
             @if($content->pdf_file_path)
                 <div class="mt-6">
                     <a href="{{ Storage::url($content->pdf_file_path) }}" target="_blank" 
-                       class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                       class="inline-flex items-center px-4 py-2 bg-maroon-600 text-white rounded-lg hover:bg-maroon-700">
                         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3M3 17V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
                         </svg>

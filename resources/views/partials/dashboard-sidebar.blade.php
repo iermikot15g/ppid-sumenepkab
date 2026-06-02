@@ -2,7 +2,7 @@
     <div class="h-full flex flex-col">
         <!-- Logo -->
         <div class="flex items-center justify-center h-16 px-4 border-b border-gray-200">
-            <div class="h-8 w-8 bg-blue-700 rounded-lg flex items-center justify-center">
+            <div class="h-8 w-8 bg-maroon-700 rounded-lg flex items-center justify-center">
                 <span class="text-white text-xs font-bold">PPID</span>
             </div>
             <span class="ml-2 text-lg font-semibold text-gray-800">PPID Sumenep</span>
@@ -248,7 +248,7 @@
         @apply flex items-center px-2 py-2 text-sm font-medium text-gray-700 rounded-lg transition-colors duration-150 hover:bg-gray-100;
     }
     .sidebar-link.active {
-        @apply bg-blue-50 text-blue-700;
+        @apply bg-maroon-50 text-maroon-700;
     }
     .sidebar-link svg {
         @apply mr-3 h-5 w-5;

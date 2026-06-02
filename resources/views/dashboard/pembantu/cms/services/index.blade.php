@@ -9,7 +9,7 @@
             <h1 class="text-2xl font-semibold text-gray-900">Layanan Publik OPD</h1>
             <p class="mt-1 text-sm text-gray-600">Kelola website layanan publik OPD Anda</p>
         </div>
-        <a href="{{ route('pembantu.cms.services.create') }}" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
+        <a href="{{ route('pembantu.cms.services.create') }}" class="px-4 py-2 bg-maroon-600 text-white rounded-md hover:bg-maroon-700">
             + Tambah Layanan
         </a>
     </div>
@@ -52,7 +52,7 @@
                             </div>
                             <div class="text-xs text-gray-500 line-clamp-1">{{ $service->description }}</div>
                         </td>
-                        <td class="px-6 py-4 text-sm text-blue-600 truncate max-w-xs">
+                        <td class="px-6 py-4 text-sm text-maroon-600 truncate max-w-xs">
                             <a href="{{ $service->url }}" target="_blank" class="hover:underline">{{ Str::limit($service->url, 40) }}</a>
                         </td>
                         <td class="px-6 py-4 text-sm text-gray-500">{{ $service->sort_order }}</td>
@@ -63,7 +63,7 @@
                             </button>
                         </td>
                         <td class="px-6 py-4 text-right text-sm">
-                            <a href="{{ route('pembantu.cms.services.edit', $service) }}" class="text-blue-600 hover:text-blue-900 mr-3">Edit</a>
+                            <a href="{{ route('pembantu.cms.services.edit', $service) }}" class="text-maroon-600 hover:text-blue-900 mr-3">Edit</a>
                             <button onclick="deleteService({{ $service->id }})" class="text-red-600 hover:text-red-900">Hapus</button>
                         </td>
                     </tr>

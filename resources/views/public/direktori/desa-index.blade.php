@@ -15,8 +15,8 @@
             <div class="flex gap-2">
                 <input type="text" name="search" placeholder="Cari desa..." 
                        value="{{ request('search') }}"
-                       class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
-                <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                       class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-maroon-500 focus:border-maroon-500">
+                <button type="submit" class="px-4 py-2 bg-maroon-600 text-white rounded-lg hover:bg-maroon-700">
                     Cari
                 </button>
             </div>
@@ -32,8 +32,8 @@
                     @if($village->logo && Storage::disk('public')->exists($village->logo))
                         <img src="{{ Storage::url($village->logo) }}" alt="{{ $village->name }}" class="w-12 h-12 object-cover rounded-lg">
                     @else
-                        <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                            <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div class="w-12 h-12 bg-maroon-100 rounded-lg flex items-center justify-center">
+                            <svg class="w-6 h-6 text-maroon-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
                             </svg>
                         </div>

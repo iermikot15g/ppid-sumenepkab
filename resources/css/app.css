@@ -1,5 +1,29 @@
 @import "tailwindcss";
 
+@theme {
+    --color-maroon-50: #fdf2f2;
+    --color-maroon-100: #fce8e8;
+    --color-maroon-200: #f8d4d4;
+    --color-maroon-300: #f1b0b0;
+    --color-maroon-400: #e88484;
+    --color-maroon-500: #c41e3a;
+    --color-maroon-600: #a01830;
+    --color-maroon-700: #7c1425;
+    --color-maroon-800: #58101b;
+    --color-maroon-900: #340a10;
+    
+    --color-blue-50: #fdf2f2;
+    --color-blue-100: #fce8e8;
+    --color-blue-200: #f8d4d4;
+    --color-blue-300: #f1b0b0;
+    --color-blue-400: #e88484;
+    --color-blue-500: #c41e3a;
+    --color-blue-600: #a01830;
+    --color-blue-700: #7c1425;
+    --color-blue-800: #58101b;
+    --color-blue-900: #340a10;
+}
+
 @layer base {
     body {
         @apply antialiased;
@@ -8,18 +32,14 @@
 
 @layer components {
     .btn-primary {
-        @apply inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 active:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition ease-in-out duration-150;
+        @apply inline-flex items-center px-4 py-2 bg-maroon-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-maroon-700 active:bg-maroon-800 focus:outline-none focus:ring-2 focus:ring-maroon-500 focus:ring-offset-2 transition ease-in-out duration-150;
     }
-    
+
     .btn-secondary {
         @apply inline-flex items-center px-4 py-2 bg-gray-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition ease-in-out duration-150;
     }
-    
+
     .form-input {
-        @apply mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500;
-    }
-    
-    .form-label {
-        @apply block text-sm font-medium text-gray-700;
+        @apply mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-maroon-500 focus:ring-maroon-500;
     }
 }

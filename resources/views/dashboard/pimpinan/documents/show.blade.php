@@ -9,7 +9,7 @@
         <div class="flex justify-between items-start">
             <div>
                 <div class="flex items-center space-x-2">
-                    <a href="{{ route('pimpinan.documents.index') }}" class="text-blue-600 hover:text-blue-800">
+                    <a href="{{ route('pimpinan.documents.index') }}" class="text-maroon-600 hover:text-maroon-800">
                         ← Kembali ke Daftar
                     </a>
                     <span class="text-gray-400">|</span>
@@ -99,7 +99,7 @@
             <div class="bg-white rounded-lg shadow p-6">
                 <div class="flex justify-between items-center mb-4">
                     <h3 class="text-lg font-medium text-gray-900">Preview Dokumen</h3>
-                    <a href="{{ route('pimpinan.documents.preview', $document) }}" target="_blank" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
+                    <a href="{{ route('pimpinan.documents.preview', $document) }}" target="_blank" class="px-4 py-2 bg-maroon-600 text-white rounded-md hover:bg-maroon-700">
                         Buka di Tab Baru
                     </a>
                 </div>

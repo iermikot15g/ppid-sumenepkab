@@ -9,7 +9,7 @@
         <div class="flex justify-between items-start">
             <div>
                 <div class="flex items-center space-x-2">
-                    <a href="{{ route('pimpinan.laporan.index') }}" class="text-blue-600 hover:text-blue-800">
+                    <a href="{{ route('pimpinan.laporan.index') }}" class="text-maroon-600 hover:text-maroon-800">
                         ← Kembali ke Form
                     </a>
                     <span class="text-gray-400">|</span>
@@ -32,8 +32,8 @@
 
     <!-- Filter Info -->
     @if($data['period']['start'] || $data['period']['end'] || $data['year'])
-    <div class="bg-blue-50 rounded-lg p-4 border border-blue-200">
-        <p class="text-sm text-blue-800">
+    <div class="bg-maroon-50 rounded-lg p-4 border border-blue-200">
+        <p class="text-sm text-maroon-800">
             <strong>Filter yang diterapkan:</strong>
             @if($data['period']['start']) Periode: {{ \Carbon\Carbon::parse($data['period']['start'])->format('d/m/Y') }} 
                 @if($data['period']['end']) s.d. {{ \Carbon\Carbon::parse($data['period']['end'])->format('d/m/Y') }} @endif
@@ -47,8 +47,8 @@
     <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
         <div class="bg-white rounded-lg shadow p-6">
             <div class="flex items-center">
-                <div class="flex-shrink-0 bg-blue-100 rounded-full p-3">
-                    <svg class="h-6 w-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="flex-shrink-0 bg-maroon-100 rounded-full p-3">
+                    <svg class="h-6 w-6 text-maroon-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                     </svg>
                 </div>
@@ -133,7 +133,7 @@
                     <span class="text-sm font-semibold text-gray-900">{{ number_format($stat->total) }}</span>
                 </div>
                 <div class="w-full bg-gray-200 rounded-full h-2">
-                    <div class="bg-blue-600 h-2 rounded-full" style="width: {{ $data['total_documents'] > 0 ? ($stat->total / $data['total_documents']) * 100 : 0 }}%"></div>
+                    <div class="bg-maroon-600 h-2 rounded-full" style="width: {{ $data['total_documents'] > 0 ? ($stat->total / $data['total_documents']) * 100 : 0 }}%"></div>
                 </div>
                 @endforeach
             </div>

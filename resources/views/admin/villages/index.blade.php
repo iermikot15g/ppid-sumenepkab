@@ -45,7 +45,7 @@
                             </span>
                         </td>
                         <td class="px-6 py-4 text-right text-sm">
-                            <a href="{{ route('admin.villages.edit', $village) }}" class="text-blue-600 hover:text-blue-900 mr-3">Edit</a>
+                            <a href="{{ route('admin.villages.edit', $village) }}" class="text-maroon-600 hover:text-blue-900 mr-3">Edit</a>
                             <button type="button" 
                                     onclick="deleteVillage({{ $village->id }})" 
                                     class="text-red-600 hover:text-red-900">
