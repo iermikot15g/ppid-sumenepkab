@@ -268,16 +268,16 @@ Route::prefix('dashboard')->middleware(['auth'])->group(function () {
         });
         
         // ====================================================================
-        // CMS LAYANAN PUBLIK (semua OPD)
+        // CMS LAYANAN PUBLIK (semua OPD) - untuk PPID Utama
         // ====================================================================
         Route::prefix('cms/public-services')->group(function () {
-            Route::get('/', [OpdServiceController::class, 'index'])->name('utama.cms.public-services.index');
-            Route::get('/create', [OpdServiceController::class, 'create'])->name('utama.cms.public-services.create');
-            Route::post('/', [OpdServiceController::class, 'store'])->name('utama.cms.public-services.store');
-            Route::get('/{service}/edit', [OpdServiceController::class, 'edit'])->name('utama.cms.public-services.edit');
-            Route::put('/{service}', [OpdServiceController::class, 'update'])->name('utama.cms.public-services.update');
-            Route::delete('/{service}', [OpdServiceController::class, 'destroy'])->name('utama.cms.public-services.destroy');
-            Route::patch('/{service}/toggle', [OpdServiceController::class, 'toggleActive'])->name('utama.cms.public-services.toggle');
+            Route::get('/', [App\Http\Controllers\Dashboard\Utama\PublicServiceController::class, 'index'])->name('utama.cms.public-services.index');
+            Route::get('/create', [App\Http\Controllers\Dashboard\Utama\PublicServiceController::class, 'create'])->name('utama.cms.public-services.create');
+            Route::post('/', [App\Http\Controllers\Dashboard\Utama\PublicServiceController::class, 'store'])->name('utama.cms.public-services.store');
+            Route::get('/{id}/edit', [App\Http\Controllers\Dashboard\Utama\PublicServiceController::class, 'edit'])->name('utama.cms.public-services.edit');
+            Route::put('/{id}', [App\Http\Controllers\Dashboard\Utama\PublicServiceController::class, 'update'])->name('utama.cms.public-services.update');
+            Route::delete('/{id}', [App\Http\Controllers\Dashboard\Utama\PublicServiceController::class, 'destroy'])->name('utama.cms.public-services.destroy');
+            Route::patch('/{id}/toggle', [App\Http\Controllers\Dashboard\Utama\PublicServiceController::class, 'toggleActive'])->name('utama.cms.public-services.toggle');
         });
         
         // ====================================================================
