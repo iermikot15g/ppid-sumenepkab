@@ -23,17 +23,18 @@
             <div class="space-y-6">
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Konten Tugas dan Fungsi</label>
-                    <textarea name="tusi_content" rows="15" class="w-full border-gray-300 rounded-md shadow-sm font-mono text-sm" 
-                              id="tusi_content">{{ old('tusi_content', $opd->tusi_content) }}</textarea>
+                    <textarea name="tugas_fungsi_content" rows="15" class="w-full border-gray-300 rounded-md shadow-sm font-mono text-sm" 
+                              id="tugas_fungsi_content">{{ old('tugas_fungsi_content', $opd->tugas_fungsi_content) }}</textarea>
                     <p class="text-xs text-gray-500 mt-1">Mendukung HTML untuk formatting</p>
+                    @error('tugas_fungsi_content') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                 </div>
 
-                @if($opd->tusi_pdf && Storage::disk('public')->exists($opd->tusi_pdf))
+                @if($opd->tugas_fungsi_pdf && Storage::disk('public')->exists($opd->tugas_fungsi_pdf))
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">PDF Saat Ini</label>
                     <div class="flex items-center gap-2">
-                        <a href="{{ Storage::url($opd->tusi_pdf) }}" target="_blank" class="text-maroon-600 hover:underline">
-                            {{ basename($opd->tusi_pdf) }}
+                        <a href="{{ Storage::url($opd->tugas_fungsi_pdf) }}" target="_blank" class="text-maroon-600 hover:underline">
+                            {{ basename($opd->tugas_fungsi_pdf) }}
                         </a>
                     </div>
                 </div>
@@ -41,9 +42,9 @@
 
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Upload PDF (opsional)</label>
-                    <input type="file" name="tusi_pdf" class="w-full border-gray-300 rounded-md shadow-sm" accept=".pdf">
+                    <input type="file" name="tugas_fungsi_pdf" class="w-full border-gray-300 rounded-md shadow-sm" accept=".pdf">
                     <p class="text-xs text-gray-500 mt-1">Format: PDF. Max 5MB. Kosongkan jika tidak ingin mengganti file.</p>
-                    @error('tusi_pdf') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                    @error('tugas_fungsi_pdf') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                 </div>
             </div>
 

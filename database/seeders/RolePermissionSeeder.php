@@ -5,134 +5,131 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
+use App\Models\User;
 
 class RolePermissionSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
-    public function run(): void
+    public function run()
     {
-        // Reset cached roles and permissions
         app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
 
-        // Create permissions
+        // ========== DAFTAR PERMISSION LENGKAP ==========
         $permissions = [
             // Dashboard
-            'view_dashboard',
-            'view_statistics',
+            'view_dashboard_all',
+            'view_dashboard_own_opd',
             
-            // Information management
-            'view_information',
-            'create_information',
-            'edit_information',
-            'delete_information',
-            'publish_information',
+            // Dokumen
+            'manage_all_documents',
+            'manage_own_opd_documents',
+            'view_own_opd_documents',
+            'download_document',
+            'preview_document',
             
-            // Request management
-            'view_requests',
-            'process_requests',
-            'approve_requests',
-            'reject_requests',
-            'export_requests',
+            // Laporan
+            'view_reports_all',
+            'view_reports_own_opd',
             
-            // Report management
-            'view_reports',
-            'generate_reports',
-            'export_reports',
+            // CMS Agenda
+            'manage_all_agenda',
+            'manage_own_opd_agenda',
             
-            // User management
-            'view_users',
-            'create_users',
-            'edit_users',
-            'delete_users',
-            'assign_roles',
+            // CMS Galeri
+            'manage_all_gallery',
+            'manage_own_opd_gallery',
+            'view_own_opd_gallery',
             
-            // Settings
-            'manage_settings',
-            'manage_logs',
+            // CMS Infografis
+            'manage_all_infographic',
+            'manage_own_opd_infographic',
+            
+            // CMS Hero Slider
+            'manage_hero_slider',
+            
+            // CMS Profil PPID Utama
+            'manage_ppid_utama_profile',
+            
+            // CMS Standar Layanan
+            'manage_standar_layanan',
+            
+            // CMS Layanan Publik
+            'manage_all_public_services',
+            'manage_own_opd_public_services',
+            
+            // CMS Profil OPD
+            'manage_own_opd_profile',
+            
+            // Administrasi
+            'manage_opd',
+            'manage_village',
+            'manage_master_category',
+            'manage_user',
+            'view_audit_log',
         ];
 
         foreach ($permissions as $permission) {
             Permission::firstOrCreate(['name' => $permission, 'guard_name' => 'web']);
         }
 
-        // Create roles
-        $roles = [
-            'super_admin' => 'Super Administrator with full access',
-            'ppid_utama' => 'Main PPID Officer',
-            'ppid_pembantu' => 'Assistant PPID Officer',
-            'pimpinan' => 'Leadership/Management',
-            'masyarakat' => 'Public User'
-        ];
+        // ========== BUAT ROLE ==========
+        $superAdmin = Role::firstOrCreate(['name' => 'super_admin', 'guard_name' => 'web']);
+        $ppidUtama = Role::firstOrCreate(['name' => 'ppid_utama', 'guard_name' => 'web']);
+        $ppidPembantu = Role::firstOrCreate(['name' => 'ppid_pembantu', 'guard_name' => 'web']);
+        $pimpinan = Role::firstOrCreate(['name' => 'pimpinan', 'guard_name' => 'web']);
+        $masyarakat = Role::firstOrCreate(['name' => 'masyarakat', 'guard_name' => 'web']);
 
-        foreach ($roles as $roleName => $roleDescription) {
-            $role = Role::firstOrCreate(['name' => $roleName, 'guard_name' => 'web']);
-            
-            // Assign permissions based on role
-            switch ($roleName) {
-                case 'super_admin':
-                    // Give all permissions
-                    $role->givePermissionTo(Permission::all());
-                    break;
-                    
-                case 'ppid_utama':
-                    // Give main PPID permissions
-                    $role->givePermissionTo([
-                        'view_dashboard',
-                        'view_statistics',
-                        'view_information',
-                        'create_information',
-                        'edit_information',
-                        'publish_information',
-                        'view_requests',
-                        'process_requests',
-                        'approve_requests',
-                        'reject_requests',
-                        'view_reports',
-                        'generate_reports',
-                        'export_reports',
-                        'view_users',
-                        'manage_logs',
-                    ]);
-                    break;
-                    
-                case 'ppid_pembantu':
-                    // Give assistant PPID permissions
-                    $role->givePermissionTo([
-                        'view_dashboard',
-                        'view_information',
-                        'create_information',
-                        'edit_information',
-                        'view_requests',
-                        'process_requests',
-                        'view_reports',
-                    ]);
-                    break;
-                    
-                case 'pimpinan':
-                    // Give leadership permissions
-                    $role->givePermissionTo([
-                        'view_dashboard',
-                        'view_statistics',
-                        'view_information',
-                        'view_requests',
-                        'approve_requests',
-                        'view_reports',
-                        'view_users',
-                    ]);
-                    break;
-                    
-                case 'masyarakat':
-                    // Give public user permissions
-                    $role->givePermissionTo([
-                        'view_information',
-                        'view_dashboard',
-                    ]);
-                    break;
-            }
-        }
+        // ========== ASSIGN PERMISSION KE ROLE ==========
         
+        // SUPER ADMIN (semua permission)
+        $superAdmin->syncPermissions(Permission::all());
+
+        // PPID UTAMA
+        $ppidUtama->syncPermissions([
+            'view_dashboard_all',
+            'manage_all_documents',
+            'view_reports_all',
+            'manage_all_agenda',
+            'manage_all_gallery',
+            'manage_all_infographic',
+            'manage_hero_slider',
+            'manage_ppid_utama_profile',
+            'manage_standar_layanan',
+            'manage_all_public_services',
+            'download_document',
+            'preview_document',
+        ]);
+
+        // PPID PEMBANTU
+        $ppidPembantu->syncPermissions([
+            'view_dashboard_own_opd',
+            'manage_own_opd_documents',
+            'view_own_opd_documents',
+            'view_reports_own_opd',
+            'manage_own_opd_agenda',
+            'manage_own_opd_gallery',
+            'view_own_opd_gallery',
+            'manage_own_opd_infographic',
+            'manage_own_opd_profile',
+            'manage_own_opd_public_services',
+            'download_document',
+            'preview_document',
+        ]);
+
+        // PIMPINAN
+        $pimpinan->syncPermissions([
+            'view_dashboard_own_opd',
+            'view_own_opd_documents',
+            'view_reports_own_opd',
+            'download_document',
+            'preview_document',
+        ]);
+
+        // MASYARAKAT
+        $masyarakat->syncPermissions([
+            'download_document',
+            'preview_document',
+        ]);
+
         $this->command->info('Roles and permissions seeded successfully!');
     }
 }

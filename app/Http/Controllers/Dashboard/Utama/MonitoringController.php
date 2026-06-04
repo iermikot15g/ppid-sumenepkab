@@ -89,7 +89,7 @@ class MonitoringController extends Controller
             ->get();
         
         // ========== STATISTIK CMS ==========
-        $totalNews = News::where('type', 'news')->count();
+        $totalInfografis = News::where('type', 'infographic')->count();
         $totalAgendas = News::where('type', 'agenda')->count();
         $totalGalleries = News::where('type', 'gallery')->count();
         
@@ -103,7 +103,7 @@ class MonitoringController extends Controller
             'documentsByCategory',
             'publicationTrend',
             'recentDocuments',
-            'totalNews',
+            'totalInfografis',
             'totalAgendas',
             'totalGalleries'
         ));

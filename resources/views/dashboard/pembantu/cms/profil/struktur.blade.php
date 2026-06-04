@@ -23,17 +23,18 @@
             <div class="space-y-6">
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Konten Struktur Organisasi</label>
-                    <textarea name="structure_content" rows="15" class="w-full border-gray-300 rounded-md shadow-sm font-mono text-sm" 
-                              id="structure_content">{{ old('structure_content', $opd->structure_content) }}</textarea>
+                    <textarea name="struktur_content" rows="15" class="w-full border-gray-300 rounded-md shadow-sm font-mono text-sm" 
+                              id="struktur_content">{{ old('struktur_content', $opd->struktur_content) }}</textarea>
                     <p class="text-xs text-gray-500 mt-1">Mendukung HTML untuk formatting</p>
+                    @error('struktur_content') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                 </div>
 
-                @if($opd->structure_pdf && Storage::disk('public')->exists($opd->structure_pdf))
+                @if($opd->struktur_pdf && Storage::disk('public')->exists($opd->struktur_pdf))
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">PDF Saat Ini</label>
                     <div class="flex items-center gap-2">
-                        <a href="{{ Storage::url($opd->structure_pdf) }}" target="_blank" class="text-maroon-600 hover:underline">
-                            {{ basename($opd->structure_pdf) }}
+                        <a href="{{ Storage::url($opd->struktur_pdf) }}" target="_blank" class="text-maroon-600 hover:underline">
+                            {{ basename($opd->struktur_pdf) }}
                         </a>
                     </div>
                 </div>
@@ -41,9 +42,9 @@
 
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Upload PDF (opsional)</label>
-                    <input type="file" name="structure_pdf" class="w-full border-gray-300 rounded-md shadow-sm" accept=".pdf">
+                    <input type="file" name="struktur_pdf" class="w-full border-gray-300 rounded-md shadow-sm" accept=".pdf">
                     <p class="text-xs text-gray-500 mt-1">Format: PDF. Max 5MB. Kosongkan jika tidak ingin mengganti file.</p>
-                    @error('structure_pdf') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                    @error('struktur_pdf') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                 </div>
             </div>
 

@@ -9,28 +9,36 @@ use App\Traits\LogsActivity;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests; // <-- TAMBAHKAN INI
 
 class DocumentController extends Controller
 {
-    use LogsActivity;
+    use LogsActivity, AuthorizesRequests; // <-- TAMBAHKAN AuthorizesRequests DI SINI
 
     public function index()
     {
+        $this->authorize('viewAny', Document::class);
+        
         $documents = Document::where('opd_id', Auth::user()->opd_id)
-            ->with('category')
+            ->with(['category', 'subCategory'])
             ->latest()
             ->paginate(10);
+            
         return view('dashboard.pembantu.documents.index', compact('documents'));
     }
 
     public function create()
     {
+        $this->authorize('create', Document::class);
+        
         $categories = Category::with('subCategories')->get();
         return view('dashboard.pembantu.documents.create', compact('categories'));
     }
 
     public function store(Request $request)
     {
+        $this->authorize('create', Document::class);
+        
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
@@ -70,25 +78,21 @@ class DocumentController extends Controller
 
         $this->logActivity('create_document', 'Mengupload dokumen: ' . $document->title, $document);
 
-        // PERBAIKAN: Ganti route() dengan url()
         return redirect()->to(url('/dashboard/pembantu/documents'))
             ->with('success', 'Dokumen berhasil diupload.');
     }
 
     public function edit(Document $document)
     {
-        if ($document->opd_id !== auth()->user()->opd_id) {
-            abort(403);
-        }
+        $this->authorize('update', $document);
+        
         $categories = Category::with('subCategories')->get();
         return view('dashboard.pembantu.documents.edit', compact('document', 'categories'));
     }
 
     public function update(Request $request, Document $document)
     {
-        if ($document->opd_id !== auth()->user()->opd_id) {
-            abort(403);
-        }
+        $this->authorize('update', $document);
 
         $validated = $request->validate([
             'title' => 'required|string|max:255',
@@ -126,32 +130,26 @@ class DocumentController extends Controller
 
         $this->logActivity('update_document', 'Memperbarui dokumen: ' . $document->title, $document);
 
-        // PERBAIKAN: Ganti route() dengan url()
         return redirect()->to(url('/dashboard/pembantu/documents'))
             ->with('success', 'Dokumen berhasil diperbarui.');
     }
 
     public function destroy(Document $document)
     {
-        if ($document->opd_id !== auth()->user()->opd_id) {
-            abort(403);
-        }
+        $this->authorize('delete', $document);
         
         $this->logActivity('delete_document', 'Menghapus dokumen: ' . $document->title, $document);
         
         Storage::disk('public')->delete($document->file_path);
         $document->delete();
 
-        // PERBAIKAN: Ganti route() dengan url()
         return redirect()->to(url('/dashboard/pembantu/documents'))
             ->with('success', 'Dokumen berhasil dihapus.');
     }
 
     public function updateStatus(Request $request, Document $document)
     {
-        if ($document->opd_id !== auth()->user()->opd_id) {
-            abort(403);
-        }
+        $this->authorize('update', $document);
 
         $validated = $request->validate([
             'status' => 'required|in:published,unpublished,archived',

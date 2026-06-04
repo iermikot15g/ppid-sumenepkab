@@ -59,6 +59,27 @@
                               id="tentang_content">{{ old('tentang_content', $opd->tentang_content) }}</textarea>
                     <p class="text-xs text-gray-500 mt-1">Mendukung HTML untuk formatting</p>
                 </div>
+
+                <!-- Upload PDF (opsional) -->
+                <div class="border-b border-gray-200 pb-4">
+                    <h2 class="text-lg font-semibold text-gray-800 mb-4">Dokumen Pendukung (PDF)</h2>
+                    
+                    @if($opd->tentang_pdf && Storage::disk('public')->exists($opd->tentang_pdf))
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">PDF Saat Ini</label>
+                        <a href="{{ Storage::url($opd->tentang_pdf) }}" target="_blank" class="text-maroon-600 hover:underline">
+                            {{ basename($opd->tentang_pdf) }}
+                        </a>
+                    </div>
+                    @endif
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Upload PDF (opsional)</label>
+                        <input type="file" name="tentang_pdf" class="w-full border-gray-300 rounded-md shadow-sm" accept=".pdf">
+                        <p class="text-xs text-gray-500 mt-1">Format: PDF. Max 5MB. Kosongkan jika tidak ingin mengganti file.</p>
+                        @error('tentang_pdf') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                    </div>
+                </div>
             </div>
 
             <div class="mt-6 flex justify-end space-x-3">

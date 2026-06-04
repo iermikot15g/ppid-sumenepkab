@@ -10,30 +10,41 @@ class Opd extends Model
     use HasFactory;
 
     protected $fillable = [
+        // Data dasar OPD
         'name',
         'short_name',
         'logo',
         'address',
+        'google_maps_link',
         'phone',
         'email',
-        'social_media',     // <-- TAMBAHKAN
+        'social_media',
         'ppid_name',
         'ppid_phone',
-        'google_maps_link',
+        'vision_mission',
+        'duties',
         'is_active',
         
-        // CMS Profil OPD
+        // ========== CMS PROFIL OPD ==========
+        // Tentang OPD
         'tentang_content',
-        'tusi_content',
-        'tusi_pdf',
-        'structure_content',
-        'structure_pdf',
+        'tentang_pdf',  // TAMBAHKAN
+        
+        // Tugas dan Fungsi
+        'tugas_fungsi_content',    // <-- PERBAIKAN: dari 'tusi_content'
+        'tugas_fungsi_pdf',        // <-- PERBAIKAN: dari 'tusi_pdf'
+        
+        // Struktur Organisasi
+        'struktur_content',        // <-- PERBAIKAN: dari 'structure_content'
+        'struktur_pdf',            // <-- PERBAIKAN: dari 'structure_pdf'
+        
+        // Dasar Hukum
         'dasar_hukum_content',
         'dasar_hukum_pdf',
     ];
 
     protected $casts = [
-        'social_media' => 'array',  // <-- TAMBAHKAN
+        'social_media' => 'array',
         'is_active' => 'boolean',
     ];
 

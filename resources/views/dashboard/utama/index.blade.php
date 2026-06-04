@@ -201,24 +201,27 @@
 
     <!-- Statistik CMS -->
     <div class="grid grid-cols-1 gap-5 sm:grid-cols-3">
+        <!-- TOTAL INFOGRAFIS (sebelumnya Total Berita) -->
         <div class="bg-white overflow-hidden shadow rounded-lg">
             <div class="p-5">
                 <div class="flex items-center">
                     <div class="flex-shrink-0">
-                        <svg class="h-6 w-6 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9.5a2.5 2.5 0 00-2.5-2.5H15" />
+                        <!-- Ikon untuk Infografis (grafik batang) -->
+                        <svg class="h-6 w-6 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                         </svg>
                     </div>
                     <div class="ml-5 w-0 flex-1">
                         <dl>
-                            <dt class="text-sm font-medium text-gray-500 truncate">Total Berita</dt>
-                            <dd class="text-2xl font-semibold text-gray-900">{{ number_format($totalNews) }}</dd>
+                            <dt class="text-sm font-medium text-gray-500 truncate">Total Infografis</dt>
+                            <dd class="text-2xl font-semibold text-purple-600">{{ number_format($totalInfografis ?? 0) }}</dd>
                         </dl>
                     </div>
                 </div>
             </div>
         </div>
 
+        <!-- Total Agenda -->
         <div class="bg-white overflow-hidden shadow rounded-lg">
             <div class="p-5">
                 <div class="flex items-center">
@@ -230,25 +233,26 @@
                     <div class="ml-5 w-0 flex-1">
                         <dl>
                             <dt class="text-sm font-medium text-gray-500 truncate">Total Agenda</dt>
-                            <dd class="text-2xl font-semibold text-green-600">{{ number_format($totalAgendas) }}</dd>
+                            <dd class="text-2xl font-semibold text-green-600">{{ number_format($totalAgendas ?? 0) }}</dd>
                         </dl>
                     </div>
                 </div>
             </div>
         </div>
 
+        <!-- Total Galeri -->
         <div class="bg-white overflow-hidden shadow rounded-lg">
             <div class="p-5">
                 <div class="flex items-center">
                     <div class="flex-shrink-0">
-                        <svg class="h-6 w-6 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="h-6 w-6 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                         </svg>
                     </div>
                     <div class="ml-5 w-0 flex-1">
                         <dl>
                             <dt class="text-sm font-medium text-gray-500 truncate">Total Galeri</dt>
-                            <dd class="text-2xl font-semibold text-purple-600">{{ number_format($totalGalleries) }}</dd>
+                            <dd class="text-2xl font-semibold text-blue-600">{{ number_format($totalGalleries ?? 0) }}</dd>
                         </dl>
                     </div>
                 </div>

@@ -128,38 +128,22 @@ Route::prefix('dashboard')->middleware(['auth'])->group(function () {
         // ====================================================================
         Route::prefix('cms')->group(function () {
             
-            // ================================================================
-            // CMS PROFIL OPD - Kelola profil OPD (Tentang, Tugas Fungsi, Struktur, Dasar Hukum, Media Sosial)
-            // ================================================================
+            // CMS PROFIL OPD
             Route::prefix('profil')->group(function () {
                 Route::get('/', [CmsProfilOpdController::class, 'index'])->name('pembantu.cms.profil.index');
-                
-                // Tentang OPD (Visi Misi, Profil, Alamat, Kontak, Logo, Google Maps)
                 Route::get('/tentang', [CmsProfilOpdController::class, 'editTentang'])->name('pembantu.cms.profil.tentang');
                 Route::put('/tentang', [CmsProfilOpdController::class, 'updateTentang'])->name('pembantu.cms.profil.update-tentang');
-                
-                // Tugas dan Fungsi
                 Route::get('/tugas-fungsi', [CmsProfilOpdController::class, 'editTugasFungsi'])->name('pembantu.cms.profil.tugas-fungsi');
                 Route::put('/tugas-fungsi', [CmsProfilOpdController::class, 'updateTugasFungsi'])->name('pembantu.cms.profil.update-tugas-fungsi');
-                
-                // Struktur Organisasi
                 Route::get('/struktur', [CmsProfilOpdController::class, 'editStruktur'])->name('pembantu.cms.profil.struktur');
                 Route::put('/struktur', [CmsProfilOpdController::class, 'updateStruktur'])->name('pembantu.cms.profil.update-struktur');
-                
-                // Dasar Hukum
                 Route::get('/dasar-hukum', [CmsProfilOpdController::class, 'editDasarHukum'])->name('pembantu.cms.profil.dasar-hukum');
                 Route::put('/dasar-hukum', [CmsProfilOpdController::class, 'updateDasarHukum'])->name('pembantu.cms.profil.update-dasar-hukum');
-                
-                // ================================================================
-                // MEDIA SOSIAL - Kelola link media sosial OPD
-                // ================================================================
                 Route::get('/media-sosial', [CmsProfilOpdController::class, 'editMediaSosial'])->name('pembantu.cms.profil.media-sosial');
                 Route::put('/media-sosial', [CmsProfilOpdController::class, 'updateMediaSosial'])->name('pembantu.cms.profil.update-media-sosial');
             });
             
-            // ================================================================
-            // CMS AGENDA - Kelola agenda kegiatan OPD
-            // ================================================================
+            // CMS AGENDA
             Route::prefix('agenda')->group(function () {
                 Route::get('/', [AgendaController::class, 'index'])->name('pembantu.cms.agenda.index');
                 Route::get('/create', [AgendaController::class, 'create'])->name('pembantu.cms.agenda.create');
@@ -170,9 +154,7 @@ Route::prefix('dashboard')->middleware(['auth'])->group(function () {
                 Route::patch('/{id}/toggle', [AgendaController::class, 'togglePublished'])->name('pembantu.cms.agenda.toggle');
             });
             
-            // ================================================================
-            // CMS INFOGRAFIS - Kelola infografis OPD
-            // ================================================================
+            // CMS INFOGRAFIS
             Route::prefix('infographic')->group(function () {
                 Route::get('/', [InfografisController::class, 'index'])->name('pembantu.cms.infographic.index');
                 Route::get('/create', [InfografisController::class, 'create'])->name('pembantu.cms.infographic.create');
@@ -184,8 +166,19 @@ Route::prefix('dashboard')->middleware(['auth'])->group(function () {
             });
 
             // ================================================================
-            // LAYANAN PUBLIK OPD - Kelola website layanan publik OPD
+            // CMS GALERI FOTO - Kelola galeri foto OPD
             // ================================================================
+            Route::prefix('gallery')->group(function () {
+                Route::get('/', [\App\Http\Controllers\Dashboard\Pembantu\GaleriController::class, 'index'])->name('pembantu.cms.gallery.index');
+                Route::get('/create', [\App\Http\Controllers\Dashboard\Pembantu\GaleriController::class, 'create'])->name('pembantu.cms.gallery.create');
+                Route::post('/', [\App\Http\Controllers\Dashboard\Pembantu\GaleriController::class, 'store'])->name('pembantu.cms.gallery.store');
+                Route::get('/{id}/edit', [\App\Http\Controllers\Dashboard\Pembantu\GaleriController::class, 'edit'])->name('pembantu.cms.gallery.edit');
+                Route::put('/{id}', [\App\Http\Controllers\Dashboard\Pembantu\GaleriController::class, 'update'])->name('pembantu.cms.gallery.update');
+                Route::delete('/{id}', [\App\Http\Controllers\Dashboard\Pembantu\GaleriController::class, 'destroy'])->name('pembantu.cms.gallery.destroy');
+                Route::patch('/{id}/toggle', [\App\Http\Controllers\Dashboard\Pembantu\GaleriController::class, 'togglePublished'])->name('pembantu.cms.gallery.toggle');
+            });
+
+            // LAYANAN PUBLIK OPD
             Route::prefix('services')->group(function () {
                 Route::get('/', [OpdServiceController::class, 'index'])->name('pembantu.cms.services.index');
                 Route::get('/create', [OpdServiceController::class, 'create'])->name('pembantu.cms.services.create');
@@ -199,16 +192,15 @@ Route::prefix('dashboard')->middleware(['auth'])->group(function () {
     });
     
     // ========================================================================
-    // DASHBOARD PPID UTAMA & SUPER ADMIN - Untuk PPID Utama dan Super Admin
-    // Catatan: Pimpinan TIDAK termasuk di sini, mereka punya group sendiri
+    // DASHBOARD PPID UTAMA (CMS Global)
     // ========================================================================
     Route::prefix('utama')->middleware(['role:super_admin|ppid_utama'])->group(function () {
         
-        // Dashboard monitoring
+        // Dashboard Monitoring
         Route::get('/', [MonitoringController::class, 'index'])->name('dashboard.utama');
-                
+        
         // ====================================================================
-        // CMS AGENDA - Kelola agenda kegiatan
+        // CMS AGENDA
         // ====================================================================
         Route::prefix('cms/agenda')->group(function () {
             Route::get('/', [CmsNewsController::class, 'agendaIndex'])->name('utama.cms.agenda.index');
@@ -218,9 +210,9 @@ Route::prefix('dashboard')->middleware(['auth'])->group(function () {
             Route::put('/{news}', [CmsNewsController::class, 'agendaUpdate'])->name('utama.cms.agenda.update');
             Route::delete('/{news}', [CmsNewsController::class, 'agendaDestroy'])->name('utama.cms.agenda.destroy');
         });
-
+        
         // ====================================================================
-        // CMS GALERI - Kelola galeri foto
+        // CMS GALERI
         // ====================================================================
         Route::prefix('cms/gallery')->group(function () {
             Route::get('/', [CmsNewsController::class, 'galleryIndex'])->name('utama.cms.gallery.index');
@@ -230,9 +222,9 @@ Route::prefix('dashboard')->middleware(['auth'])->group(function () {
             Route::put('/{news}', [CmsNewsController::class, 'galleryUpdate'])->name('utama.cms.gallery.update');
             Route::delete('/{news}', [CmsNewsController::class, 'galleryDestroy'])->name('utama.cms.gallery.destroy');
         });
-
+        
         // ====================================================================
-        // CMS INFOGRAFIS - Kelola infografis
+        // CMS INFOGRAFIS
         // ====================================================================
         Route::prefix('cms/infographic')->group(function () {
             Route::get('/', [CmsNewsController::class, 'infographicIndex'])->name('utama.cms.infographic.index');
@@ -242,9 +234,9 @@ Route::prefix('dashboard')->middleware(['auth'])->group(function () {
             Route::put('/{news}', [CmsNewsController::class, 'infographicUpdate'])->name('utama.cms.infographic.update');
             Route::delete('/{news}', [CmsNewsController::class, 'infographicDestroy'])->name('utama.cms.infographic.destroy');
         });
-
+        
         // ====================================================================
-        // CMS HERO SLIDER - Kelola slide hero slider di halaman beranda
+        // CMS HERO SLIDER
         // ====================================================================
         Route::prefix('cms/hero')->group(function () {
             Route::get('/', [HeroSlideController::class, 'index'])->name('utama.cms.hero.index');
@@ -256,27 +248,40 @@ Route::prefix('dashboard')->middleware(['auth'])->group(function () {
             Route::patch('/{heroSlide}/toggle', [HeroSlideController::class, 'toggleActive'])->name('utama.cms.hero.toggle');
             Route::post('/update-order', [HeroSlideController::class, 'updateOrder'])->name('utama.cms.hero.update-order');
         });
-
+        
         // ====================================================================
-        // CMS PROFIL PPID - Kelola konten halaman profil PPID
+        // CMS PROFIL PPID UTAMA
         // ====================================================================
         Route::prefix('cms/profil')->group(function () {
             Route::get('/', [CmsNewsController::class, 'profilIndex'])->name('utama.cms.profil.index');
             Route::get('/{pageKey}/edit', [CmsNewsController::class, 'profilEdit'])->name('utama.cms.profil.edit');
             Route::put('/{pageKey}', [CmsNewsController::class, 'profilUpdate'])->name('utama.cms.profil.update');
         });
-
+        
         // ====================================================================
-        // CMS STANDAR LAYANAN - Kelola konten halaman standar layanan
+        // CMS STANDAR LAYANAN
         // ====================================================================
         Route::prefix('cms/standar')->group(function () {
             Route::get('/', [CmsNewsController::class, 'standarIndex'])->name('utama.cms.standar.index');
             Route::get('/{pageKey}/edit', [CmsNewsController::class, 'standarEdit'])->name('utama.cms.standar.edit');
             Route::put('/{pageKey}', [CmsNewsController::class, 'standarUpdate'])->name('utama.cms.standar.update');
         });
-
+        
         // ====================================================================
-        // MANAJEMEN DOKUMEN GLOBAL - Kelola semua dokumen dari seluruh OPD
+        // CMS LAYANAN PUBLIK (semua OPD)
+        // ====================================================================
+        Route::prefix('cms/public-services')->group(function () {
+            Route::get('/', [OpdServiceController::class, 'index'])->name('utama.cms.public-services.index');
+            Route::get('/create', [OpdServiceController::class, 'create'])->name('utama.cms.public-services.create');
+            Route::post('/', [OpdServiceController::class, 'store'])->name('utama.cms.public-services.store');
+            Route::get('/{service}/edit', [OpdServiceController::class, 'edit'])->name('utama.cms.public-services.edit');
+            Route::put('/{service}', [OpdServiceController::class, 'update'])->name('utama.cms.public-services.update');
+            Route::delete('/{service}', [OpdServiceController::class, 'destroy'])->name('utama.cms.public-services.destroy');
+            Route::patch('/{service}/toggle', [OpdServiceController::class, 'toggleActive'])->name('utama.cms.public-services.toggle');
+        });
+        
+        // ====================================================================
+        // MANAJEMEN DOKUMEN (semua OPD)
         // ====================================================================
         Route::prefix('documents')->group(function () {
             Route::get('/', [DocumentManagementController::class, 'index'])->name('utama.documents.index');
@@ -285,9 +290,9 @@ Route::prefix('dashboard')->middleware(['auth'])->group(function () {
             Route::delete('/{document}', [DocumentManagementController::class, 'destroy'])->name('utama.documents.destroy');
             Route::patch('/{document}/force-unpublish', [DocumentManagementController::class, 'forceUnpublish'])->name('utama.documents.force-unpublish');
         });
-
+        
         // ====================================================================
-        // LAPORAN - Export laporan statistik dalam format PDF/Excel
+        // LAPORAN STATISTIK
         // ====================================================================
         Route::prefix('laporan')->group(function () {
             Route::get('/', [LaporanController::class, 'index'])->name('utama.laporan.index');
@@ -296,112 +301,85 @@ Route::prefix('dashboard')->middleware(['auth'])->group(function () {
     });
 
     // ========================================================================
-    // DASHBOARD PIMPINAN OPD (READ-ONLY) - Untuk Kepala OPD
+    // DASHBOARD SUPER ADMIN ONLY (Administrasi)
+    // ========================================================================
+    Route::prefix('admin')->middleware(['role:super_admin'])->group(function () {
+        
+        // Manajemen OPD
+        Route::resource('opds', OpdController::class)->names([
+            'index' => 'admin.opds.index',
+            'create' => 'admin.opds.create',
+            'store' => 'admin.opds.store',
+            'show' => 'admin.opds.show',
+            'edit' => 'admin.opds.edit',
+            'update' => 'admin.opds.update',
+            'destroy' => 'admin.opds.destroy',
+        ]);
+        
+        // Manajemen Desa
+        Route::resource('villages', VillageController::class)->names([
+            'index' => 'admin.villages.index',
+            'create' => 'admin.villages.create',
+            'store' => 'admin.villages.store',
+            'show' => 'admin.villages.show',
+            'edit' => 'admin.villages.edit',
+            'update' => 'admin.villages.update',
+            'destroy' => 'admin.villages.destroy',
+        ]);
+        
+        // Master Kategori
+        Route::resource('categories', CategoryController::class)->names([
+            'index' => 'admin.categories.index',
+            'create' => 'admin.categories.create',
+            'store' => 'admin.categories.store',
+            'show' => 'admin.categories.show',
+            'edit' => 'admin.categories.edit',
+            'update' => 'admin.categories.update',
+            'destroy' => 'admin.categories.destroy',
+        ]);
+        
+        // Sub Kategori
+        Route::get('categories/{category}/subcategories', [CategoryController::class, 'subCategories'])->name('admin.categories.subcategories');
+        Route::post('categories/{category}/subcategories', [CategoryController::class, 'storeSubCategory'])->name('admin.categories.subcategories.store');
+        Route::get('subcategories/{subCategory}/edit', [CategoryController::class, 'editSubCategory'])->name('admin.subcategories.edit');
+        Route::put('subcategories/{subCategory}', [CategoryController::class, 'updateSubCategory'])->name('admin.subcategories.update');
+        Route::delete('subcategories/{subCategory}', [CategoryController::class, 'destroySubCategory'])->name('admin.subcategories.destroy');
+        
+        // Manajemen User
+        Route::resource('users', UserManagementController::class)->names([
+            'index' => 'admin.users.index',
+            'create' => 'admin.users.create',
+            'store' => 'admin.users.store',
+            'show' => 'admin.users.show',
+            'edit' => 'admin.users.edit',
+            'update' => 'admin.users.update',
+            'destroy' => 'admin.users.destroy',
+        ]);
+        
+        // Audit Log
+        Route::get('audit-logs', [AuditLogController::class, 'index'])->name('admin.audit-logs');
+    });
+
+    // ========================================================================
+    // DASHBOARD PIMPINAN OPD (READ-ONLY)
     // ========================================================================
     Route::prefix('pimpinan')->middleware(['role:pimpinan'])->group(function () {
         
-        // ====================================================================
-        // DASHBOARD MONITORING - Menampilkan statistik OPD yang dipimpin
-        // ====================================================================
         Route::get('/', [PimpinanDashboardController::class, 'index'])->name('pimpinan.dashboard');
         
-        // ====================================================================
-        // MANAJEMEN DOKUMEN (READ-ONLY) - Lihat dokumen milik OPD sendiri
-        // ====================================================================
         Route::prefix('documents')->group(function () {
-            // Daftar dokumen (dengan filter dan pencarian)
             Route::get('/', [PimpinanDocumentController::class, 'index'])->name('pimpinan.documents.index');
-            
-            // Detail dokumen (tampilan read-only, tanpa form edit)
             Route::get('/{document}', [PimpinanDocumentController::class, 'show'])->name('pimpinan.documents.show');
-            
-            // Preview PDF (membuka file PDF di browser)
             Route::get('/{document}/preview', [PimpinanDocumentController::class, 'preview'])->name('pimpinan.documents.preview');
         });
         
-        // ====================================================================
-        // LAPORAN STATISTIK (READ-ONLY) - Generate laporan untuk OPD sendiri
-        // ====================================================================
         Route::prefix('laporan')->group(function () {
-            // Halaman form filter laporan
             Route::get('/', [PimpinanLaporanController::class, 'index'])->name('pimpinan.laporan.index');
-            
-            // Generate laporan berdasarkan filter
             Route::post('/generate', [PimpinanLaporanController::class, 'generate'])->name('pimpinan.laporan.generate');
-            
-            // Export laporan ke PDF
             Route::get('/export-pdf', [PimpinanLaporanController::class, 'exportPdf'])->name('pimpinan.laporan.export-pdf');
-            
-            // Export laporan ke Excel
             Route::get('/export-excel', [PimpinanLaporanController::class, 'exportExcel'])->name('pimpinan.laporan.export-excel');
         });
     });
-});
-
-// ============================================================================
-// SUPER ADMIN ROUTES - Manajemen data master (hanya Super Admin)
-// ============================================================================
-Route::prefix('dashboard/admin')->middleware(['auth', 'role:super_admin'])->group(function () {
-    
-    // ========================================================================
-    // MANAJEMEN OPD - CRUD data OPD/PPID Pembantu
-    // ========================================================================
-    Route::resource('opds', OpdController::class)->names([
-        'index' => 'admin.opds.index',
-        'create' => 'admin.opds.create',
-        'store' => 'admin.opds.store',
-        'edit' => 'admin.opds.edit',
-        'update' => 'admin.opds.update',
-        'destroy' => 'admin.opds.destroy',
-    ]);
-    
-    // ========================================================================
-    // MANAJEMEN DESA - CRUD data desa/PPID Desa
-    // ========================================================================
-    Route::resource('villages', VillageController::class)->names([
-        'index' => 'admin.villages.index',
-        'create' => 'admin.villages.create',
-        'store' => 'admin.villages.store',
-        'edit' => 'admin.villages.edit',
-        'update' => 'admin.villages.update',
-        'destroy' => 'admin.villages.destroy',
-    ]);
-    
-    // ========================================================================
-    // MASTER KATEGORI - CRUD kategori dan sub kategori DIP
-    // ========================================================================
-    Route::resource('categories', CategoryController::class)->names([
-        'index' => 'admin.categories.index',
-        'create' => 'admin.categories.create',
-        'store' => 'admin.categories.store',
-        'edit' => 'admin.categories.edit',
-        'update' => 'admin.categories.update',
-        'destroy' => 'admin.categories.destroy',
-    ]);
-    
-    // Sub Kategori
-    Route::get('categories/{category}/subcategories', [CategoryController::class, 'subCategories'])->name('admin.categories.subcategories');
-    Route::post('categories/{category}/subcategories', [CategoryController::class, 'storeSubCategory'])->name('admin.categories.subcategories.store');
-    Route::get('subcategories/{subCategory}/edit', [CategoryController::class, 'editSubCategory'])->name('admin.subcategories.edit');
-    Route::put('subcategories/{subCategory}', [CategoryController::class, 'updateSubCategory'])->name('admin.subcategories.update');
-    Route::delete('subcategories/{subCategory}', [CategoryController::class, 'destroySubCategory'])->name('admin.subcategories.destroy');
-    
-    // ========================================================================
-    // MANAJEMEN USER - CRUD user dan assign role
-    // ========================================================================
-    Route::resource('users', UserManagementController::class)->names([
-        'index' => 'admin.users.index',
-        'create' => 'admin.users.create',
-        'store' => 'admin.users.store',
-        'edit' => 'admin.users.edit',
-        'update' => 'admin.users.update',
-        'destroy' => 'admin.users.destroy',
-    ]);
-    
-    // ========================================================================
-    // AUDIT LOG - Melihat riwayat aktivitas pengguna
-    // ========================================================================
-    Route::get('audit-logs', [AuditLogController::class, 'index'])->name('admin.audit-logs');
 });
 
 // ============================================================================

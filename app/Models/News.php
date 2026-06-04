@@ -12,6 +12,7 @@ class News extends Model
     use HasFactory;
 
     protected $fillable = [
+        'opd_id',
         'title',
         'slug',
         'content',
@@ -29,6 +30,11 @@ class News extends Model
         'published_at' => 'datetime',
         'is_published' => 'boolean',
     ];
+
+    public function opd()
+    {
+        return $this->belongsTo(Opd::class);
+    }
 
     public function creator()
     {
