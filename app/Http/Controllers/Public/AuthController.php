@@ -5,94 +5,119 @@ namespace App\Http\Controllers\Public;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\UserProfile;
+use App\Models\Province;
+use App\Models\Regency;
+use App\Models\District;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rules\Password;
+use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
 {
     public function showLoginForm()
     {
-        return view('public.auth.login');
+        return view('public.login');
     }
 
     public function login(Request $request)
     {
         $credentials = $request->validate([
-            'email' => ['required', 'email'],
-            'password' => ['required'],
+            'email' => 'required|email',
+            'password' => 'required',
         ]);
 
-        $remember = $request->boolean('remember');
-
-        if (Auth::attempt($credentials, $remember)) {
+        if (Auth::attempt($credentials, $request->remember)) {
             $request->session()->regenerate();
-
+            
             $user = Auth::user();
             
-            // Check if user is active
-            if (!$user->is_active) {
-                Auth::logout();
-                return back()->withErrors([
-                    'email' => 'Akun Anda telah dinonaktifkan. Silakan hubungi administrator.',
-                ])->onlyInput('email');
-            }
-
-            // ========== REDIRECT BERDASARKAN ROLE ==========
-            
-            // Super Admin & PPID Utama -> Dashboard Utama
+            // Redirect berdasarkan role
             if ($user->hasRole('super_admin') || $user->hasRole('ppid_utama')) {
-                return redirect()->intended('/dashboard/utama');
+                return redirect()->route('dashboard.utama');
+            } elseif ($user->hasRole('ppid_pembantu')) {
+                return redirect()->route('dashboard.pembantu');
+            } elseif ($user->hasRole('pimpinan')) {
+                return redirect()->route('pimpinan.dashboard');
             }
             
-            // PPID Pembantu -> Dashboard Pembantu
-            if ($user->hasRole('ppid_pembantu')) {
-                return redirect()->intended('/dashboard/pembantu');
-            }
-            
-            // PIMPINAN OPD (READ-ONLY) -> Dashboard Pimpinan
-            // PERUBAHAN: sebelumnya ke /dashboard/utama, sekarang ke /dashboard/pimpinan
-            if ($user->hasRole('pimpinan')) {
-                return redirect()->intended('/dashboard/pimpinan');
-            }
-
-            // Default untuk masyarakat dan role lainnya
-            return redirect()->intended('/');
+            return redirect()->route('home');
         }
 
         return back()->withErrors([
-            'email' => 'Email atau password yang dimasukkan salah.',
+            'email' => 'Email atau password salah.',
         ])->onlyInput('email');
     }
 
     public function showRegisterForm()
     {
-        return view('public.auth.register');
+        $provinces = Province::orderBy('name')->get();
+        $regencies = Regency::where('province_id', 35)->orderBy('name')->get(); // Default Jawa Timur
+        $districts = District::where('regency_id', 3529)->orderBy('name')->get(); // Default Sumenep
+        
+        return view('public.register', compact('provinces', 'regencies', 'districts'));
     }
 
     public function register(Request $request)
     {
-        $validated = $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'phone' => ['required', 'string', 'max:15', 'unique:users'],
-            'password' => ['required', 'confirmed', Password::min(8)->mixedCase()->numbers()],
-            'terms' => ['required', 'accepted'],
+        // Validasi input
+        $validator = Validator::make($request->all(), [
+            // Informasi Login
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'phone' => 'required|string|max:15|unique:users',
+            'password' => 'required|string|min:8|confirmed',
+            
+            // Informasi Pribadi
+            'nik' => 'required|string|size:16|unique:user_profiles,nik',
+            'address' => 'required|string|max:500',
+            'province_id' => 'required|exists:provinces,id',
+            'regency_id' => 'required|exists:regencies,id',
+            'district_id' => 'required|exists:districts,id',
+            'gender' => 'required|in:male,female',
+            'birth_date' => 'required|date|before:today',
+            'education' => 'required|string|max:100',
+            'occupation' => 'required|string|max:100',
         ]);
 
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+        // Buat user baru
         $user = User::create([
-            'name' => $validated['name'],
-            'email' => $validated['email'],
-            'phone' => $validated['phone'],
-            'password' => Hash::make($validated['password']),
+            'name' => $request->name,
+            'email' => $request->email,
+            'phone' => $request->phone,
+            'password' => Hash::make($request->password),
             'is_active' => true,
         ]);
 
+        // Assign role 'masyarakat'
         $user->assignRole('masyarakat');
+
+        // Buat user profile
+        UserProfile::create([
+            'user_id' => $user->id,
+            'nik' => $request->nik,
+            'address' => $request->address,
+            'province_id' => $request->province_id,
+            'regency_id' => $request->regency_id,
+            'district_id' => $request->district_id,
+            'gender' => $request->gender,
+            'birth_date' => $request->birth_date,
+            'education' => $request->education,
+            'occupation' => $request->occupation,
+        ]);
+
+        // Auto login setelah register
         Auth::login($user);
 
-        return redirect('/')->with('success', 'Selamat datang! Anda berhasil mendaftar.');
+        return redirect()->route('home')
+            ->with('success', 'Pendaftaran berhasil! Selamat datang di PPID Kabupaten Sumenep.');
     }
 
     public function logout(Request $request)
@@ -102,6 +127,6 @@ class AuthController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect('/');
+        return redirect()->route('home');
     }
 }

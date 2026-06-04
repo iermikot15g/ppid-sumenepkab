@@ -57,4 +57,10 @@ class User extends Authenticatable
         
         return $this->hasRole('ppid_pembantu') && $this->opd_id == $opdId;
     }
+
+    // Tambahkan relasi
+    public function profile()
+    {
+        return $this->hasOne(UserProfile::class);
+    }
 }

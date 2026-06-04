@@ -382,6 +382,17 @@ Route::prefix('dashboard')->middleware(['auth'])->group(function () {
     });
 });
 
+// API untuk dropdown wilayah (hanya untuk keperluan form)
+Route::prefix('api')->group(function () {
+    Route::get('/regencies/{provinceId}', function ($provinceId) {
+        return App\Models\Regency::where('province_id', $provinceId)->orderBy('name')->get(['id', 'name']);
+    });
+    
+    Route::get('/districts/{regencyId}', function ($regencyId) {
+        return App\Models\District::where('regency_id', $regencyId)->orderBy('name')->get(['id', 'name']);
+    });
+});
+
 // ============================================================================
 // TEMP TEST ROUTE - Hapus setelah production
 // ============================================================================
