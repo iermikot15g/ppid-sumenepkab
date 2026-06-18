@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Dashboard\Pembantu;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\NewsRequest;
 use App\Models\News;
 use App\Traits\LogsActivity;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -13,9 +13,6 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 class GaleriController extends Controller
 {
     use LogsActivity, AuthorizesRequests;
-
-    // Constructor dihapus karena middleware sudah di handle di routes/web.php
-    // dan authorization sudah di handle oleh Policy
 
     public function index()
     {
@@ -32,20 +29,12 @@ class GaleriController extends Controller
     public function create()
     {
         $this->authorize('create', News::class);
-        
         return view('dashboard.pembantu.cms.gallery.create');
     }
 
-    public function store(Request $request)
+    public function store(NewsRequest $request)
     {
-        $this->authorize('create', News::class);
-        
-        $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'thumbnail' => 'required|image|mimes:jpeg,png,jpg|max:5120',
-            'is_published' => 'boolean',
-        ]);
+        $validated = $request->validated();
 
         $user = Auth::user();
         
@@ -58,7 +47,7 @@ class GaleriController extends Controller
         $gallery = News::create([
             'opd_id' => $user->opd_id,
             'title' => $validated['title'],
-            'content' => $validated['description'] ?? null,
+            'content' => $validated['content'] ?? null,
             'thumbnail' => $filePath ?? null,
             'type' => 'gallery',
             'is_published' => $validated['is_published'] ?? false,
@@ -83,7 +72,7 @@ class GaleriController extends Controller
         return view('dashboard.pembantu.cms.gallery.edit', compact('gallery'));
     }
 
-    public function update(Request $request, $id)
+    public function update(NewsRequest $request, $id)
     {
         $gallery = News::where('opd_id', Auth::user()->opd_id)
             ->where('type', 'gallery')
@@ -91,12 +80,7 @@ class GaleriController extends Controller
             
         $this->authorize('update', $gallery);
 
-        $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'thumbnail' => 'nullable|image|mimes:jpeg,png,jpg|max:5120',
-            'is_published' => 'boolean',
-        ]);
+        $validated = $request->validated();
 
         if ($request->hasFile('thumbnail')) {
             if ($gallery->thumbnail && Storage::disk('public')->exists($gallery->thumbnail)) {
@@ -110,7 +94,7 @@ class GaleriController extends Controller
         }
 
         $gallery->title = $validated['title'];
-        $gallery->content = $validated['description'] ?? null;
+        $gallery->content = $validated['content'] ?? null;
         $gallery->is_published = $validated['is_published'] ?? false;
         
         if (($validated['is_published'] ?? false) && !$gallery->published_at) {

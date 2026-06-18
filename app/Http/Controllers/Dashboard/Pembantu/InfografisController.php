@@ -3,12 +3,11 @@
 namespace App\Http\Controllers\Dashboard\Pembantu;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\NewsRequest;
 use App\Models\News;
 use App\Traits\LogsActivity;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 
 class InfografisController extends Controller
 {
@@ -16,11 +15,12 @@ class InfografisController extends Controller
 
     public function index()
     {
-        $infographics = News::where('type', 'infographic')
-            ->where('created_by', Auth::id())
+        $infografis = News::where('opd_id', Auth::user()->opd_id)
+            ->where('type', 'infographic')
             ->latest()
-            ->paginate(12);
-        return view('dashboard.pembantu.cms.infographic.index', compact('infographics'));
+            ->paginate(10);
+            
+        return view('dashboard.pembantu.cms.infographic.index', compact('infografis'));
     }
 
     public function create()
@@ -28,30 +28,30 @@ class InfografisController extends Controller
         return view('dashboard.pembantu.cms.infographic.create');
     }
 
-    public function store(Request $request)
+    public function store(NewsRequest $request)
     {
-        $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'thumbnail' => 'required|image|mimes:jpg,jpeg,png|max:2048',
-            'is_published' => 'boolean',
+        $validated = $request->validated();
+
+        $user = Auth::user();
+        
+        if ($request->hasFile('thumbnail')) {
+            $file = $request->file('thumbnail');
+            $fileName = time() . '_' . preg_replace('/[^a-zA-Z0-9._-]/', '', $file->getClientOriginalName());
+            $filePath = $file->storeAs('infographic/' . $user->opd_id, $fileName, 'public');
+        }
+
+        $infografis = News::create([
+            'opd_id' => $user->opd_id,
+            'title' => $validated['title'],
+            'content' => $validated['content'] ?? null,
+            'thumbnail' => $filePath ?? null,
+            'type' => 'infographic',
+            'is_published' => $validated['is_published'] ?? false,
+            'published_at' => ($validated['is_published'] ?? false) ? now() : null,
+            'created_by' => $user->id,
         ]);
 
-        $thumbnailPath = $request->file('thumbnail')->store('infographic', 'public');
-
-        $data = [
-            'title' => $validated['title'],
-            'slug' => Str::slug($validated['title']),
-            'content' => '',
-            'thumbnail' => $thumbnailPath,
-            'type' => 'infographic',
-            'is_published' => $request->boolean('is_published'),
-            'published_at' => $request->boolean('is_published') ? now() : null,
-            'created_by' => Auth::id(),
-        ];
-
-        News::create($data);
-
-        $this->logActivity('create_infographic', 'Menambahkan infografis: ' . $validated['title']);
+        $this->logActivity('create_infographic', 'Membuat infografis: ' . $infografis->title, $infografis);
 
         return redirect()->route('pembantu.cms.infographic.index')
             ->with('success', 'Infografis berhasil ditambahkan.');
@@ -59,47 +59,43 @@ class InfografisController extends Controller
 
     public function edit($id)
     {
-        $infographic = News::where('type', 'infographic')
-            ->where('created_by', Auth::id())
+        $infografis = News::where('opd_id', Auth::user()->opd_id)
+            ->where('type', 'infographic')
             ->findOrFail($id);
-        
-        // Cek apakah file thumbnail masih ada
-        if ($infographic->thumbnail && !Storage::disk('public')->exists($infographic->thumbnail)) {
-            $infographic->thumbnail = null; // Set ke null jika file tidak ada
-        }
-        
-        return view('dashboard.pembantu.cms.infographic.edit', compact('infographic'));
+            
+        return view('dashboard.pembantu.cms.infographic.edit', compact('infografis'));
     }
 
-    public function update(Request $request, $id)
+    public function update(NewsRequest $request, $id)
     {
-        $infographic = News::where('type', 'infographic')
-            ->where('created_by', Auth::id())
+        $infografis = News::where('opd_id', Auth::user()->opd_id)
+            ->where('type', 'infographic')
             ->findOrFail($id);
 
-        $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'thumbnail' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
-            'is_published' => 'boolean',
-        ]);
-
-        $data = [
-            'title' => $validated['title'],
-            'slug' => Str::slug($validated['title']),
-            'is_published' => $request->boolean('is_published'),
-            'published_at' => $request->boolean('is_published') && !$infographic->published_at ? now() : $infographic->published_at,
-        ];
+        $validated = $request->validated();
 
         if ($request->hasFile('thumbnail')) {
-            if ($infographic->thumbnail) {
-                Storage::disk('public')->delete($infographic->thumbnail);
+            if ($infografis->thumbnail && Storage::disk('public')->exists($infografis->thumbnail)) {
+                Storage::disk('public')->delete($infografis->thumbnail);
             }
-            $data['thumbnail'] = $request->file('thumbnail')->store('infographic', 'public');
+            
+            $file = $request->file('thumbnail');
+            $fileName = time() . '_' . preg_replace('/[^a-zA-Z0-9._-]/', '', $file->getClientOriginalName());
+            $filePath = $file->storeAs('infographic/' . $infografis->opd_id, $fileName, 'public');
+            $infografis->thumbnail = $filePath;
         }
 
-        $infographic->update($data);
+        $infografis->title = $validated['title'];
+        $infografis->content = $validated['content'] ?? null;
+        $infografis->is_published = $validated['is_published'] ?? false;
+        
+        if (($validated['is_published'] ?? false) && !$infografis->published_at) {
+            $infografis->published_at = now();
+        }
+        
+        $infografis->save();
 
-        $this->logActivity('update_infographic', 'Memperbarui infografis: ' . $validated['title']);
+        $this->logActivity('update_infographic', 'Memperbarui infografis: ' . $infografis->title, $infografis);
 
         return redirect()->route('pembantu.cms.infographic.index')
             ->with('success', 'Infografis berhasil diperbarui.');
@@ -107,17 +103,17 @@ class InfografisController extends Controller
 
     public function destroy($id)
     {
-        $infographic = News::where('type', 'infographic')
-            ->where('created_by', Auth::id())
+        $infografis = News::where('opd_id', Auth::user()->opd_id)
+            ->where('type', 'infographic')
             ->findOrFail($id);
+            
+        $this->logActivity('delete_infographic', 'Menghapus infografis: ' . $infografis->title, $infografis);
         
-        if ($infographic->thumbnail) {
-            Storage::disk('public')->delete($infographic->thumbnail);
+        if ($infografis->thumbnail && Storage::disk('public')->exists($infografis->thumbnail)) {
+            Storage::disk('public')->delete($infografis->thumbnail);
         }
         
-        $this->logActivity('delete_infographic', 'Menghapus infografis: ' . $infographic->title);
-        
-        $infographic->delete();
+        $infografis->delete();
 
         return redirect()->route('pembantu.cms.infographic.index')
             ->with('success', 'Infografis berhasil dihapus.');
@@ -125,14 +121,19 @@ class InfografisController extends Controller
 
     public function togglePublished($id)
     {
-        $infographic = News::where('type', 'infographic')
-            ->where('created_by', Auth::id())
+        $infografis = News::where('opd_id', Auth::user()->opd_id)
+            ->where('type', 'infographic')
             ->findOrFail($id);
+            
+        $infografis->is_published = !$infografis->is_published;
         
-        $infographic->update([
-            'is_published' => !$infographic->is_published,
-            'published_at' => !$infographic->is_published ? now() : null,
-        ]);
+        if ($infografis->is_published && !$infografis->published_at) {
+            $infografis->published_at = now();
+        }
+        
+        $infografis->save();
+        
+        $this->logActivity('toggle_infographic', 'Mengubah status publikasi infografis: ' . $infografis->title, $infografis);
 
         return response()->json(['success' => true]);
     }

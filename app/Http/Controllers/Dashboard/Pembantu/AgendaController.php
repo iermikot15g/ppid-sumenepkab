@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\Dashboard\Pembantu;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\NewsRequest;
 use App\Models\News;
 use App\Traits\LogsActivity;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
 
 class AgendaController extends Controller
 {
@@ -15,10 +15,11 @@ class AgendaController extends Controller
 
     public function index()
     {
-        $agendas = News::where('type', 'agenda')
-            ->where('created_by', Auth::id())
+        $agendas = News::where('opd_id', Auth::user()->opd_id)
+            ->where('type', 'agenda')
             ->latest()
             ->paginate(10);
+            
         return view('dashboard.pembantu.cms.agenda.index', compact('agendas'));
     }
 
@@ -27,31 +28,25 @@ class AgendaController extends Controller
         return view('dashboard.pembantu.cms.agenda.create');
     }
 
-    public function store(Request $request)
+    public function store(NewsRequest $request)
     {
-        $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'content' => 'nullable|string',
-            'event_date' => 'required|date',
-            'location' => 'nullable|string|max:255',
-            'is_published' => 'boolean',
+        $validated = $request->validated();
+        
+        $user = Auth::user();
+
+        $agenda = News::create([
+            'opd_id' => $user->opd_id,
+            'title' => $validated['title'],
+            'content' => $validated['content'] ?? null,
+            'type' => 'agenda',
+            'event_date' => $validated['event_date'] ?? null,
+            'location' => $validated['location'] ?? null,
+            'is_published' => $validated['is_published'] ?? false,
+            'published_at' => ($validated['is_published'] ?? false) ? now() : null,
+            'created_by' => $user->id,
         ]);
 
-        $data = [
-            'title' => $validated['title'],
-            'slug' => Str::slug($validated['title']),
-            'content' => $validated['content'] ?? '',
-            'type' => 'agenda',
-            'event_date' => $validated['event_date'],
-            'location' => $validated['location'] ?? null,
-            'is_published' => $request->boolean('is_published'),
-            'published_at' => $request->boolean('is_published') ? now() : null,
-            'created_by' => Auth::id(),
-        ];
-
-        News::create($data);
-
-        $this->logActivity('create_agenda', 'Menambahkan agenda: ' . $validated['title']);
+        $this->logActivity('create_agenda', 'Membuat agenda: ' . $agenda->title, $agenda);
 
         return redirect()->route('pembantu.cms.agenda.index')
             ->with('success', 'Agenda berhasil ditambahkan.');
@@ -59,39 +54,31 @@ class AgendaController extends Controller
 
     public function edit($id)
     {
-        $agenda = News::where('type', 'agenda')
-            ->where('created_by', Auth::id())
+        $agenda = News::where('opd_id', Auth::user()->opd_id)
+            ->where('type', 'agenda')
             ->findOrFail($id);
+            
         return view('dashboard.pembantu.cms.agenda.edit', compact('agenda'));
     }
 
-    public function update(Request $request, $id)
+    public function update(NewsRequest $request, $id)
     {
-        $agenda = News::where('type', 'agenda')
-            ->where('created_by', Auth::id())
+        $agenda = News::where('opd_id', Auth::user()->opd_id)
+            ->where('type', 'agenda')
             ->findOrFail($id);
 
-        $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'content' => 'nullable|string',
-            'event_date' => 'required|date',
-            'location' => 'nullable|string|max:255',
-            'is_published' => 'boolean',
+        $validated = $request->validated();
+
+        $agenda->update([
+            'title' => $validated['title'],
+            'content' => $validated['content'] ?? null,
+            'event_date' => $validated['event_date'] ?? null,
+            'location' => $validated['location'] ?? null,
+            'is_published' => $validated['is_published'] ?? false,
+            'published_at' => ($validated['is_published'] ?? false) ? now() : $agenda->published_at,
         ]);
 
-        $data = [
-            'title' => $validated['title'],
-            'slug' => Str::slug($validated['title']),
-            'content' => $validated['content'] ?? '',
-            'event_date' => $validated['event_date'],
-            'location' => $validated['location'] ?? null,
-            'is_published' => $request->boolean('is_published'),
-            'published_at' => $request->boolean('is_published') && !$agenda->published_at ? now() : $agenda->published_at,
-        ];
-
-        $agenda->update($data);
-
-        $this->logActivity('update_agenda', 'Memperbarui agenda: ' . $validated['title']);
+        $this->logActivity('update_agenda', 'Memperbarui agenda: ' . $agenda->title, $agenda);
 
         return redirect()->route('pembantu.cms.agenda.index')
             ->with('success', 'Agenda berhasil diperbarui.');
@@ -99,12 +86,11 @@ class AgendaController extends Controller
 
     public function destroy($id)
     {
-        $agenda = News::where('type', 'agenda')
-            ->where('created_by', Auth::id())
+        $agenda = News::where('opd_id', Auth::user()->opd_id)
+            ->where('type', 'agenda')
             ->findOrFail($id);
-        
-        $this->logActivity('delete_agenda', 'Menghapus agenda: ' . $agenda->title);
-        
+            
+        $this->logActivity('delete_agenda', 'Menghapus agenda: ' . $agenda->title, $agenda);
         $agenda->delete();
 
         return redirect()->route('pembantu.cms.agenda.index')
@@ -113,14 +99,19 @@ class AgendaController extends Controller
 
     public function togglePublished($id)
     {
-        $agenda = News::where('type', 'agenda')
-            ->where('created_by', Auth::id())
+        $agenda = News::where('opd_id', Auth::user()->opd_id)
+            ->where('type', 'agenda')
             ->findOrFail($id);
+            
+        $agenda->is_published = !$agenda->is_published;
         
-        $agenda->update([
-            'is_published' => !$agenda->is_published,
-            'published_at' => !$agenda->is_published ? now() : null,
-        ]);
+        if ($agenda->is_published && !$agenda->published_at) {
+            $agenda->published_at = now();
+        }
+        
+        $agenda->save();
+        
+        $this->logActivity('toggle_agenda', 'Mengubah status publikasi agenda: ' . $agenda->title, $agenda);
 
         return response()->json(['success' => true]);
     }

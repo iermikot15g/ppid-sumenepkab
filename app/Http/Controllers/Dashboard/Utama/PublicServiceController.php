@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Dashboard\Utama;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\OpdServiceRequest;
 use App\Models\OpdService;
 use App\Traits\ManagesPublicServices;
 use App\Traits\LogsActivity;
-use Illuminate\Http\Request;
 
 class PublicServiceController extends Controller
 {
@@ -27,7 +27,7 @@ class PublicServiceController extends Controller
         return view('dashboard.utama.cms.public-services.create', compact('opds'));
     }
 
-    public function store(Request $request)
+    public function store(OpdServiceRequest $request)
     {
         $data = $this->prepareServiceData($request);
         $service = OpdService::create($data);
@@ -46,7 +46,7 @@ class PublicServiceController extends Controller
         return view('dashboard.utama.cms.public-services.edit', compact('service', 'opds'));
     }
 
-    public function update(Request $request, $id)
+    public function update(OpdServiceRequest $request, $id)
     {
         $service = OpdService::findOrFail($id);
         $data = $this->prepareServiceData($request, $service->icon);

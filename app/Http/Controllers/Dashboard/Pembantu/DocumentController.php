@@ -3,22 +3,19 @@
 namespace App\Http\Controllers\Dashboard\Pembantu;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\DocumentRequest;
 use App\Models\Document;
 use App\Models\Category;
 use App\Traits\LogsActivity;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests; // <-- TAMBAHKAN INI
 
 class DocumentController extends Controller
 {
-    use LogsActivity, AuthorizesRequests; // <-- TAMBAHKAN AuthorizesRequests DI SINI
+    use LogsActivity;
 
     public function index()
     {
-        $this->authorize('viewAny', Document::class);
-        
         $documents = Document::where('opd_id', Auth::user()->opd_id)
             ->with(['category', 'subCategory'])
             ->latest()
@@ -35,22 +32,9 @@ class DocumentController extends Controller
         return view('dashboard.pembantu.documents.create', compact('categories'));
     }
 
-    public function store(Request $request)
+    public function store(DocumentRequest $request)
     {
-        $this->authorize('create', Document::class);
-        
-        $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'category_id' => 'required|exists:categories,id',
-            'sub_category_id' => 'nullable|exists:sub_categories,id',
-            'year' => 'required|integer|min:1900|max:' . date('Y'),
-            'doc_number' => 'nullable|string|max:100',
-            'officer_name' => 'nullable|string|max:255',
-            'classification' => 'required|in:open,excluded',
-            'status' => 'required|in:published,unpublished',
-            'file' => 'required|file|mimes:pdf,jpg,jpeg,png|max:25600',
-        ]);
+        $validated = $request->validated();
 
         $user = Auth::user();
         $file = $request->file('file');
@@ -60,12 +44,12 @@ class DocumentController extends Controller
         $document = Document::create([
             'opd_id' => $user->opd_id,
             'title' => $validated['title'],
-            'description' => $validated['description'],
+            'description' => $validated['description'] ?? null,
             'category_id' => $validated['category_id'],
-            'sub_category_id' => $validated['sub_category_id'],
+            'sub_category_id' => $validated['sub_category_id'] ?? null,
             'year' => $validated['year'],
-            'doc_number' => $validated['doc_number'],
-            'officer_name' => $validated['officer_name'],
+            'doc_number' => $validated['doc_number'] ?? null,
+            'officer_name' => $validated['officer_name'] ?? null,
             'classification' => $validated['classification'],
             'status' => $validated['status'],
             'file_path' => $filePath,
@@ -90,22 +74,9 @@ class DocumentController extends Controller
         return view('dashboard.pembantu.documents.edit', compact('document', 'categories'));
     }
 
-    public function update(Request $request, Document $document)
+    public function update(DocumentRequest $request, Document $document)
     {
-        $this->authorize('update', $document);
-
-        $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'category_id' => 'required|exists:categories,id',
-            'sub_category_id' => 'nullable|exists:sub_categories,id',
-            'year' => 'required|integer|min:1900|max:' . date('Y'),
-            'doc_number' => 'nullable|string|max:100',
-            'officer_name' => 'nullable|string|max:255',
-            'classification' => 'required|in:open,excluded',
-            'status' => 'required|in:published,unpublished,archived',
-            'file' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:25600',
-        ]);
+        $validated = $request->validated();
 
         if ($request->hasFile('file')) {
             Storage::disk('public')->delete($document->file_path);

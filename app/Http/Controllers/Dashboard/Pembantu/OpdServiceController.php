@@ -3,11 +3,12 @@
 namespace App\Http\Controllers\Dashboard\Pembantu;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\OpdServiceRequest;
 use App\Models\OpdService;
 use App\Traits\ManagesPublicServices;
 use App\Traits\LogsActivity;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class OpdServiceController extends Controller
 {
@@ -35,7 +36,7 @@ class OpdServiceController extends Controller
         return view('dashboard.pembantu.cms.services.create');
     }
 
-    public function store(Request $request)
+    public function store(OpdServiceRequest $request)
     {
         $opdId = $this->getOpdId();
         $data = $this->prepareServiceData($request);
@@ -57,7 +58,7 @@ class OpdServiceController extends Controller
         return view('dashboard.pembantu.cms.services.edit', compact('service'));
     }
 
-    public function update(Request $request, OpdService $service)
+    public function update(OpdServiceRequest $request, OpdService $service)
     {
         if ($service->opd_id !== $this->getOpdId()) {
             abort(403);
