@@ -13,6 +13,56 @@ class CmsProfilOpdController extends Controller
 {
     use LogsActivity;
 
+    /**
+     * Konfigurasi untuk setiap section CMS Profil OPD
+     */
+    protected $sections = [
+        'tentang' => [
+            'view' => 'tentang',
+            'field' => 'tentang_content',
+            'pdf_field' => 'tentang_pdf',
+            'route' => 'pembantu.cms.profil.tentang',
+            'update_route' => 'pembantu.cms.profil.update-tentang',
+            'pdf_folder' => 'tentang',
+            'title' => 'Tentang OPD',
+            'has_logo' => true,
+            'has_google_maps' => true,
+        ],
+        'tugas-fungsi' => [
+            'view' => 'tugas-fungsi',
+            'field' => 'tugas_fungsi_content',
+            'pdf_field' => 'tugas_fungsi_pdf',
+            'route' => 'pembantu.cms.profil.tugas-fungsi',
+            'update_route' => 'pembantu.cms.profil.update-tugas-fungsi',
+            'pdf_folder' => 'tugas-fungsi',
+            'title' => 'Tugas dan Fungsi',
+            'has_logo' => false,
+            'has_google_maps' => false,
+        ],
+        'struktur' => [
+            'view' => 'struktur',
+            'field' => 'struktur_content',
+            'pdf_field' => 'struktur_pdf',
+            'route' => 'pembantu.cms.profil.struktur',
+            'update_route' => 'pembantu.cms.profil.update-struktur',
+            'pdf_folder' => 'struktur',
+            'title' => 'Struktur Organisasi',
+            'has_logo' => false,
+            'has_google_maps' => false,
+        ],
+        'dasar-hukum' => [
+            'view' => 'dasar-hukum',
+            'field' => 'dasar_hukum_content',
+            'pdf_field' => 'dasar_hukum_pdf',
+            'route' => 'pembantu.cms.profil.dasar-hukum',
+            'update_route' => 'pembantu.cms.profil.update-dasar-hukum',
+            'pdf_folder' => 'dasar-hukum',
+            'title' => 'Dasar Hukum',
+            'has_logo' => false,
+            'has_google_maps' => false,
+        ],
+    ];
+
     private function getOpd()
     {
         $opd = Auth::user()->opd;
@@ -54,9 +104,9 @@ class CmsProfilOpdController extends Controller
             return !empty($value);
         });
 
-        $opd->update([
-            'social_media' => $socialMedia
-        ]);
+        $opd->update(['social_media' => $socialMedia]);
+
+        $this->logActivity('update_media_sosial', 'Memperbarui media sosial OPD', $opd);
 
         return redirect()->route('pembantu.cms.profil.media-sosial')
             ->with('success', 'Media sosial berhasil diperbarui.');
@@ -66,143 +116,125 @@ class CmsProfilOpdController extends Controller
     public function editTentang()
     {
         $opd = $this->getOpd();
-        return view('dashboard.pembantu.cms.profil.tentang', compact('opd'));
+        $config = $this->sections['tentang'];
+        return view("dashboard.pembantu.cms.profil.{$config['view']}", compact('opd', 'config'));
     }
 
-public function updateTentang(Request $request)
-{
-    $opd = Auth::user()->opd;
-    
-    $validated = $request->validate([
-        'tentang_content' => 'nullable|string',
-        'vision_mission' => 'nullable|string',
-        'address' => 'nullable|string',
-        'phone' => 'nullable|string',
-        'email' => 'nullable|email',
-        'google_maps_link' => 'nullable|url',
-        'logo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
-        'tentang_pdf' => 'nullable|file|mimes:pdf|max:5120',  // TAMBAHKAN
-    ]);
-    
-    // Handle logo upload
-    if ($request->hasFile('logo')) {
-        if ($opd->logo && Storage::disk('public')->exists($opd->logo)) {
-            Storage::disk('public')->delete($opd->logo);
-        }
-        $logoPath = $request->file('logo')->store('opds', 'public');
-        $validated['logo'] = $logoPath;
-    }
-    
-    // Handle PDF upload
-    if ($request->hasFile('tentang_pdf')) {
-        if ($opd->tentang_pdf && Storage::disk('public')->exists($opd->tentang_pdf)) {
-            Storage::disk('public')->delete($opd->tentang_pdf);
-        }
-        $validated['tentang_pdf'] = $request->file('tentang_pdf')->store('opds/tentang', 'public');
-    }
-    
-    $opd->update($validated);
-    
-    return redirect()->route('pembantu.cms.profil.index')
-        ->with('success', 'Profil OPD berhasil diperbarui.');
-}
+    public function updateTentang(Request $request)
+    {
+        $opd = $this->getOpd();
+        $config = $this->sections['tentang'];
+        
+        $rules = [
+            'tentang_content' => 'nullable|string',
+            'vision_mission' => 'nullable|string',
+            'address' => 'nullable|string',
+            'phone' => 'nullable|string',
+            'email' => 'nullable|email',
+            'google_maps_link' => 'nullable|url',
+            'logo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'tentang_pdf' => 'nullable|file|mimes:pdf|max:5120',
+        ];
 
-    // ========== TUGAS DAN FUNGSI ==========
+        $validated = $request->validate($rules);
+        
+        // Handle logo upload
+        if ($request->hasFile('logo')) {
+            if ($opd->logo && Storage::disk('public')->exists($opd->logo)) {
+                Storage::disk('public')->delete($opd->logo);
+            }
+            $validated['logo'] = $request->file('logo')->store('opds', 'public');
+        }
+        
+        // Handle PDF upload
+        if ($request->hasFile('tentang_pdf')) {
+            if ($opd->tentang_pdf && Storage::disk('public')->exists($opd->tentang_pdf)) {
+                Storage::disk('public')->delete($opd->tentang_pdf);
+            }
+            $validated['tentang_pdf'] = $request->file('tentang_pdf')->store('opds/tentang', 'public');
+        }
+
+        $opd->update($validated);
+
+        $this->logActivity('update_tentang', 'Memperbarui Tentang OPD', $opd);
+
+        return redirect()->route('pembantu.cms.profil.tentang')
+            ->with('success', 'Tentang OPD berhasil diperbarui.');
+    }
+
+    // ========== SECTION GENERIC (Tugas Fungsi, Struktur, Dasar Hukum) ==========
+    
+    /**
+     * Edit any section dynamically
+     */
+    public function editSection($section)
+    {
+        $config = $this->sections[$section] ?? abort(404, 'Section tidak ditemukan');
+        $opd = $this->getOpd();
+        return view("dashboard.pembantu.cms.profil.{$config['view']}", compact('opd', 'config'));
+    }
+
+    /**
+     * Update any section dynamically
+     */
+    public function updateSection(Request $request, $section)
+    {
+        $config = $this->sections[$section] ?? abort(404, 'Section tidak ditemukan');
+        $opd = $this->getOpd();
+
+        $validated = $request->validate([
+            $config['field'] => 'nullable|string',
+            $config['pdf_field'] => 'nullable|file|mimes:pdf|max:5120',
+        ]);
+
+        $data = [$config['field'] => $validated[$config['field']]];
+
+        // Handle PDF upload
+        if ($request->hasFile($config['pdf_field'])) {
+            if ($opd->{$config['pdf_field']} && Storage::disk('public')->exists($opd->{$config['pdf_field']})) {
+                Storage::disk('public')->delete($opd->{$config['pdf_field']});
+            }
+            $data[$config['pdf_field']] = $request->file($config['pdf_field'])
+                ->store("opds/{$config['pdf_folder']}", 'public');
+        }
+
+        $opd->update($data);
+
+        $this->logActivity("update_{$section}", "Memperbarui {$config['title']}", $opd);
+
+        return redirect()->route($config['route'])
+            ->with('success', "{$config['title']} berhasil diperbarui.");
+    }
+
+    // ========== LEGACY METHODS (untuk kompatibilitas route) ==========
+    
     public function editTugasFungsi()
     {
-        $opd = $this->getOpd();
-        return view('dashboard.pembantu.cms.profil.tugas-fungsi', compact('opd'));
+        return $this->editSection('tugas-fungsi');
     }
 
-    /**
-     * PERBAIKAN: Menggunakan kolom 'tugas_fungsi_content' dan 'tugas_fungsi_pdf'
-     */
     public function updateTugasFungsi(Request $request)
     {
-        $opd = $this->getOpd();
-
-        $validated = $request->validate([
-            'tugas_fungsi_content' => 'nullable|string',  // PERBAIKAN
-            'tugas_fungsi_pdf' => 'nullable|file|mimes:pdf|max:5120',  // PERBAIKAN
-        ]);
-
-        $data = ['tugas_fungsi_content' => $validated['tugas_fungsi_content']];  // PERBAIKAN
-
-        if ($request->hasFile('tugas_fungsi_pdf')) {  // PERBAIKAN
-            if ($opd->tugas_fungsi_pdf && Storage::disk('public')->exists($opd->tugas_fungsi_pdf)) {  // PERBAIKAN
-                Storage::disk('public')->delete($opd->tugas_fungsi_pdf);
-            }
-            $data['tugas_fungsi_pdf'] = $request->file('tugas_fungsi_pdf')->store('opds/tugas-fungsi', 'public');  // PERBAIKAN
-        }
-
-        $opd->update($data);
-
-        return redirect()->route('pembantu.cms.profil.tugas-fungsi')
-            ->with('success', 'Tugas dan Fungsi berhasil diperbarui.');
+        return $this->updateSection($request, 'tugas-fungsi');
     }
 
-    // ========== STRUKTUR ORGANISASI ==========
     public function editStruktur()
     {
-        $opd = $this->getOpd();
-        return view('dashboard.pembantu.cms.profil.struktur', compact('opd'));
+        return $this->editSection('struktur');
     }
 
-    /**
-     * PERBAIKAN: Menggunakan kolom 'struktur_content' dan 'struktur_pdf'
-     */
     public function updateStruktur(Request $request)
     {
-        $opd = $this->getOpd();
-
-        $validated = $request->validate([
-            'struktur_content' => 'nullable|string',  // PERBAIKAN
-            'struktur_pdf' => 'nullable|file|mimes:pdf|max:5120',  // PERBAIKAN
-        ]);
-
-        $data = ['struktur_content' => $validated['struktur_content']];  // PERBAIKAN
-
-        if ($request->hasFile('struktur_pdf')) {  // PERBAIKAN
-            if ($opd->struktur_pdf && Storage::disk('public')->exists($opd->struktur_pdf)) {  // PERBAIKAN
-                Storage::disk('public')->delete($opd->struktur_pdf);
-            }
-            $data['struktur_pdf'] = $request->file('struktur_pdf')->store('opds/struktur', 'public');  // PERBAIKAN
-        }
-
-        $opd->update($data);
-
-        return redirect()->route('pembantu.cms.profil.struktur')
-            ->with('success', 'Struktur Organisasi berhasil diperbarui.');
+        return $this->updateSection($request, 'struktur');
     }
 
-    // ========== DASAR HUKUM ==========
     public function editDasarHukum()
     {
-        $opd = $this->getOpd();
-        return view('dashboard.pembantu.cms.profil.dasar-hukum', compact('opd'));
+        return $this->editSection('dasar-hukum');
     }
 
     public function updateDasarHukum(Request $request)
     {
-        $opd = $this->getOpd();
-
-        $validated = $request->validate([
-            'dasar_hukum_content' => 'nullable|string',
-            'dasar_hukum_pdf' => 'nullable|file|mimes:pdf|max:5120',
-        ]);
-
-        $data = ['dasar_hukum_content' => $validated['dasar_hukum_content']];
-
-        if ($request->hasFile('dasar_hukum_pdf')) {
-            if ($opd->dasar_hukum_pdf && Storage::disk('public')->exists($opd->dasar_hukum_pdf)) {
-                Storage::disk('public')->delete($opd->dasar_hukum_pdf);
-            }
-            $data['dasar_hukum_pdf'] = $request->file('dasar_hukum_pdf')->store('opds/dasar-hukum', 'public');
-        }
-
-        $opd->update($data);
-
-        return redirect()->route('pembantu.cms.profil.dasar-hukum')
-            ->with('success', 'Dasar Hukum berhasil diperbarui.');
+        return $this->updateSection($request, 'dasar-hukum');
     }
 }

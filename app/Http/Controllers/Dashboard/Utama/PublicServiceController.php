@@ -4,15 +4,16 @@ namespace App\Http\Controllers\Dashboard\Utama;
 
 use App\Http\Controllers\Controller;
 use App\Models\OpdService;
-use App\Models\Opd;
+use App\Traits\ManagesPublicServices;
+use App\Traits\LogsActivity;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 
 class PublicServiceController extends Controller
 {
+    use ManagesPublicServices, LogsActivity;
+
     public function index()
     {
-        // PPID Utama bisa melihat semua layanan dari semua OPD
         $services = OpdService::with('opd')
             ->orderBy('sort_order')
             ->paginate(15);
@@ -22,38 +23,16 @@ class PublicServiceController extends Controller
 
     public function create()
     {
-        // Ambil semua OPD untuk dipilih
-        $opds = Opd::where('is_active', true)->orderBy('name')->get();
-        
+        $opds = $this->getOpdsForSelect();
         return view('dashboard.utama.cms.public-services.create', compact('opds'));
     }
 
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'opd_id' => 'required|exists:opds,id',
-            'name' => 'required|string|max:255',
-            'description' => 'nullable|string|max:500',
-            'url' => 'required|url|max:500',
-            'icon' => 'nullable|image|mimes:jpg,jpeg,png|max:1024',
-            'sort_order' => 'nullable|integer',
-            'is_active' => 'boolean',
-        ]);
+        $data = $this->prepareServiceData($request);
+        $service = OpdService::create($data);
 
-        $data = [
-            'opd_id' => $validated['opd_id'],
-            'name' => $validated['name'],
-            'description' => $validated['description'],
-            'url' => $validated['url'],
-            'sort_order' => $validated['sort_order'] ?? 0,
-            'is_active' => $request->boolean('is_active'),
-        ];
-
-        if ($request->hasFile('icon')) {
-            $data['icon'] = $request->file('icon')->store('services', 'public');
-        }
-
-        OpdService::create($data);
+        $this->logActivity('create_service_global', 'Menambahkan layanan publik global: ' . $service->name, $service);
 
         return redirect()->route('utama.cms.public-services.index')
             ->with('success', 'Layanan publik berhasil ditambahkan.');
@@ -62,7 +41,7 @@ class PublicServiceController extends Controller
     public function edit($id)
     {
         $service = OpdService::with('opd')->findOrFail($id);
-        $opds = Opd::where('is_active', true)->orderBy('name')->get();
+        $opds = $this->getOpdsForSelect();
         
         return view('dashboard.utama.cms.public-services.edit', compact('service', 'opds'));
     }
@@ -70,34 +49,10 @@ class PublicServiceController extends Controller
     public function update(Request $request, $id)
     {
         $service = OpdService::findOrFail($id);
-
-        $validated = $request->validate([
-            'opd_id' => 'required|exists:opds,id',
-            'name' => 'required|string|max:255',
-            'description' => 'nullable|string|max:500',
-            'url' => 'required|url|max:500',
-            'icon' => 'nullable|image|mimes:jpg,jpeg,png|max:1024',
-            'sort_order' => 'nullable|integer',
-            'is_active' => 'boolean',
-        ]);
-
-        $data = [
-            'opd_id' => $validated['opd_id'],
-            'name' => $validated['name'],
-            'description' => $validated['description'],
-            'url' => $validated['url'],
-            'sort_order' => $validated['sort_order'] ?? 0,
-            'is_active' => $request->boolean('is_active'),
-        ];
-
-        if ($request->hasFile('icon')) {
-            if ($service->icon) {
-                Storage::disk('public')->delete($service->icon);
-            }
-            $data['icon'] = $request->file('icon')->store('services', 'public');
-        }
-
+        $data = $this->prepareServiceData($request, $service->icon);
         $service->update($data);
+
+        $this->logActivity('update_service_global', 'Memperbarui layanan publik global: ' . $service->name, $service);
 
         return redirect()->route('utama.cms.public-services.index')
             ->with('success', 'Layanan publik berhasil diperbarui.');
@@ -111,6 +66,7 @@ class PublicServiceController extends Controller
             Storage::disk('public')->delete($service->icon);
         }
 
+        $this->logActivity('delete_service_global', 'Menghapus layanan publik global: ' . $service->name, $service);
         $service->delete();
 
         return redirect()->route('utama.cms.public-services.index')
@@ -121,6 +77,8 @@ class PublicServiceController extends Controller
     {
         $service = OpdService::findOrFail($id);
         $service->update(['is_active' => !$service->is_active]);
+
+        $this->logActivity('toggle_service_global', 'Mengubah status layanan global: ' . $service->name, $service);
 
         return response()->json(['success' => true]);
     }

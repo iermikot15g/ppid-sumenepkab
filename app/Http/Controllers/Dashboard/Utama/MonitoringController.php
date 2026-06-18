@@ -4,108 +4,149 @@ namespace App\Http\Controllers\Dashboard\Utama;
 
 use App\Http\Controllers\Controller;
 use App\Models\Document;
-use App\Models\Opd;
 use App\Models\News;
+use App\Models\Opd;
+use App\Models\Category;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
 class MonitoringController extends Controller
 {
+    /**
+     * Display monitoring dashboard
+     */
     public function index()
     {
-        // ========== STATISTIK DOKUMEN ==========
-        $totalDocuments = Document::count();
-        $publishedDocuments = Document::where('status', 'published')->count();
-        $excludedDocuments = Document::where('classification', 'excluded')->count();
-        $totalDownloads = Document::sum('download_count');
-        
-        // ========== STATISTIK PER OPD ==========
-        $opdStats = Opd::withCount(['documents' => function($query) {
-                $query->where('status', 'published');
-            }])
-            ->withCount(['documents as total_documents'])
-            ->orderBy('documents_count', 'desc')
-            ->get();
-        
-        // ========== INDIKATOR KEAKTIFAN OPD ==========
-        // Hijau: update dalam 30 hari terakhir
-        // Kuning: update 31-90 hari
-        // Merah: tidak ada update > 90 hari
-        $activeOpds = Opd::all()->map(function($opd) {
-            $lastUpdate = Document::where('opd_id', $opd->id)
-                ->latest('updated_at')
-                ->first();
-            
-            if (!$lastUpdate) {
-                $status = 'red';
-                $statusText = 'Tidak Aktif (Belum ada dokumen)';
-            } else {
-                $daysSinceUpdate = $lastUpdate->updated_at->diffInDays(now());
-                
-                if ($daysSinceUpdate <= 30) {
-                    $status = 'green';
-                    $statusText = 'Aktif (' . $daysSinceUpdate . ' hari yang lalu)';
-                } elseif ($daysSinceUpdate <= 90) {
-                    $status = 'yellow';
-                    $statusText = 'Kurang Aktif (' . $daysSinceUpdate . ' hari yang lalu)';
-                } else {
-                    $status = 'red';
-                    $statusText = 'Tidak Aktif (' . $daysSinceUpdate . ' hari yang lalu)';
-                }
-            }
-            
+        // ========== STATISTIK UTAMA (Cache 5 menit) ==========
+        $stats = Cache::remember('dashboard_stats', 300, function () {
             return [
-                'id' => $opd->id,
-                'name' => $opd->name,
-                'short_name' => $opd->short_name,
-                'total_documents' => Document::where('opd_id', $opd->id)->count(),
-                'published_documents' => Document::where('opd_id', $opd->id)->where('status', 'published')->count(),
-                'status' => $status,
-                'status_text' => $statusText,
-                'last_update' => $lastUpdate ? $lastUpdate->updated_at->format('d/m/Y') : '-',
+                'totalDocuments' => Document::count(),
+                'publishedDocuments' => Document::where('status', 'published')->count(),
+                'excludedDocuments' => Document::where('classification', 'excluded')->count(),
+                'totalDownloads' => Document::sum('download_count'),
             ];
         });
-        
+
+        // ========== OPD AKTIF (Cache 10 menit) ==========
+        $activeOpds = Cache::remember('active_opds', 600, function () {
+            return Opd::withCount([
+                'documents',
+                'documents as published_count' => function ($query) {
+                    $query->where('status', 'published');
+                }
+            ])
+            ->with(['documents' => function ($query) {
+                $query->latest()->limit(1);
+            }])
+            ->get()
+            ->map(function ($opd) {
+                $lastUpdate = $opd->documents->first()?->updated_at;
+                
+                return [
+                    'name' => $opd->name,
+                    'total_documents' => $opd->documents_count,
+                    'published_documents' => $opd->published_count,
+                    'last_update' => $lastUpdate ? $lastUpdate->diffForHumans() : 'Tidak pernah',
+                    'status' => $this->calculateStatus($lastUpdate),
+                    'status_text' => $this->getStatusText($this->calculateStatus($lastUpdate)),
+                ];
+            })
+            ->sortByDesc('total_documents')
+            ->values()
+            ->toArray();
+        });
+
         // ========== DOKUMEN PER KATEGORI ==========
-        $documentsByCategory = Document::select('category_id', DB::raw('count(*) as total'))
-            ->where('status', 'published')
-            ->groupBy('category_id')
+        $documentsByCategory = Document::where('status', 'published')
+            ->select('category_id', DB::raw('count(*) as total'))
             ->with('category')
+            ->groupBy('category_id')
             ->get();
-        
-        // ========== TREN PUBLIKASI (6 bulan terakhir) ==========
-        $publicationTrend = Document::select(
-                DB::raw('DATE_FORMAT(created_at, "%Y-%m") as month'),
-                DB::raw('count(*) as total')
-            )
+
+        // ========== TREN PUBLIKASI (6 Bulan) ==========
+        $publicationTrend = Document::where('status', 'published')
             ->where('created_at', '>=', now()->subMonths(6))
+            ->select(DB::raw("DATE_FORMAT(created_at, '%Y-%m') as month"), DB::raw('count(*) as total'))
             ->groupBy('month')
-            ->orderBy('month', 'asc')
-            ->get();
-        
+            ->orderBy('month')
+            ->get()
+            ->map(function ($item) {
+                $date = \Carbon\Carbon::createFromFormat('Y-m', $item->month);
+                return [
+                    'month' => $date->format('M Y'),
+                    'total' => $item->total,
+                ];
+            });
+
         // ========== DOKUMEN TERBARU ==========
         $recentDocuments = Document::with(['opd', 'category'])
             ->latest()
-            ->take(10)
+            ->limit(10)
             ->get();
-        
+
         // ========== STATISTIK CMS ==========
-        $totalInfografis = News::where('type', 'infographic')->count();
-        $totalAgendas = News::where('type', 'agenda')->count();
-        $totalGalleries = News::where('type', 'gallery')->count();
-        
-        return view('dashboard.utama.index', compact(
-            'totalDocuments',
-            'publishedDocuments',
-            'excludedDocuments',
-            'totalDownloads',
-            'opdStats',
-            'activeOpds',
-            'documentsByCategory',
-            'publicationTrend',
-            'recentDocuments',
-            'totalInfografis',
-            'totalAgendas',
-            'totalGalleries'
+        $cmsStats = Cache::remember('cms_stats', 300, function () {
+            return [
+                'totalInfografis' => News::where('type', 'infographic')->count(),
+                'totalAgendas' => News::where('type', 'agenda')->count(),
+                'totalGalleries' => News::where('type', 'gallery')->count(),
+            ];
+        });
+
+        return view('dashboard.utama.index', array_merge(
+            $stats,
+            $cmsStats,
+            [
+                'activeOpds' => $activeOpds,
+                'documentsByCategory' => $documentsByCategory,
+                'publicationTrend' => $publicationTrend,
+                'recentDocuments' => $recentDocuments,
+            ]
         ));
+    }
+
+    /**
+     * Calculate OPD activity status based on last update
+     */
+    private function calculateStatus($lastUpdate)
+    {
+        if (!$lastUpdate) {
+            return 'red';
+        }
+        $days = $lastUpdate->diffInDays(now());
+        if ($days <= 30) {
+            return 'green';
+        }
+        if ($days <= 60) {
+            return 'yellow';
+        }
+        return 'red';
+    }
+
+    /**
+     * Get status text for display
+     */
+    private function getStatusText($status)
+    {
+        return match($status) {
+            'green' => 'Aktif',
+            'yellow' => 'Cukup Aktif',
+            'red' => 'Tidak Aktif',
+            default => 'Tidak Aktif',
+        };
+    }
+
+    /**
+     * Clear dashboard cache (bisa dipanggil setelah update data)
+     */
+    public function clearCache()
+    {
+        Cache::forget('dashboard_stats');
+        Cache::forget('active_opds');
+        Cache::forget('cms_stats');
+        
+        return redirect()->route('dashboard.utama')
+            ->with('success', 'Cache dashboard berhasil dibersihkan.');
     }
 }

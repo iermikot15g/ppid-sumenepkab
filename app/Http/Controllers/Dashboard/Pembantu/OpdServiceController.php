@@ -4,12 +4,15 @@ namespace App\Http\Controllers\Dashboard\Pembantu;
 
 use App\Http\Controllers\Controller;
 use App\Models\OpdService;
+use App\Traits\ManagesPublicServices;
+use App\Traits\LogsActivity;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
 
 class OpdServiceController extends Controller
 {
+    use ManagesPublicServices, LogsActivity;
+
     private function getOpdId()
     {
         $opd = Auth::user()->opd;
@@ -34,29 +37,13 @@ class OpdServiceController extends Controller
 
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'description' => 'nullable|string|max:500',
-            'url' => 'required|url|max:500',
-            'icon' => 'nullable|image|mimes:jpg,jpeg,png|max:1024',
-            'sort_order' => 'nullable|integer',
-            'is_active' => 'boolean',
-        ]);
+        $opdId = $this->getOpdId();
+        $data = $this->prepareServiceData($request);
+        $data['opd_id'] = $opdId;
 
-        $data = [
-            'opd_id' => $this->getOpdId(),
-            'name' => $validated['name'],
-            'description' => $validated['description'],
-            'url' => $validated['url'],
-            'sort_order' => $validated['sort_order'] ?? 0,
-            'is_active' => $request->boolean('is_active'),
-        ];
+        $service = OpdService::create($data);
 
-        if ($request->hasFile('icon')) {
-            $data['icon'] = $request->file('icon')->store('services', 'public');
-        }
-
-        OpdService::create($data);
+        $this->logActivity('create_service', 'Menambahkan layanan publik: ' . $service->name, $service);
 
         return redirect()->route('pembantu.cms.services.index')
             ->with('success', 'Layanan berhasil ditambahkan.');
@@ -76,31 +63,10 @@ class OpdServiceController extends Controller
             abort(403);
         }
 
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'description' => 'nullable|string|max:500',
-            'url' => 'required|url|max:500',
-            'icon' => 'nullable|image|mimes:jpg,jpeg,png|max:1024',
-            'sort_order' => 'nullable|integer',
-            'is_active' => 'boolean',
-        ]);
-
-        $data = [
-            'name' => $validated['name'],
-            'description' => $validated['description'],
-            'url' => $validated['url'],
-            'sort_order' => $validated['sort_order'] ?? 0,
-            'is_active' => $request->boolean('is_active'),
-        ];
-
-        if ($request->hasFile('icon')) {
-            if ($service->icon) {
-                Storage::disk('public')->delete($service->icon);
-            }
-            $data['icon'] = $request->file('icon')->store('services', 'public');
-        }
-
+        $data = $this->prepareServiceData($request, $service->icon);
         $service->update($data);
+
+        $this->logActivity('update_service', 'Memperbarui layanan publik: ' . $service->name, $service);
 
         return redirect()->route('pembantu.cms.services.index')
             ->with('success', 'Layanan berhasil diperbarui.');
@@ -116,6 +82,7 @@ class OpdServiceController extends Controller
             Storage::disk('public')->delete($service->icon);
         }
 
+        $this->logActivity('delete_service', 'Menghapus layanan publik: ' . $service->name, $service);
         $service->delete();
 
         return redirect()->route('pembantu.cms.services.index')
@@ -129,6 +96,8 @@ class OpdServiceController extends Controller
         }
 
         $service->update(['is_active' => !$service->is_active]);
+
+        $this->logActivity('toggle_service', 'Mengubah status layanan: ' . $service->name, $service);
 
         return response()->json(['success' => true]);
     }
