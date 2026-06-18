@@ -392,17 +392,3 @@ Route::prefix('api')->group(function () {
         return App\Models\District::where('regency_id', $regencyId)->orderBy('name')->get(['id', 'name']);
     });
 });
-
-// ============================================================================
-// TEMP TEST ROUTE - Hapus setelah production
-// ============================================================================
-Route::get('/test-role', function() {
-    if (!auth()->check()) {
-        return 'Not logged in';
-    }
-    return [
-        'user' => auth()->user()->name,
-        'email' => auth()->user()->email,
-        'roles' => auth()->user()->getRoleNames(),
-    ];
-});
